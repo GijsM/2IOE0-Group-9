@@ -8,7 +8,7 @@ public class App {
 
 	public GUIStateManager guiManager;
 	public WindowManager windowManager;
-
+	
 	public void run() throws InterruptedException {
 		guiManager = new GUIStateManager();
 		windowManager = new WindowManager();
@@ -16,13 +16,15 @@ public class App {
 		windowManager.start();
 		guiManager.setCurrentGuiState(new MenuGUIState());
 		//DO NOTHING AS THE GUISTATE HANDLES THREADING
-		wait();
+//		wait();
+
 	}
 
 	public static void main(String[] args) {
 		try {
 			new App().run();
 		} catch (InterruptedException e) {
+			System.out.println("test");
 			e.printStackTrace();
 		}
 	}
