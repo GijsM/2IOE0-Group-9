@@ -1,5 +1,5 @@
 package app.Util;
 
 public interface IRenderable {
-    public void render();
+    public void render(WindowManager window);
 }
