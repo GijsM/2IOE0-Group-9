@@ -13,6 +13,6 @@ public class GUIStateManager {
             this.currentGuiState.stop();
         }
         this.currentGuiState = currentGuiState;
-        this.currentGuiState.start();
+        this.currentGuiState.start(WindowManager window);
     }
 }

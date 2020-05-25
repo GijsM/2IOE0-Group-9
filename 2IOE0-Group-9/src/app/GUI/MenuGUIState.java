@@ -12,15 +12,15 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class MenuGUIState extends GUIState implements IRenderable {
 	private Thread thread;
-	WindowManager manager = new WindowManager();
+	WindowManager manager = new WindowManager("Hello World", 800, 600);
 	
     @Override
-    public void start() {
+    public void start(WindowManager window) {
     	if (manager.getThread() == null) {
     		thread = new Thread(new Runnable() {
         		public void run() {
         			System.out.println("new menu thread");
-        			render();
+        			render(window);
         		}
         	});    		
     		
@@ -39,9 +39,8 @@ public class MenuGUIState extends GUIState implements IRenderable {
     }
     
     @Override
-    public void render() {
-    	manager = new WindowManager();
-    	manager.start();
+    public void render(WindowManager window) {
+    	window.start(window);
     	manager.loop();
 
 
