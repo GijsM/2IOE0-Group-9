@@ -7,6 +7,7 @@ import java.util.Random;
 import app.Game.Object.GameObject;
 import app.Util.IRenderable;
 import app.Util.IUpdateable;
+import app.Util.WindowManager;
 
 public class GameMap implements IUpdateable, IRenderable {
 
@@ -32,12 +33,12 @@ public class GameMap implements IUpdateable, IRenderable {
     }
 
     @Override
-    public void render() {
+    public void render(WindowManager window) {
         for (final GameObject gameObject : gameobjects) {
-            gameObject.render();
+            gameObject.render(window);
         }
         for (final Room room : rooms) {
-            room.render();
+            room.render(window);
         }
     }
 

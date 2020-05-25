@@ -6,6 +6,7 @@ import java.util.List;
 import app.Game.Object.StaticGameObject;
 import app.Util.IRenderable;
 import app.Util.IUpdateable;
+import app.Util.WindowManager;
 
 public class Room implements IUpdateable, IRenderable {
 
@@ -29,9 +30,9 @@ public class Room implements IUpdateable, IRenderable {
     }
 
     @Override
-    public void render() {
+    public void render(WindowManager window) {
        for (StaticGameObject staticGameObject : gameobjects) {
-           staticGameObject.render();
+           staticGameObject.render(window);
        }
     }
 

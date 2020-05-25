@@ -1,30 +1,19 @@
 package app;
 
-import app.GUI.GUIStateManager;
-import app.GUI.MenuGUIState;
-import app.Util.WindowManager;
+import app.Game.Engine;
+import app.Game.Game;
 
 public class App {
-
-	public GUIStateManager guiManager;
-	public WindowManager windowManager;
-	
 	public void run() throws InterruptedException {
-		guiManager = new GUIStateManager();
-		windowManager = new WindowManager();
-
-		windowManager.start();
-		guiManager.setCurrentGuiState(new MenuGUIState());
-		//DO NOTHING AS THE GUISTATE HANDLES THREADING
-//		wait();
-
+		Game game = new Game();
+		Engine engine = new Engine("GameWindow", 800, 600, game);
+		engine.run();
 	}
 
 	public static void main(String[] args) {
 		try {
 			new App().run();
 		} catch (InterruptedException e) {
-			System.out.println("test");
 			e.printStackTrace();
 		}
 	}

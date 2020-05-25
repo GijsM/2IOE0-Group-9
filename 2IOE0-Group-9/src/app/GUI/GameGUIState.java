@@ -27,7 +27,7 @@ public class GameGUIState extends GUIState implements IRenderable {
     
     @Override
     public void render() {
-    	final WindowManager manager = new WindowManager();
+    	final WindowManager manager = new WindowManager("Hello World", 800, 600);
     	long window = manager.getWindow();
     	
     	manager.start();
