@@ -15,13 +15,15 @@ public class GameMap implements IUpdateable, IRenderable {
 
     // Readonly, perhaps all gameobjects can move through rooms, hence why they are part of the entire map object
     private final List<GameObject> gameobjects = new ArrayList<>();
+    public List<Room> rooms = new ArrayList<>();
 
     public GameMap(final Random random) {
         this.random = random;
+        this.rooms.add(new app.Game.Map.Room(this));
+        this.rooms.get(0).print();
+        this.rooms.get(0).rotateCounterClockwise();
+        this.rooms.get(0).print();
     }
-
-    // TODO: add a generator of some kind to add new rooms
-    private final List<Room> rooms = new ArrayList<>();
 
     public List<GameObject> getGameobjects() {
         return gameobjects;

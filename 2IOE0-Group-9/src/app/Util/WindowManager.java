@@ -1,13 +1,11 @@
 package app.Util;
 
-import app.Game.Object.GameMap;
-import org.lwjgl.*;
+import app.Game.Map.GameMap;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
-
 import java.nio.*;
-import java.util.ArrayList;
+import java.util.Random;
 
 import static java.lang.StrictMath.round;
 import static org.lwjgl.glfw.Callbacks.*;
@@ -16,11 +14,12 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+
 public class WindowManager implements IStartStopable{
     private long window;
     private Thread thread;
     //COPIED FROM TUTORIAL NOT SURE IF THIS IS CORRECT
-	GameMap map  = new GameMap();
+
 
     @Override
     public void start() {
@@ -116,9 +115,8 @@ public class WindowManager implements IStartStopable{
 		glClearColor(0f, 0.0f, 0.0f, 0.0f);
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
+		GameMap map  = new GameMap(new Random());
 		while ( !glfwWindowShouldClose(window) ) {
-
-			this.map.rooms.get(0).render();
 
 
 			glfwSwapBuffers(window); // swap the color buffers
