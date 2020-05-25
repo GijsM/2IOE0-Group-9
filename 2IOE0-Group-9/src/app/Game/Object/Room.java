@@ -19,7 +19,9 @@ public class Room implements IRenderable {
     doorwayDirection = 3 when the door is on the west side
      */
     int doorwayDirection;
+    int exitDoorwayDirection;
     int[] doorWayLocation = new int[2];
+    int[] exitDoorWayLocation = new int[2];
 
     public Room(){
         this.room = standardroom(10);
@@ -28,6 +30,17 @@ public class Room implements IRenderable {
     private ArrayList<ArrayList> standardroom(int width) {
         int doorwayDirection = this.ran.nextInt(5);
         int randomDoorLocation = this.ran.nextInt(9)+1;
+        int exitDoorwayDirection = this.ran.nextInt(5);
+        int randomExitDoorLocation = this.ran.nextInt(9)+1;
+        boolean entranceExitCollision = true;
+
+        while(entranceExitCollision){
+            if(exitDoorwayDirection == doorwayDirection){
+                randomExitDoorLocation = this.ran.nextInt(9)+1;
+            } else {
+                entranceExitCollision = false;
+            }
+        }
         ArrayList<ArrayList> room = new ArrayList<>();
         for(int i = 0; i < width ; i ++){
             room.add(new ArrayList<Integer>());
@@ -59,6 +72,25 @@ public class Room implements IRenderable {
             this.doorWayLocation[1] = 0;
         }
         this.doorwayDirection = doorwayDirection;
+
+        if (exitDoorwayDirection == 0) {
+            room.get(0).set(randomExitDoorLocation,3);
+            this.exitDoorWayLocation[0] = 0;
+            this.exitDoorWayLocation[1] = randomExitDoorLocation;
+        } else if (exitDoorwayDirection == 1) {
+            room.get(randomExitDoorLocation).set(width-1,3);
+            this.exitDoorWayLocation[0] = randomExitDoorLocation;
+            this.exitDoorWayLocation[1] = width-1;
+        } else if (exitDoorwayDirection == 2) {
+            room.get(width-1).set(randomExitDoorLocation,3);
+            this.exitDoorWayLocation[0] = width-1;
+            this.exitDoorWayLocation[1] = randomExitDoorLocation;
+        } else if (exitDoorwayDirection == 1) {
+            room.get(randomExitDoorLocation).set(0,3);
+            this.exitDoorWayLocation[0] = randomExitDoorLocation;
+            this.exitDoorWayLocation[1] = 0;
+        }
+        this.exitDoorwayDirection = exitDoorwayDirection;
         return room;
     }
 
