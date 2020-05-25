@@ -24,7 +24,6 @@ public class StateManager {
 
             case SETTINGS:
                 SettingsMenu.init();
-
                 break;
         }
     }
@@ -36,4 +35,5 @@ public class StateManager {
     public static void toPause() {
         gameState = GameState.PAUSE;
     }
+    public static void toSettings() {gameState = GameState.SETTINGS;}
 }

@@ -29,7 +29,7 @@ public class MainMenu {
             System.out.println("Go to settings menu");
             Window.ClearWindow();
             Window.UpdateScreen();
-            StateManager.GameState gameState = StateManager.GameState.SETTINGS;
+            StateManager.toSettings();
         }
 
         if (GUI.Button("Exit", new Rect(Window.Width() / 4, Window.Height() / 2, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover")) {
