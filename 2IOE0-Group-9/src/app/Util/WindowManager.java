@@ -1,5 +1,7 @@
 package app.Util;
 
+import engine.graphics.*;
+
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -15,7 +17,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class WindowManager implements IStartStopable{
     private long window;
-
+    private Thread thread;
     //COPIED FROM TUTORIAL NOT SURE IF THIS IS CORRECT
 
     @Override
@@ -67,6 +69,8 @@ public class WindowManager implements IStartStopable{
 		glfwMakeContextCurrent(window);
 		// Enable v-sync
 		glfwSwapInterval(1);
+		
+
 
 		// Make the window visible
 		glfwShowWindow(window);
@@ -83,9 +87,21 @@ public class WindowManager implements IStartStopable{
 		glfwSetErrorCallback(null).free();
 
     }
+    
+    public long getWindow() {
+    	return window;
+    }
+    
+    public Thread getThread() {
+    	return thread;
+    }
+    
+    public void setThread(Thread thrd) {
+    	this.thread = thrd;
+    }
 
     //USED ORIGINALLY, DEAD CODE, KEPT FOR REFERENCE
-    private void loop() {
+    public void loop() {
 		// This line is critical for LWJGL's interoperation with GLFW's
 		// OpenGL context, or any context that is managed externally.
 		// LWJGL detects the context that is current in the current thread,
@@ -94,15 +110,31 @@ public class WindowManager implements IStartStopable{
 		GL.createCapabilities();
 
 		// Set the clear color
-		glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0f, 0.0f, 0.0f, 0.0f);
 
+		Renderer renderer = new Renderer();
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
 		while ( !glfwWindowShouldClose(window) ) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
+			
+			
+	    	for(int m = -20; m < 21; m++) {
+	    		for(int n = -20; n < 21; n++) {
+	    	        glBegin(GL_QUADS);
+	    	        glColor4d(1f, 0.1f, 1f, 0.3f);
+	    	        glVertex3f(m , n, 1);
+	    	        glColor4d(0.2f, 0.1f, 1f, 0.3f);
+	    	        glVertex3f(m, n + 1, 1);
+	    	        glColor4d(1f, 0.1f, 0f, 0.3f);
+	    	        glVertex3f(m + 1, n + 1, 1);
+	    	        glColor4d(1f, 0f, 0f, 0.3f);
+	    	        glVertex3f(m + 1, n, 1);
+	    	        glEnd();
+	    		}
+	    	}
 			glfwSwapBuffers(window); // swap the color buffers
-
+			
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
