@@ -120,7 +120,6 @@ public class Game implements IStartStopable, IRenderable, IUpdateable {
     	camera.movePosition(cameraVec.x * CAMERA_POS_STEP, cameraVec.y * CAMERA_POS_STEP, cameraVec.z * CAMERA_POS_STEP);
     	
     	if (mouseInput.isRightButtonPressed()) {
-    		System.out.println("test");
     		Vector2f rotVec = mouseInput.getDisplVec();
     		camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY,0);
     	}
