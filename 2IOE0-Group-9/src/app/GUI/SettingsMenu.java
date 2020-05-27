@@ -1,8 +1,8 @@
-package gui;
+package app.GUI;
 
-import engine.Rect;
-import engine.Texture;
-import engine.Window;
+import app.engine.Rect;
+import app.engine.Texture;
+import app.engine.Window;
 
 public class SettingsMenu {
     private static Texture title;

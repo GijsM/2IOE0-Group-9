@@ -1,9 +1,9 @@
-package gui;
+package app.GUI;
 
-import engine.Rect;
-import engine.Texture;
-import engine.Window;
-import engine.main;
+import app.engine.Rect;
+import app.engine.Texture;
+import app.engine.Window;
+import app.App;
 import org.lwjgl.glfw.GLFW;
 
 public class MainMenu {

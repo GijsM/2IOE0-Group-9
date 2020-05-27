@@ -1,4 +1,4 @@
-package math;
+package app.math;
 
 public class Color {
     public float r = 1;

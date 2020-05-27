@@ -1,0 +1,13 @@
+image: DefaultGUI
+Name: Box
+Offset: 0,0,16,16
+Padding: 2,2,2,2
+Name: Button
+Offset: 16,0,16,16
+Padding: 4,2,4,2
+Name: ButtonHover
+Offset: 16,16,16,16
+Padding: 4,2,4,2
+Name: Window
+Offset: 32,0,16,32
+Padding: 4,29,4,2

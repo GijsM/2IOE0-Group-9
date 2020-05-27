@@ -1,17 +1,18 @@
-package engine.maths;
+package app.math;
 
-public class Vector2f {
-    private float x;
-    private float y;
+public class Vector3f {
+    private float x, y, z;
 
-    public Vector2f(float x, float y) {
+    public Vector3f(float x, float y, float z) {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
-    public void set(float x, float y) {
+    public void set(float x, float y, float z) {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
     public float getX() {
@@ -30,4 +31,11 @@ public class Vector2f {
         this.y = y;
     }
 
+    public float getZ() {
+        return z;
+    }
+
+    public void setZ(float z) {
+        this.z = z;
+    }
 }

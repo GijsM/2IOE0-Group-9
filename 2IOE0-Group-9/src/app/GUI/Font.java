@@ -1,4 +1,4 @@
-package gui;
+package app.GUI;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import engine.Texture;
-import math.Vec2;
+import app.engine.Texture;
+import app.math.Vec2;
 
 public class Font {
     private int fontID;

@@ -1,7 +1,7 @@
-package gui;
+package app.GUI;
 
-import engine.Rect;
-import engine.Texture;
+import app.engine.Rect;
+import app.engine.Texture;
 
 public class GUIStyle {
     public String name;

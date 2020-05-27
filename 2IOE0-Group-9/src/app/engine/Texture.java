@@ -1,4 +1,4 @@
-package engine;
+package app.engine;
 
 
 import static org.lwjgl.stb.STBImage.stbi_image_free;

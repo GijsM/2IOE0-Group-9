@@ -1,6 +1,6 @@
-package engine.graphics;
+package app.math;
 
-import engine.maths.Vector3f;
+import app.math.Vector3f;
 
 public class Vertex {
     private Vector3f position;

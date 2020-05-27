@@ -1,7 +1,7 @@
-package engine;
+package app.engine;
 
-import math.Color;
-import math.Matrix4X4;
+import app.math.Color;
+import app.math.Matrix4X4;
 import org.lwjgl.BufferUtils;
 
 import java.io.BufferedReader;

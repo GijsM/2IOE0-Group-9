@@ -1,4 +1,4 @@
-package math;
+package app.math;
 
 public class Math {
     public static float Clamp(float val, float min, float max) {

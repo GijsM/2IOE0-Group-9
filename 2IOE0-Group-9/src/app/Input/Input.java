@@ -1,4 +1,4 @@
-package engine.io;
+package app.Input;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;

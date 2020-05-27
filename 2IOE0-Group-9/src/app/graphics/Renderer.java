@@ -1,5 +1,6 @@
-package engine.graphics;
+package app.graphics;
 
+import app.engine.Mesh;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -16,7 +17,7 @@ public class Renderer {
         GL30.glEnableVertexAttribArray(0);
         GL30.glEnableVertexAttribArray(1);
         
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getIBO());
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, mesh.getU_id());
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, 
                 GL11.GL_UNSIGNED_INT, 0);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -37,7 +38,7 @@ public class Renderer {
     	
     public void cleanup() {
         if (mesh != null) {
-            mesh.cleanup();
+            mesh.CleanUp();
         }
     }
     

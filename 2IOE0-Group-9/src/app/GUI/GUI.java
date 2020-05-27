@@ -1,11 +1,10 @@
-package gui;
+package app.GUI;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import Input.Mouse;
-import engine.*;
-import math.Color;
-import math.Matrix4X4;
+import app.Input.Mouse;
+import app.engine.*;
+import app.math.*;
 
 import java.util.ArrayList;
 import java.util.List;

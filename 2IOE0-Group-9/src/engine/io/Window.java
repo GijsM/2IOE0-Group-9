@@ -1,5 +1,6 @@
 package engine.io;
 
+import app.Input.Input;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;

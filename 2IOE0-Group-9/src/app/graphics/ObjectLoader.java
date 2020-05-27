@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package engine.graphics;
+package app.graphics;
 
-import engine.maths.Vector2f;
-import engine.maths.Vector3f;
+import app.math.Vec2;
+import app.math.Vector3f;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +34,7 @@ public class ObjectLoader {
         BufferedReader reader = new BufferedReader(fileReader);
         String line;
         List<Vector3f> vertices = new ArrayList<>();
-        List<Vector2f> textures = new ArrayList<>();
+        List<Vec2> textures = new ArrayList<>();
         List<Vector3f> normals = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
@@ -58,7 +58,7 @@ public class ObjectLoader {
                     vertices.add(vertex);
 
                 } else if (line.startsWith("vt ")) {
-                    Vector2f texture = new Vector2f(
+                    Vec2 texture = new Vec2(
                             Float.parseFloat(currentLine[1]),
                             Float.parseFloat(currentLine[2]));
 
@@ -129,14 +129,14 @@ public class ObjectLoader {
     }
     
     private static void processVertex(String[] vertexData,
-            List<Integer> indices, List<Vector2f> textures, 
+            List<Integer> indices, List<Vec2> textures,
             List<Vector3f> normals, float[] textureArray, float[] normalArray) {
         
         int currentVertexIndex = Integer.parseInt(vertexData[0]) - 1;
         indices.add(currentVertexIndex);
         
         //add textures to the array of textures
-        Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
+        Vec2 currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
         textureArray[currentVertexIndex * 2] = currentTex.getX();
         textureArray[currentVertexIndex * 2 + 1] = 1 - currentTex.getY();
         

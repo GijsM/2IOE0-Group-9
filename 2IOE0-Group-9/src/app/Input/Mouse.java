@@ -1,7 +1,7 @@
-package Input;
+package app.Input;
 
-import engine.Window;
-import math.Vec2;
+import app.engine.Window;
+import app.math.Vec2;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
