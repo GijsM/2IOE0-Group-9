@@ -35,8 +35,6 @@ public class Renderer {
     
     private final Transformation transformation;
 
-    private Matrix4f projectionMatrix;
-
     private ShaderProgram shaderProgram;
 
     public Renderer() {

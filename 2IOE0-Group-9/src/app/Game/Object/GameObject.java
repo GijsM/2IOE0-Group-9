@@ -16,9 +16,7 @@ public class GameObject {
     private final Vector3f rotation;
 
 
-    public GameObject(GameMap gameMap, Mesh mesh) {
-        this.gameMap = gameMap;
-        
+    public GameObject(Mesh mesh) {
         this.mesh = mesh;
         position = new Vector3f();
         scale = 1;

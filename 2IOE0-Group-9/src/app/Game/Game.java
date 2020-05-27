@@ -41,7 +41,10 @@ public class Game implements IStartStopable, IRenderable, IUpdateable {
     @Override
     public void start(WindowManager window) throws Exception {
 		renderer.init(window);
-		// Test Triangle
+		running = true;
+		/*
+		 * TEST RENDERING
+		 */
         float[] positions = new float[]{
                 // V0
                 -0.5f, 0.5f, 0.5f,
@@ -64,26 +67,39 @@ public class Game implements IStartStopable, IRenderable, IUpdateable {
                 0.0f, 0.0f, 0.5f,
                 0.0f, 0.5f, 0.5f,
                 0.0f, 0.5f, 0.5f,
-                0.0f, 0.5f, 0.5f,
+                0.0f, 0.5f, 0.5f,            		
             };
             int[] indices = new int[]{
                 0, 1, 3, 3, 1, 2,
             };
             mesh = new Mesh(positions, colours, indices);
-            GameObject obj1 = new GameObject(gamemap, mesh);
+            GameObject obj1 = new GameObject(mesh);
             obj1.setScale(0.5f);
             obj1.setPosition(0, 0, -2);
-            GameObject obj2 = new GameObject(gamemap, mesh);
+            GameObject obj2 = new GameObject(mesh);
             obj2.setScale(0.5f);
             obj2.setPosition(0.5f, 0.5f, -2);
-            
             gameObjects = new GameObject[] {obj1, obj2};
-            //
-            running = true;
-            Random rng = new Random();
-            GameMap gMap = new GameMap(rng);
-            setGamemap(gMap);
+    		/*
+    		 * END : TEST RENDERING
+    		 */
+            
 
+            /*
+             * WIP : Render Map from GameMap/GameObjects/Rooms and pass to gameObjects array
+             */
+              Random rng = new Random();
+              GameMap gMap = new GameMap(rng);
+            //  gMap.getRooms();
+            
+            // Create mesh of rooms/map
+            // for (room: GameMap) {
+            //	mesh = new Mesh(room.positions, room.colours, room.indices);
+            // 	gameObjects.add(new GameObject(mesh);
+
+            /*
+             * WIP : Render Map from GameMap/GameObjects/Rooms and pass to gameObjects array
+             */
     }
 
     @Override
@@ -116,6 +132,7 @@ public class Game implements IStartStopable, IRenderable, IUpdateable {
     //TODO perhaps call update and render in different threads for performance (Can do this at a later stage if performance becomes a problem)
     @Override
     public void update(float interval, MouseInput mouseInput) {
+    	// TODO: Implement update() in GameMap.java 
 //        gamemap.update();
     	camera.movePosition(cameraVec.x * CAMERA_POS_STEP, cameraVec.y * CAMERA_POS_STEP, cameraVec.z * CAMERA_POS_STEP);
     	
@@ -128,15 +145,5 @@ public class Game implements IStartStopable, IRenderable, IUpdateable {
     @Override
     public void render(WindowManager window) {
     	renderer.render(window, camera, gameObjects);
-//        gamemap.render();
-
-    }
-    
-    public GameMap getGamemap() {
-        return gamemap;
-    }
-
-    public void setGamemap(GameMap gamemap) {
-        this.gamemap = gamemap;
-    }    
+    } 
 }

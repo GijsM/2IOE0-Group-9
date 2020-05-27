@@ -1,16 +1,11 @@
 package app.Util;
 
-import app.Game.Game;
-import app.Game.Object.GameMap;
-import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import java.nio.*;
-import java.util.ArrayList;
 
-import static java.lang.StrictMath.round;
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -18,15 +13,13 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class WindowManager implements IStartStopable{
-	private final String title;
+	private String title;
 	private int width;
 	private int height;
 	private boolean resized;
 	
     private long window;
     private Thread thread;
-    //COPIED FROM TUTORIAL NOT SURE IF THIS IS CORRECT
-	GameMap map  = new GameMap();
 	
 	public WindowManager(String title, int width, int height) {
 		this.title = title;
@@ -152,30 +145,4 @@ public class WindowManager implements IStartStopable{
     public void setResized(boolean resized) {
     	this.resized = resized;
     }
-
-    //USED ORIGINALLY, DEAD CODE, KEPT FOR REFERENCE
-    public void loop() {
-		// This line is critical for LWJGL's interoperation with GLFW's
-		// OpenGL context, or any context that is managed externally.
-		// LWJGL detects the context that is current in the current thread,
-		// creates the GLCapabilities instance and makes the OpenGL
-		// bindings available for use.
-		GL.createCapabilities();
-
-		// Set the clear color
-		glClearColor(0f, 0.0f, 0.0f, 0.0f);
-		// Run the rendering loop until the user has attempted to close
-		// the window or has pressed the ESCAPE key.
-		while ( !glfwWindowShouldClose(window) ) {
-
-			this.map.rooms.get(0).render();
-
-
-			glfwSwapBuffers(window); // swap the color buffers
-
-			// Poll for window events. The key callback above will only be
-			// invoked during this call.
-			glfwPollEvents();
-		}
-	}
 }

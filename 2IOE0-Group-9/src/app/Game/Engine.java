@@ -14,7 +14,6 @@ public class Engine implements Runnable{
 	private final MouseInput mouseInput;
 	
 	private boolean running = false;
-	private static final int TARGET_FPS = 60;
 	private static final int TARGET_UPS = 30;
 	
 	public Engine(String title, int width, int height, Game game) {
