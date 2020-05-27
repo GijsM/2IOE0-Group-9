@@ -1,8 +1,15 @@
 package app.GUI;
 
 public class Pause {
+    public static void init() {
 
-    public static void update() {
+    }
+
+    public void update() {
+
+    }
+
+    public void render() {
 
     }
 }
