@@ -15,12 +15,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 
 public class App {
-
-//	public GUIStateManager guiManager;
-//	public WindowManager windowManager;
-
-//	GameMap gameMap = new GameMap();
-
 	private static Texture tex;
 	private static Texture title;
 
