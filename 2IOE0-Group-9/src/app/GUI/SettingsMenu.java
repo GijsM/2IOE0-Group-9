@@ -10,26 +10,26 @@ public class SettingsMenu {
     public static void init() {
         title = new Texture("Title.png");
 
-        GUI.DrawTexture(title, new Rect((Window.Width() / 4),0, Window.Width() / 2, 100));
-        GUI.Button("Audio", new Rect(Window.Width() / 4, Window.Height() / 6, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover");
-        GUI.Button("Controls", new Rect(Window.Width() / 4, Window.Height() / 3, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover");
-        GUI.Button("Back to Menu", new Rect(Window.Width() / 4, Window.Height() / 2, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover");
+        GUI.DrawTexture(title, new Rect((Window.getWidth() / 4),0, Window.getWidth() / 2, 100));
+        GUI.Button("Audio", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
+        GUI.Button("Controls", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
+        GUI.Button("Back to Menu", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
         update();
     }
 
     public static void update() {
-        if (GUI.Button("Audio", new Rect(Window.Width() / 4, Window.Height() / 6, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover")) {
+        if (GUI.Button("Audio", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Go to audio options");
         }
 
-        if (GUI.Button("Controls", new Rect(Window.Width() / 4, Window.Height() / 3, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover")) {
+        if (GUI.Button("Controls", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Here the controls can be found");
         }
 
-        if (GUI.Button("Back to Menu", new Rect(Window.Width() / 4, Window.Height() / 2, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover")) {
+        if (GUI.Button("Back to Menu", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Game now goes back to menu");
             Window.ClearWindow();
-            Window.UpdateScreen();
+            Window.update();
             StateManager.toMenu();
         }
     }

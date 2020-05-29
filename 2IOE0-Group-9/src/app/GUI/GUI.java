@@ -27,7 +27,7 @@ public class GUI {
     private static int boundTex = -1;
     private static Color boundColor = Color.color(1, 1, 1);
 
-    private static Rect area = new Rect(0,0, Window.Width(), Window.Height());
+    private static Rect area = new Rect(0,0, Window.getWidth(), Window.getHeight());
     private static List<Rect> areas = new ArrayList<Rect>();
 
     public static void init() {
@@ -40,13 +40,13 @@ public class GUI {
 
     public static void Start() {
         areas.clear();
-        areas.add(Window.GetRect());
+        areas.add(Window.getRect());
         area = areas.get(areas.size() - 1);
 
         glDisable(GL_DEPTH_TEST);
         shader.Bind();
         shader.SetUniform("matColor", backgroundColor);
-        ortho = Matrix4X4.Ortho(0, Window.Width(), Window.Height(), 0, -1, 1);
+        ortho = Matrix4X4.Ortho(0, Window.getWidth(), Window.getHeight(), 0, -1, 1);
         shader.SetUniform("projection", ortho);
         mesh.Bind();
     }

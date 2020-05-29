@@ -29,7 +29,7 @@ public class Mouse extends GLFWMouseButtonCallback {
     private static DoubleBuffer yBuffer;
 
     public Mouse() {
-        window = Window.Window();
+        window = Window.getWindow();
         xBuffer = BufferUtils.createDoubleBuffer(1);
         yBuffer = BufferUtils.createDoubleBuffer(1);
     }

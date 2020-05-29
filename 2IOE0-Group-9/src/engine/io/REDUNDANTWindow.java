@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-public class Window {
+public class REDUNDANTWindow {
     private int width, height;
     private String title;
     private long window;
@@ -20,7 +20,7 @@ public class Window {
     private boolean isFullscreen;
     private int[] windowPosX = new int[1], windowPosY = new int[1];
 
-    public Window(int width, int height, String title) {
+    public REDUNDANTWindow(int width, int height, String title) {
         this.width = width;
         this.height = height;
         this.title = title;
@@ -138,7 +138,7 @@ public class Window {
         return title;
     }
 
-    public long getWindow() {
-        return window;
-    }
+//    public long getWindow() {
+//        return window;
+//    }
 }

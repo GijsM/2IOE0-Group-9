@@ -25,7 +25,7 @@ public class App {
 	private static Texture title;
 
 	public void run() throws InterruptedException {
-		long window = Window.Init();
+		long window = Window.start();
 		Color clear = Color.color(0f, 0,0);
 
 		tex = new Texture("Egg.png");
@@ -41,17 +41,17 @@ public class App {
 			Mouse.Reset();
 			glfwPollEvents();
 
-			Window.ClearWindow();
+			Window.clear();
 
-			//GUI.Start();
+			GUI.Start();
 
-			//StateManager.update();
+			StateManager.update();
 
 //			GameMap.render();
 
-			//GUI.Unbind();
+			GUI.Unbind();
 
-			Window.UpdateScreen();
+			Window.update();
 		}
 
 		Texture.CleanUp();

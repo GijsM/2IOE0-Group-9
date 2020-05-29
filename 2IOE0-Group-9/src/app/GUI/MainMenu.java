@@ -13,26 +13,26 @@ public class MainMenu {
         title = new Texture("Title.png");
 
 
-        GUI.DrawTexture(title, new Rect((Window.Width() / 4),0, Window.Width() / 2, 100));
-        GUI.Button("Start", new Rect(Window.Width() / 4, Window.Height() / 6, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover");
-        GUI.Button("Settings", new Rect(Window.Width() / 4, Window.Height() / 3, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover");
-        GUI.Button("Exit", new Rect(Window.Width() / 4, Window.Height() / 2, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover");
+        GUI.DrawTexture(title, new Rect((Window.getWidth() / 4),0, Window.getWidth() / 2, 100));
+        GUI.Button("Start", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
+        GUI.Button("Settings", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
+        GUI.Button("Exit", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
         update();
     }
 
     public static void update() {
-        if (GUI.Button("Start", new Rect(Window.Width() / 4, Window.Height() / 6, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover")) {
+        if (GUI.Button("Start", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("The game has started");
         }
 
-        if (GUI.Button("Settings", new Rect(Window.Width() / 4, Window.Height() / 3, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover")) {
+        if (GUI.Button("Settings", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Go to settings menu");
             Window.ClearWindow();
-            Window.UpdateScreen();
+            Window.update();
             StateManager.toSettings();
         }
 
-        if (GUI.Button("Exit", new Rect(Window.Width() / 4, Window.Height() / 2, Window.Width() / 2, Window.Height() / 10), "Button", "ButtonHover")) {
+        if (GUI.Button("Exit", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Game is being shutdown");
             Window.CloseWindow();
         }
