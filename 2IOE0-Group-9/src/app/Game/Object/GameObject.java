@@ -9,17 +9,18 @@ import org.joml.Vector3f;
 import app.Game.Map.GameMap;
 import app.Util.IRenderable;
 import app.Util.IUpdateable;
+import app.engine.Mesh2;
 
 public class GameObject implements IRenderable, IUpdateable, ILoadable, ICollidable {
     protected GameMap gameMap;
     protected Body body;
     
     private float scale;
-    private final Mesh mesh;			// TODO: requires merging mesh.java's from branches
+    private final Mesh2 mesh;			// TODO: requires merging mesh.java's from branches
     private final Vector3f position;
     private final Vector3f rotation;
 
-    public GameObject(Mesh mesh) {
+    public GameObject(Mesh2 mesh) {
 //        this.gameMap = gameMap;
     	this.mesh = mesh;
     	position = new Vector3f();
@@ -41,7 +42,7 @@ public class GameObject implements IRenderable, IUpdateable, ILoadable, ICollida
     	return scale;
     }
     
-    public void setScale() {
+    public void setScale(float scale) {
     	this.scale = scale;
     }
     
@@ -55,7 +56,7 @@ public class GameObject implements IRenderable, IUpdateable, ILoadable, ICollida
     	this.rotation.z = z;
     }
     
-    public Mesh getMesh() {
+    public Mesh2 getMesh() {
     	return mesh;
     }
     @Override
