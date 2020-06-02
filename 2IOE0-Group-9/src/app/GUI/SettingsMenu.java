@@ -28,7 +28,7 @@ public class SettingsMenu {
 
         if (GUI.Button("Back to Menu", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Game now goes back to menu");
-            Window.ClearWindow();
+            Window.clear();
             Window.update();
             StateManager.toMenu();
         }

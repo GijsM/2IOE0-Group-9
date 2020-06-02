@@ -30,10 +30,15 @@ public class GUI {
     private static Rect area = new Rect(0,0, Window.getWidth(), Window.getHeight());
     private static List<Rect> areas = new ArrayList<Rect>();
 
-    public static void init() {
+    public static void init() throws Exception {
         float[] meshData = new float[] {0,1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1};
         mesh = new Mesh(meshData, meshData);
+        
         shader = new Shader("DefaultShader");
+        shader.createVertexShader(Shader.loadResource("res/Shaders/vertex.vs"));
+        shader.createFragmentShader(Shader.loadResource("res/Shaders/fragment.fs"));
+        shader.link();
+
         skin = new GUISkin("DefaultGUI");
         font = new Font("Candarai", 22);
     }
@@ -44,7 +49,7 @@ public class GUI {
         area = areas.get(areas.size() - 1);
 
         glDisable(GL_DEPTH_TEST);
-        shader.Bind();
+        shader.bind();
         shader.SetUniform("matColor", backgroundColor);
         ortho = Matrix4X4.Ortho(0, Window.getWidth(), Window.getHeight(), 0, -1, 1);
         shader.SetUniform("projection", ortho);

@@ -2,52 +2,35 @@ package app.engine;
 
 import app.math.Color;
 import app.math.Matrix4X4;
-import org.lwjgl.BufferUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryStack;
+
+import java.io.InputStream;
 import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
     private int program;
+    private int vertexShaderId;
+    private int fragmentShaderId;
     private int vs;
-    private int fs;
+    
+    private final Map<String, Integer> uniforms;
 
     public Shader (String fileName) {
         program = glCreateProgram();
-
-        vs = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vs, CreateShader(fileName + ".vs"));
-        glCompileShader(vs);
-        if (glGetShaderi(vs, GL_COMPILE_STATUS) != 1) {
-            //System.out.println("Hi");
-            System.err.println(glGetShaderInfoLog(vs));
-            System.exit(-1);
-        }
-
-        fs = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fs, CreateShader(fileName + ".fs"));
-        glCompileShader(fs);
-        if (glGetShaderi(fs, GL_COMPILE_STATUS) != 1) {
-            //System.out.println("Hi");
-            System.err.println(glGetShaderInfoLog(fs));
-            System.exit(-1);
-        }
-
-        glAttachShader(program, vs);
-        glAttachShader(program, fs);
+        uniforms = new HashMap<>();
 
         glBindAttribLocation(program, 0, "vertices");
         glBindAttribLocation(program, 1, "uv");
 
-        glLinkProgram(program);
-
         if(glGetProgrami(program, GL_LINK_STATUS) != 1) {
-            //System.out.println("Hi");
             System.err.println(glGetProgramInfoLog(vs));
             System.exit(-1);
         }
@@ -58,24 +41,40 @@ public class Shader {
             System.exit(-1);
         }
     }
-
-    private String CreateShader (String fileName) {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br;
-
-        try {
-            br = new BufferedReader(new FileReader(new File("res/Shaders/" + fileName)));
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-                sb.append("\n");
-            }
-            br.close();
+    
+    
+    protected int createShader(String shaderCode, int shaderType) throws Exception {
+        int shaderId = glCreateShader(shaderType);
+        if (shaderId == 0) {
+            throw new Exception("Error creating shader. Type: " + shaderType);
         }
-        catch (IOException e) {
-            e.printStackTrace();
+
+        glShaderSource(shaderId, shaderCode);
+        glCompileShader(shaderId);
+
+        if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
+            throw new Exception("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
         }
-        return sb.toString();
+
+        glAttachShader(program, shaderId);
+
+        return shaderId;
+    }
+    
+    public void createVertexShader(String shaderCode) throws Exception {
+        vertexShaderId = createShader(shaderCode, GL_VERTEX_SHADER);
+    }
+
+    public void createFragmentShader(String shaderCode) throws Exception {
+        fragmentShaderId = createShader(shaderCode, GL_FRAGMENT_SHADER);
+    }
+    
+    public void createUniform(String uniformName) throws Exception {
+        int uniformLocation = glGetUniformLocation(program, uniformName);
+        if (uniformLocation < 0) {
+            throw new Exception("Could not find uniform:" + uniformName);
+        }
+        uniforms.put(uniformName, uniformLocation);
     }
 
     public void SetUniform(String name, float x, float y) {
@@ -108,12 +107,51 @@ public class Shader {
             buffer.flip();
         }
     }
+    
+    public void pushUniform(String uniformName, Matrix4f value) {
+        // Dump the matrix into a float buffer
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            glUniformMatrix4fv(uniforms.get(uniformName), false,
+                               value.get(stack.mallocFloat(16)));
+        }
+    }
+    
+    public void link() throws Exception {
+        glLinkProgram(program);
+        if (glGetProgrami(program, GL_LINK_STATUS) == 0) {
+            throw new Exception("Error linking Shader code: " + glGetProgramInfoLog(program, 1024));
+        }
 
-    public void Bind() {
+        if (vertexShaderId != 0) {
+            glDetachShader(program, vertexShaderId);
+        }
+        if (fragmentShaderId != 0) {
+            glDetachShader(program, fragmentShaderId);
+        }
+
+        glValidateProgram(program);
+        if (glGetProgrami(program, GL_VALIDATE_STATUS) == 0) {
+            System.err.println("Warning validating Shader code: " + glGetProgramInfoLog(program, 1024));
+        }
+    }
+
+    public void bind() {
         glUseProgram(program);
     }
 
-    public void Unbind() {
+    public void unbind() {
         glUseProgram(0);
+    }
+    
+    /*
+     * Aux. Function for reading shaders
+     */
+    public static String loadResource(String fileName) throws Exception {
+        String result;
+        try (InputStream in = Coordinates.class.getResourceAsStream(fileName);
+             Scanner scanner = new Scanner(in, java.nio.charset.StandardCharsets.UTF_8.name())) {
+            result = scanner.useDelimiter("\\A").next();
+        }
+        return result;
     }
 }
