@@ -3,7 +3,7 @@ package app;
 import app.Game.Game;
 //import app.GUI.GUIStateManager;
 //import app.GUI.MenuGUIState;
-import app.Input.Mouse2;
+import app.Input.Mouse;
 //import app.Util.Timer;
 import app.engine.Window;
 
@@ -12,7 +12,7 @@ public class Engine implements Runnable{
 //	private GUIStateManager guiManager;
 	private Game game;
 	private Timer timer;
-	private final Mouse2 mouse2;
+	private final Mouse mouse;
 	
 	private boolean running = false;
 	private static final int TARGET_UPS = 30;
@@ -21,7 +21,7 @@ public class Engine implements Runnable{
 		window = Window.getWindow();
 //		guiManager = new GUIStateManager();
 //		guiManager.setCurrentGuiState(new MenuGUIState());
-		mouse2 = new Mouse2();
+		mouse = new Mouse();
 		this.game = game;
 		timer = new Timer();
 	}
@@ -44,7 +44,7 @@ public class Engine implements Runnable{
 	
 	protected void init() throws Exception {
 		Window.start(window);
-		mouseInput.init(window);
+		mouse.init();
 		game.start(window);
 	}
 	
@@ -71,12 +71,12 @@ public class Engine implements Runnable{
 	}
 	
 	protected void input() {
-		mouseInput.input(window);
-		game.input(window, mouseInput);
+		mouse.input();
+		game.input(window, mouse);
 	}
 	
 	protected void update(float interval) {
-		game.update(interval, mouseInput);
+		game.update(interval, mouse);
 	}
 	
 	protected void render() {
