@@ -12,10 +12,7 @@ import app.engine.Mesh2;
 import app.engine.Coordinates;
 import app.Game.Map.GameMap;
 import app.Game.Object.GameObject;
-import app.Util.IRenderable;
-import app.Util.IStartStopable;
-import app.Util.IUpdateable;
-import app.Input.Mouse2;
+import app.Input.Mouse;
 import app.engine.Window;
 
 public class Game {
@@ -98,12 +95,7 @@ public class Game {
 
             /*
              * WIP : Render Map from GameMap/GameObjects/Rooms and pass to gameObjects array
-             */
-              
-              
-              
-              
-   
+             */   
     }
 
     
@@ -114,7 +106,7 @@ public class Game {
     }
     
     
-    public void input(Window window, Mouse2 mouseInput) {
+    public void input(Window window, Mouse mouseInput) {
         cameraVec.set(0, 0, 0);
         if (window.isKeyPressed(GLFW_KEY_W)) {
             cameraVec.z = -1;
@@ -135,7 +127,7 @@ public class Game {
 
     //TODO perhaps call update and render in different threads for performance (Can do this at a later stage if performance becomes a problem)
     
-    public void update(float interval, Mouse2 mouseInput) {
+    public void update(float interval, Mouse mouseInput) {
     	// TODO: Implement update() in GameMap.java 
 //        gamemap.update();
     	camera.movePosition(cameraVec.x * CAMERA_POS_STEP, cameraVec.y * CAMERA_POS_STEP, cameraVec.z * CAMERA_POS_STEP);
