@@ -43,13 +43,13 @@ public class App {
 
 			Window.ClearWindow();
 
-			//GUI.Start();
+			GUI.Start();
 
-			//StateManager.update();
+			StateManager.update();
 
 //			GameMap.render();
 
-			//GUI.Unbind();
+			GUI.Unbind();
 
 			Window.UpdateScreen();
 		}
@@ -58,7 +58,7 @@ public class App {
 		Mesh.CleanAllMesh();
 
 		glfwTerminate();
-		wait();
+		//wait();
 	}
 
 	public static void main(String[] args) {
