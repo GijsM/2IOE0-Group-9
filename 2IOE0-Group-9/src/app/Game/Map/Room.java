@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import app.Game.AI.AStar;
+import app.Game.Object.ILoadable;
 import app.Game.Object.StaticGameObject;
+import app.Util.IRenderable;
+import app.Util.IUpdateable;
+import org.jbox2d.dynamics.World;
 
-public class Room {
+public class Room implements IUpdateable, IRenderable, ILoadable {
     private List<StaticGameObject> gameObjects = new ArrayList<>();
-    //private GameMap map;
+    private GameMap map;
     Random ran = new Random();
     ArrayList<ArrayList> room;
 
@@ -33,17 +37,43 @@ public class Room {
     	return gameObjects;
     }
 
-//    public GameMap getMap() {
-//    	return map;
-//    }
-
-//    public void setMap(GameMap map) {
-//    	this.map = map;
-//    }
-
-    public void update() {
-        // TODO: IMPLEMENT
+    public GameMap getMap() {
+    	return map;
     }
+
+    public void setMap(GameMap map) {
+    	this.map = map;
+    }
+
+    @Override
+    public void render() {
+        for (StaticGameObject staticGameObject : gameObjects) {
+            staticGameObject.render();
+        }
+    }
+
+    @Override
+    public void update() {
+        // TODO not sure if this is necessary
+
+    }
+
+    @Override
+    public void load(World world) {
+        for (StaticGameObject staticGameObject : gameObjects) {
+            staticGameObject.load(world);
+        }
+
+    }
+
+    @Override
+    public void unload(World world) {
+        for (StaticGameObject staticGameObject : gameObjects) {
+            staticGameObject.unload(world);
+        }
+    }
+
+
 
     private ArrayList<ArrayList> standardroom(int width) {
         int doorwayDirection = this.ran.nextInt(5);
@@ -128,9 +158,6 @@ public class Room {
         return room;
     }
 
-
-
-
     /*
     Rotates the map clockwise
      */
@@ -182,6 +209,7 @@ public class Room {
         ToInt();
     }
 
+    // Transform room array into int[][]
     public int[][] ToInt(){
         System.out.println("Starting");
         int[][] aStarRoom = new int[this.room.size()][this.room.size()];
@@ -197,30 +225,24 @@ public class Room {
                     aStarRoom[i][j] = -3;
                     // If a tile is traversable put a 0 in the array
                 } else{
-                    aStarRoom[i][j] = 0;
+                    aStarRoom[i][j] = currentTile;
                 }
             }
         }
+        PrintAStar(aStarRoom);
         AStar.PerformAStar(aStarRoom);
         return aStarRoom;
     }
 
-    public void PrintAStar(){
-        int[][] Astar = ToInt();
-        for(int i = 0; i < Astar.length; i++){
-            for(int j = 0; j < Astar.length; j++){
-                if(j == Astar.length - 1){
-                    System.out.println(" " + Astar[i][j]);
+    public void PrintAStar(int[][] aStar){
+        for(int i = 0; i < aStar.length; i++){
+            for(int j = 0; j < aStar.length; j++){
+                if(j == aStar.length - 1){
+                    System.out.println(" " + aStar[i][j]);
                 } else{
-                    System.out.print(" " + Astar[i][j]);
+                    System.out.print(" " + aStar[i][j]);
                 }
             }
-        }
-    }
-
-    public void render(){
-        for (StaticGameObject staticGameObject : gameObjects) {
-            staticGameObject.render();
         }
     }
 

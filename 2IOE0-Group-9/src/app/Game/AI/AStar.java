@@ -1,5 +1,6 @@
 package app.Game.AI;
 
+import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -114,8 +115,9 @@ public class AStar {
 
     // Perform the A* algorithm and return a path
     public static void PerformAStar(int[][] room){
-        AStar as = new AStar(room, 2, 1, false); // Create new AStar instance with starting points
+        AStar as = new AStar(room, 2, 2, false); // Create new AStar instance with starting points
         List<Node> path = as.findPathTo(6, 8); // Create a list containing the path to the goal node
+        FindDangerZones(2, 2, room);
         if (path != null) {
             path.forEach((n) -> {
                 System.out.print("[" + n.x + ", " + n.y + "] "); // Print out the path from start to end
@@ -127,7 +129,7 @@ public class AStar {
                 for (int room_entry : room_row) {
                     switch (room_entry) {
                         case 0: // Current entry is empty
-                            System.out.print("_");
+                            System.out.print("#");
                             break;
                         case -1: // Current entry is part of the path
                             System.out.print("*");
@@ -139,11 +141,75 @@ public class AStar {
                             System.out.print("O");
                             break;
                         default: // All other cases
-                            System.out.print("#");
+                            System.out.print("_");
                     }
                 }
                 System.out.println();
             }
         }
+    }
+
+    // Calculate all coordinates that the player can shoot at
+    public static void FindDangerZones(int playerX, int playerY, int[][] room){
+        List<List<Integer>> dangers = new ArrayList<>();
+        // Find horizontal coordinates
+        for(int i = playerX; i < room.length; i++){
+            if(room[playerY][i] == -3){
+                break;
+            }
+            AddCoords(i, playerY, dangers);
+        }
+        for(int i = playerX - 1; i >= 0; i--){
+            if(room[playerY][i] == -3){
+                break;
+            }
+            AddCoords(i, playerY, dangers);
+        }
+        for(int i = playerY + 1; i < room[playerX].length; i++){
+            if(room[i][playerX] == -3){
+                break;
+            }
+            AddCoords(playerX, i, dangers);
+        }
+        // Find vertical coordinates
+        for(int i = playerY - 1; i >= 0; i--){
+            if(room[i][playerX] == -3){
+                break;
+            }
+            AddCoords(playerX, i, dangers);
+        }
+        // Calculate diagonals in all 4 directions
+        CalculateDiagonals(dangers, playerX, playerY, 1, 1, room);
+        CalculateDiagonals(dangers, playerX, playerY, -1, 1, room);
+        CalculateDiagonals(dangers, playerX, playerY, -1, -1, room);
+        CalculateDiagonals(dangers, playerX, playerY, 1, -1, room);
+
+        for(int i = 0; i < dangers.size(); i++){
+            System.out.print(dangers.get(i) + " ");
+        }
+        System.out.println();
+    }
+
+    // Calculate the diagonal range of the player
+    public static void CalculateDiagonals(List<List<Integer>> dangers, int player_X, int player_Y,
+                                                         int xVal, int yVal, int[][] room){
+        player_X += xVal;
+        player_Y += yVal;
+        while(!(player_X < 0 || player_Y < 0 || player_X >= room.length || player_Y >= room.length)){
+            if(room[player_Y][player_X] == -3){
+                break;
+            }
+            AddCoords(player_X, player_Y, dangers);
+            player_X += xVal;
+            player_Y += yVal;
+        }
+    }
+
+    // Add coordinates to dangers list
+    public static void AddCoords(int x, int y, List<List<Integer>> dangers){
+        List<Integer> coords = new ArrayList();
+        coords.add(x);
+        coords.add(y);
+        dangers.add(coords);
     }
 }
