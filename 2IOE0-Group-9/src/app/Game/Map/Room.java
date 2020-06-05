@@ -141,6 +141,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         }
         this.exitDoorwayDirection = exitDoorwayDirection;
         int random = this.ran.nextInt(10) + 5;
+        int player = this.ran.nextInt((room.size() - 1) * (room.size() - 1));
         int counter = 0;
         for(int i = 0 ; i < width ; i++){
             for(int j = 0; j < width ; j++){
@@ -149,6 +150,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                     if(counter >= random){
                         random += this.ran.nextInt(10) + 5;
                         room.get(i).set(j, 4);
+                    } else if(counter >= player){
+                        room.get(i).set(j, 5);
+                        player = 10000;
                     } else{
                         //room.get(i).set(j, this.ran.nextInt(100) + 5);
                     }
@@ -219,13 +223,16 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 int currentTile = (int) this.room.get(i).get(j);
                 // If a tile is blocked put -2 in the array for A*
                 if(currentTile == 0 || currentTile == 2 || currentTile == 3){
-                    aStarRoom[i][j] = -2;
+                    aStarRoom[i][j] = 0;
                     // If a tile contains a rock put -3 in the array
                 } else if(currentTile == 4){
-                    aStarRoom[i][j] = -3;
+                    aStarRoom[i][j] = 4;
+                    // If a tile is traversable put a 0 in the array
+                } else if(currentTile == 5){
+                    aStarRoom[i][j] = 5;
                     // If a tile is traversable put a 0 in the array
                 } else{
-                    aStarRoom[i][j] = currentTile;
+                    aStarRoom[i][j] = 9;
                 }
             }
         }

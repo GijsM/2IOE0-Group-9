@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 public class AStar {
     private final List<Node> open;
     private final List<Node> closed;
@@ -94,9 +95,9 @@ public class AStar {
                 if ((x != 0 || y != 0) // If this node is not the current node
                         && this.current.x + x >= 0 && this.current.x + x < this.room[0].length // check room boundaries
                         && this.current.y + y >= 0 && this.current.y + y < this.room.length
-                        && this.room[this.current.y + y][this.current.x + x] != -1 // check if square is walkable
-                        && this.room[this.current.y + y][this.current.x + x] != -2
-                        && this.room[this.current.y + y][this.current.x + x] != -3
+                        && this.room[this.current.y + y][this.current.x + x] != 0 // check if square is walkable
+                        && this.room[this.current.y + y][this.current.x + x] != 4
+                        && this.room[this.current.y + y][this.current.x + x] != -1
                         && !findNeighborInList(this.open, node) && !findNeighborInList(this.closed, node)) { // if not already done
                     node.g = node.parent.g + 1.; // Horizontal/vertical cost = 1.0
                     node.g += room[this.current.y + y][this.current.x + x]; // add movement cost for this square
@@ -117,7 +118,31 @@ public class AStar {
     public static void PerformAStar(int[][] room){
         AStar as = new AStar(room, 2, 2, false); // Create new AStar instance with starting points
         List<Node> path = as.findPathTo(6, 8); // Create a list containing the path to the goal node
-        FindDangerZones(2, 2, room);
+
+        int playerX = 0;
+        int playerY = 0;
+
+        for(int i = 0; i < room.length; i ++){
+            for(int j = 0; j < room.length; j++){
+                if(room[j][i] == 5){
+                    playerX = i;
+                    playerY = j;
+                    break;
+                }
+            }
+        }
+        List<List<Integer>> dangerZone = FindDangerZones(playerX, playerY, room);
+
+        for(int i = 0; i < room.length; i++){
+            for(int j = 0; j < room.length; j++){
+                if(j == room.length - 1){
+                    System.out.println(" " + room[i][j]);
+                } else{
+                    System.out.print(" " + room[i][j]);
+                }
+            }
+        }
+
         if (path != null) {
             path.forEach((n) -> {
                 System.out.print("[" + n.x + ", " + n.y + "] "); // Print out the path from start to end
@@ -128,17 +153,17 @@ public class AStar {
             for (int[] room_row : room) {
                 for (int room_entry : room_row) {
                     switch (room_entry) {
-                        case 0: // Current entry is empty
-                            System.out.print("#");
-                            break;
                         case -1: // Current entry is part of the path
                             System.out.print("*");
                             break;
-                        case -2: // Current entry is blocked
+                        case 0: // Current entry is blocked
                             System.out.print("X");
                             break;
-                        case -3: // Current entry is a rock
+                        case 4: // Current entry is a rock
                             System.out.print("O");
+                            break;
+                        case 5: // Current entry is the player
+                            System.out.print("x");
                             break;
                         default: // All other cases
                             System.out.print("_");
@@ -150,32 +175,36 @@ public class AStar {
     }
 
     // Calculate all coordinates that the player can shoot at
-    public static void FindDangerZones(int playerX, int playerY, int[][] room){
+    public static List<List<Integer>> FindDangerZones(int playerX, int playerY, int[][] room){
         List<List<Integer>> dangers = new ArrayList<>();
         // Find horizontal coordinates
-        for(int i = playerX; i < room.length; i++){
+        for(int i = playerX; i < room.length - 1; i++){
             if(room[playerY][i] == -3){
                 break;
             }
+            room[playerY][i] -= 3;
             AddCoords(i, playerY, dangers);
         }
-        for(int i = playerX - 1; i >= 0; i--){
-            if(room[playerY][i] == -3){
+        for(int i = playerX - 1; i > 0; i--){
+            if(room[playerY][i] == 4){
                 break;
             }
+            room[playerY][i] -= 3;
             AddCoords(i, playerY, dangers);
         }
-        for(int i = playerY + 1; i < room[playerX].length; i++){
-            if(room[i][playerX] == -3){
+        for(int i = playerY + 1; i < room[playerX].length - 1; i++){
+            if(room[i][playerX] == 4){
                 break;
             }
+            room[i][playerX] -= 3;
             AddCoords(playerX, i, dangers);
         }
         // Find vertical coordinates
-        for(int i = playerY - 1; i >= 0; i--){
-            if(room[i][playerX] == -3){
+        for(int i = playerY - 1; i > 0; i--){
+            if(room[i][playerX] == 4){
                 break;
             }
+            room[i][playerX] -= 3;
             AddCoords(playerX, i, dangers);
         }
         // Calculate diagonals in all 4 directions
@@ -188,6 +217,7 @@ public class AStar {
             System.out.print(dangers.get(i) + " ");
         }
         System.out.println();
+        return dangers;
     }
 
     // Calculate the diagonal range of the player
@@ -195,10 +225,11 @@ public class AStar {
                                                          int xVal, int yVal, int[][] room){
         player_X += xVal;
         player_Y += yVal;
-        while(!(player_X < 0 || player_Y < 0 || player_X >= room.length || player_Y >= room.length)){
-            if(room[player_Y][player_X] == -3){
+        while(!(player_X <= 0 || player_Y <= 0 || player_X >= room.length - 1 || player_Y >= room.length - 1)){
+            if(room[player_Y][player_X] == 4){
                 break;
             }
+            room[player_Y][player_X] -= 3;
             AddCoords(player_X, player_Y, dangers);
             player_X += xVal;
             player_Y += yVal;
