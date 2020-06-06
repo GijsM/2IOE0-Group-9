@@ -91,11 +91,11 @@ public class Window {
 		glfwTerminate();
 	}
 	
-	public boolean windowShouldClose() {
+	public static boolean windowShouldClose() {
 		return glfwWindowShouldClose(window);
 	}
 	
-	public boolean isKeyPressed(int keyCode) {
+	public static boolean isKeyPressed(int keyCode) {
 		return glfwGetKey(window, keyCode) == GLFW_PRESS;
 	}
 	

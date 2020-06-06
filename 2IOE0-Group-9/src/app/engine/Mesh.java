@@ -20,7 +20,7 @@ public class Mesh {
     private int v_id;
     private int u_id;
 
-    private static List<Mesh> meshList = new ArrayList<Mesh>();
+    private static List<Mesh> m	hList = new ArrayList<Mesh>();
 
     public Mesh(float[] vertices, float[] indices) {
         this.vertices = vertices;

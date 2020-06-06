@@ -30,7 +30,7 @@ public class Coordinates {
     	transformation = new Transformation();
     }
 
-    public void init(Window window) throws Exception {
+    public void init() throws Exception {
     	GL.createCapabilities();
         // Create shader
         shader = new Shader("DefaultShader");
@@ -47,13 +47,13 @@ public class Coordinates {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, GameObject[] objects) {
+    public void render(Camera camera, GameObject[] objects) {
         clear();
 
         shader.bind();
         
         // Projection matrix
-        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
+        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, Window.getWidth(), Window.getHeight(), Z_NEAR, Z_FAR);
         shader.pushUniform("projectionMatrix", projectionMatrix);
         
      // Update view Matrix

@@ -35,8 +35,8 @@ public class Game {
     	cameraVec = new Vector3f();
     }
         
-    public void start(Window window) throws Exception {
-		coordinates.init(window);
+    public void start() throws Exception {
+		coordinates.init();
 		running = true;
 		/*
 		 * TEST RENDERING
@@ -106,21 +106,21 @@ public class Game {
     }
     
     
-    public void input(Window window, Mouse mouseInput) {
+    public void input(Mouse mouseInput) {
         cameraVec.set(0, 0, 0);
-        if (window.isKeyPressed(GLFW_KEY_W)) {
+        if (Window.isKeyPressed(GLFW_KEY_W)) {
             cameraVec.z = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_S)) {
+        } else if (Window.isKeyPressed(GLFW_KEY_S)) {
             cameraVec.z = 1;
         }
-        if (window.isKeyPressed(GLFW_KEY_A)) {
+        if (Window.isKeyPressed(GLFW_KEY_A)) {
             cameraVec.x = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_D)) {
+        } else if (Window.isKeyPressed(GLFW_KEY_D)) {
             cameraVec.x = 1;
         }
-        if (window.isKeyPressed(GLFW_KEY_Z)) {
+        if (Window.isKeyPressed(GLFW_KEY_Z)) {
             cameraVec.y = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_X)) {
+        } else if (Window.isKeyPressed(GLFW_KEY_X)) {
             cameraVec.y = 1;
         }
     }
@@ -138,8 +138,8 @@ public class Game {
     	}
     }
 
-    public void render(Window window) {
-    	coordinates.render(window, camera, gameObjects);
+    public void render() {
+    	coordinates.render(camera, gameObjects);
     } 
     
     public GameMap getGamemap() {

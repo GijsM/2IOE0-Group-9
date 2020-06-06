@@ -4,7 +4,7 @@ import app.Game.Game;
 //import app.GUI.GUIStateManager;
 //import app.GUI.MenuGUIState;
 import app.Input.Mouse;
-//import app.Util.Timer;
+import app.Util.Timer;
 import app.engine.Window;
 
 public class Engine implements Runnable{
@@ -43,9 +43,9 @@ public class Engine implements Runnable{
 	}
 	
 	protected void init() throws Exception {
-		Window.start(window);
+		Window.start();
 		mouse.init();
-		game.start(window);
+		game.start();
 	}
 	
 	protected void loop() {
@@ -55,7 +55,7 @@ public class Engine implements Runnable{
 		
 		boolean running = true;
 		
-		while(running && !window.windowShouldClose()) {
+		while(running && !Window.windowShouldClose()) {
 			elapsedTime = timer.getElapsedTime();
 			accumulator += elapsedTime;
 			
@@ -72,7 +72,7 @@ public class Engine implements Runnable{
 	
 	protected void input() {
 		mouse.input();
-		game.input(window, mouse);
+		game.input(mouse);
 	}
 	
 	protected void update(float interval) {
@@ -80,8 +80,8 @@ public class Engine implements Runnable{
 	}
 	
 	protected void render() {
-		game.render(window);
-		window.update();
+		game.render();
+		Window.update();
 	}
 	
 	protected void cleanup() {
