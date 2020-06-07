@@ -1,6 +1,7 @@
 package app.Game.AI;
 
 import java.util.Random;
+import app.Game.AI.AStar;
 
 /*
 TODO:
@@ -11,6 +12,7 @@ TODO:
  //setLearningRate(learningrate)
  updateQTable(state, action ,newState (potentially unnecessary) , double reward);
  */
+//total cost: 11 (in example). integer called: path.get(path.size() -1).g
 
 public class Qlearner {
     float[][] qTable;
@@ -19,16 +21,19 @@ public class Qlearner {
     int state;
     int action;
     int newState;
+    private final int[][] room;
+    //total cost: 11 (in example). integer called: path.get(path.size() -1).g
 
-
-    public Qlearner(){
+    public Qlearner(int[][] room){
+        this.room = room;
         initTable();
         learningRate = (float) 1.0; // this needs to tested and tuned.
 
 
     }
 
-    public Qlearner(float learningRate){
+    public Qlearner(float learningRate, int[][] room){
+    	this.room = room;
         initTable();
         this.learningRate = learningRate;
     }
@@ -98,6 +103,17 @@ public class Qlearner {
                 qTable[i][1] = (float) ((double) selectRandomAction() * reward);
             }
         }
+    }
+    
+    public double getAstarValues() {
+    	// TODO get coordinates enemy & item & player
+    	    	
+    	//get distance to item
+    	double distItem = AStar.AStarql(room, xEnemy, yEnemy, xItem, yItem) ;
+    	//get distance to player
+    	double distPlayer = AStar.AStarql(room, xEnemy, yEnemy, xPlayer, yPlayer);
+    	//return difference for qtable
+    	return(distItem - distPlayer);
     }
     
 }

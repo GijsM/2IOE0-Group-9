@@ -115,7 +115,7 @@ public class AStar {
     }
 
     // Perform the A* algorithm and return a path
-    public static void PerformAStar(int[][] room){
+    public static void PerformAStar(int[][] room) {
         AStar as = new AStar(room, 2, 2, false); // Create new AStar instance with starting points
         List<Node> path = as.findPathTo(6, 8); // Create a list containing the path to the goal node
 
@@ -243,4 +243,12 @@ public class AStar {
         coords.add(y);
         dangers.add(coords);
     }
+    
+    // Perform the A* algorithm and return a value for qlearner
+    public static double AStarql(int[][] room, int xEnemy, int yEnemy, int xItem, int yItem) {
+        AStar as = new AStar(room, xEnemy, yEnemy, false); // Create new AStar instance with starting points
+        List<Node> path = as.findPathTo(xItem, yItem); // Create a list containing the path to the goal node
+        return path.get(path.size() - 1).g;
+    }
+    
 }
