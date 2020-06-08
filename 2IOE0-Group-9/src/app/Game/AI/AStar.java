@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class AStar {
     private final List<Node> open;
     private final List<Node> closed;
@@ -177,60 +176,101 @@ public class AStar {
     // Calculate all coordinates that the player can shoot at
     public static List<List<Integer>> FindDangerZones(int playerX, int playerY, int[][] room){
         List<List<Integer>> dangers = new ArrayList<>();
+        List<List<Integer>> safeSpots = new ArrayList<>();
+
         // Find horizontal coordinates
+        Boolean foundStone = false;
+
         for(int i = playerX; i < room.length - 1; i++){
-            if(room[playerY][i] == -3){
-                break;
+            if(room[playerY][i] == 4){
+                foundStone = true;
             }
-            room[playerY][i] -= 3;
-            AddCoords(i, playerY, dangers);
+            else if (foundStone) {
+                AddCoords(i, playerY, safeSpots);
+            }
+            else {
+                AddCoords(i, playerY, dangers);
+            }
+
+
+
         }
+        foundStone = false;
         for(int i = playerX - 1; i > 0; i--){
             if(room[playerY][i] == 4){
-                break;
+                foundStone = true;
             }
-            room[playerY][i] -= 3;
-            AddCoords(i, playerY, dangers);
+            else if(foundStone) {
+                AddCoords(i, playerY, safeSpots);
+            } else {
+                AddCoords(i, playerY, dangers);
+            }
+
         }
+        foundStone = false;
+
         for(int i = playerY + 1; i < room[playerX].length - 1; i++){
             if(room[i][playerX] == 4){
-                break;
+                foundStone = true;
             }
-            room[i][playerX] -= 3;
-            AddCoords(playerX, i, dangers);
+            else if(foundStone) {
+                AddCoords(playerX, i, safeSpots);
+            }
+            else {
+                AddCoords(playerX, i, dangers);
+            }
+
         }
+        foundStone = false;
         // Find vertical coordinates
         for(int i = playerY - 1; i > 0; i--){
             if(room[i][playerX] == 4){
-                break;
+                foundStone = true;
             }
-            room[i][playerX] -= 3;
-            AddCoords(playerX, i, dangers);
+            else if(foundStone) {
+                AddCoords(playerX, i, safeSpots);
+            }
+            else {
+                AddCoords(playerX, i, dangers);
+            }
+
         }
+        foundStone = false;
         // Calculate diagonals in all 4 directions
-        CalculateDiagonals(dangers, playerX, playerY, 1, 1, room);
-        CalculateDiagonals(dangers, playerX, playerY, -1, 1, room);
-        CalculateDiagonals(dangers, playerX, playerY, -1, -1, room);
-        CalculateDiagonals(dangers, playerX, playerY, 1, -1, room);
+        CalculateDiagonals(dangers, playerX, playerY, 1, 1, room, safeSpots);
+        CalculateDiagonals(dangers, playerX, playerY, -1, 1, room, safeSpots);
+        CalculateDiagonals(dangers, playerX, playerY, -1, -1, room, safeSpots);
+        CalculateDiagonals(dangers, playerX, playerY, 1, -1, room, safeSpots);
 
         for(int i = 0; i < dangers.size(); i++){
             System.out.print(dangers.get(i) + " ");
         }
+        System.out.println("/n");
+        for(int i = 0; i < safeSpots.size(); i++){
+            System.out.print(safeSpots.get(i) + " ");
+        }
+        setValues(safeSpots, room);
         System.out.println();
         return dangers;
     }
 
     // Calculate the diagonal range of the player
     public static void CalculateDiagonals(List<List<Integer>> dangers, int player_X, int player_Y,
-                                                         int xVal, int yVal, int[][] room){
+                                          int xVal, int yVal, int[][] room, List<List<Integer>> safeSpots){
         player_X += xVal;
         player_Y += yVal;
+        boolean foundStone = false;
         while(!(player_X <= 0 || player_Y <= 0 || player_X >= room.length - 1 || player_Y >= room.length - 1)){
             if(room[player_Y][player_X] == 4){
-                break;
+                foundStone = true;
             }
-            room[player_Y][player_X] -= 3;
-            AddCoords(player_X, player_Y, dangers);
+            else if (foundStone) {
+                AddCoords(player_X, player_Y, safeSpots);
+            }
+            else {
+                AddCoords(player_X, player_Y, dangers);
+            }
+
             player_X += xVal;
             player_Y += yVal;
         }
@@ -242,6 +282,37 @@ public class AStar {
         coords.add(x);
         coords.add(y);
         dangers.add(coords);
+    }
+    public static void setValues(List<List<Integer>> safeSpots, int[][] room) {
+        int x;
+        int y;
+        for(int i = 0; i < safeSpots.size(); i++){
+            y = safeSpots.get(i).get(0);
+            x = safeSpots.get(i).get(1);
+
+            room[x][y] -= 3;
+        }
+        for(int i = 0; i < safeSpots.size(); i++){
+            y = safeSpots.get(i).get(0);
+            x = safeSpots.get(i).get(1);
+
+            setNeighbours(x - 1, y, room);
+            setNeighbours(x, y - 1, room);
+            setNeighbours(x + 1, y, room);
+            setNeighbours(x  , y + 1, room);
+
+            //Diagonal safespots
+//            setNeighbours(x - 1, y - 1, room);
+//            setNeighbours(x - 1, y + 1, room);
+//            setNeighbours(x + 1, y - 1, room);
+//            setNeighbours(x + 1, y + 1, room);
+        }
+    }
+
+    public static void setNeighbours(int x, int y, int[][] room) {
+        if (room[x][y] == 9) {
+            room[x][y] -= 2;
+        }
     }
     
     // Perform the A* algorithm and return a value for qlearner
