@@ -31,7 +31,7 @@ public class Texture {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
-        ByteBuffer data = stbi_load("./res/Textures/" + fileName, width, height, channels, 4);
+        ByteBuffer data = stbi_load("C:\\Users\\malte\\Documents\\GameDev\\Current\\2IOE0-Group-9\\res\\Textures\\" + fileName, width, height, channels, 4);
 
         id = glGenTextures();
         this.width = width.get();
@@ -54,19 +54,6 @@ public class Texture {
         this.height = height;
     }
 
-    public int ID() {
-        return id;
-    }
-
-    public void Bind() {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, id);
-    }
-
-    public void Unbind() {
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
     public static Texture Find(String textureName) {
         for (int i = 0; i < textureInstances.size(); i++) {
             tmp = textureInstances.get(i);
@@ -76,10 +63,19 @@ public class Texture {
         }
         return null;
     }
+    
+    public void bind() {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, id);
+    }
 
-    public static void CleanUp() {
+    public void unbind() {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public static void clean() {
         for (int i = 0; i < textureInstances.size(); i++) {
-            glDeleteTextures(textureInstances.get(i).ID());
+            glDeleteTextures(textureInstances.get(i).getId());
         }
     }
 
@@ -87,11 +83,15 @@ public class Texture {
         return textureInstances;
     }
 
-    public int Width() {
+    public int getId() {
+        return id;
+    }
+    
+    public int getWidth() {
         return width;
     }
 
-    public int Height() {
+    public int getHeight() {
         return height;
     }
 

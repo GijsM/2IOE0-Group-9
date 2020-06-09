@@ -1,66 +1,32 @@
 package app;
 
-import app.GUI.GUI;
-import app.GUI.StateManager;
-import app.Input.Mouse;
-import app.engine.Mesh;
-import app.engine.Texture;
-import app.engine.Window;
-import app.math.Color;
-import app.graphics.Renderer;
-import app.Game.Map.GameMap;
-
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-
-
 public class App {
-	private static Texture tex;
-	private static Texture title;
-
-	public void run() throws InterruptedException {
-		long window = Window.start();
-		Color clear = Color.color(0f, 0,0);
-
-		tex = new Texture("Egg.png");
-
-		new Texture("DefaultGUI.png");
-
-		GUI.init();
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		while(!glfwWindowShouldClose(window)){
-			Mouse.Reset();
-			glfwPollEvents();
-
-			Window.clear();
-
-			GUI.Start();
-
-			StateManager.update();
-
-//			GameMap.render();
-
-			GUI.Unbind();
-
-			Window.update();
-		}
-
-		Texture.CleanUp();
-		Mesh.CleanAllMesh();
-
-		glfwTerminate();
-		wait();
+	/*
+	 * Game Properties
+	 */
+	private final String TITLE = "Genocrawler";
+	private final int WIDTH = 800;
+	private final int HEIGHT = 600;
+	
+	protected Engine engine;
+	
+	public App() {
+		engine = new Engine();
+		engine.createWindow(TITLE, WIDTH, HEIGHT);
+		engine.init();
+		engine.start();
+	}
+	
+	public Engine getEngine() {
+		return engine;
+	}
+	
+	public void setEngine(Engine engine) {
+		this.engine = engine;
 	}
 
 	public static void main(String[] args) {
-		try {
-			new App().run();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		new App();
 	}
 
 }

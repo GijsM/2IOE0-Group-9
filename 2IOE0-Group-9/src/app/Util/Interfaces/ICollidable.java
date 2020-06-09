@@ -1,4 +1,4 @@
-package app.Game.Object;
+package app.Util.Interfaces;
 
 import org.jbox2d.dynamics.BodyDef;
 

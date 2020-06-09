@@ -1,6 +1,6 @@
-package app.math;
+package app.Util;
 
-public class Math {
+public class MathClamp {
     public static float Clamp(float val, float min, float max) {
         if (val < min) {
             return min;

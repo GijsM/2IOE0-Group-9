@@ -1,6 +1,6 @@
 package app.engine;
 
-import app.math.Vec2;
+import app.Util.Vec2;
 
 public class Rect {
     public float x;

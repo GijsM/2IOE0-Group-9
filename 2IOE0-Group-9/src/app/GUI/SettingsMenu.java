@@ -1,36 +1,42 @@
 package app.GUI;
 
+import app.Window;
 import app.engine.Rect;
 import app.engine.Texture;
-import app.engine.Window;
 
 public class SettingsMenu {
-    private static Texture title;
+    protected static Texture title = new Texture("Title.png");
+    protected static StateManager stateManager;
+    protected static GUI gui;
+    protected static Window window;
 
     public static void init() {
-        title = new Texture("Title.png");
-
-        GUI.DrawTexture(title, new Rect((Window.getWidth() / 4),0, Window.getWidth() / 2, 100));
-        GUI.Button("Audio", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
-        GUI.Button("Controls", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
-        GUI.Button("Back to Menu", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
+    	gui = GUI.getInstance();
+    	window = Window.getInstance();
+    	stateManager = StateManager.getInstance();
+    	
+        gui.DrawTexture(title, new Rect((window.getWidth() / 4),0, window.getWidth() / 2, 100));
+        gui.Button("Audio", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
+        gui.Button("Controls", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
+        gui.Button("Back to Menu", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
         update();
     }
 
     public static void update() {
-        if (GUI.Button("Audio", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
+        if (gui.Button("Audio", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Go to audio options");
+//          stateManager.update();
         }
 
-        if (GUI.Button("Controls", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
+        if (gui.Button("Controls", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Here the controls can be found");
+//          stateManager.update();
         }
 
-        if (GUI.Button("Back to Menu", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
+        if (gui.Button("Back to Menu", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Game now goes back to menu");
-            Window.clear();
-            Window.update();
-            StateManager.toMenu();
+            stateManager.toMenu();
+            stateManager.update();
         }
     }
 

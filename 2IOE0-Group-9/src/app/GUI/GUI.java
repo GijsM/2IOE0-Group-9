@@ -1,10 +1,17 @@
 package app.GUI;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.glfw.GLFW.*;
 
+import app.Window;
+import app.GUI.Components.Font;
+import app.GUI.Components.GUISkin;
+import app.GUI.Components.GUIStyle;
+import app.GUI.Components.Glyph;
 import app.Input.Mouse;
+import app.Util.Color;
+import app.Util.Matrix4X4;
 import app.engine.*;
-import app.math.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +19,17 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class GUI {
+	private static GUI instance = null;
 
     public static Color backgroundColor = Color.color(0, 1, 1);
     public static Color textColor = Color.color(1,1,1);
     private static GUISkin skin;
 
     private static Mesh mesh;
+    private static Mouse mouse;
     private static Shader shader;
     private static Matrix4X4 ortho;
+    private static Window window;
 
     private static char[] c;
     private static float xTemp;
@@ -27,49 +37,72 @@ public class GUI {
     private static int boundTex = -1;
     private static Color boundColor = Color.color(1, 1, 1);
 
-    private static Rect area = new Rect(0,0, Window.getWidth(), Window.getHeight());
+    private static Rect area;
     private static List<Rect> areas = new ArrayList<Rect>();
 
-    public static void init() throws Exception {
+    public static GUI getInstance() {
+    	if (instance == null) {
+    		instance = new GUI();
+    	}
+    	
+    	return instance;
+    }
+    
+    public void init() throws Exception {
+    	
+        window = Window.getInstance();
+        mouse = Mouse.getInstance();
+        
         float[] meshData = new float[] {0,1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1};
         mesh = new Mesh(meshData, meshData);
         
+        area = new Rect(0,0, window.getWidth(), window.getHeight());
+        
+        
         shader = new Shader("DefaultShader");
-        shader.createVertexShader(Shader.loadResource("res/Shaders/vertex.vs"));
-        shader.createFragmentShader(Shader.loadResource("res/Shaders/fragment.fs"));
+        // TODO
+        shader.createVertexShader(Shader.loadResource("DefaultShader.vs"));
+        shader.createFragmentShader(Shader.loadResource("DefaultShader.fs"));        
         shader.link();
+
+		new Texture("DefaultGUI.png");
+		new Texture("Egg.png");
 
         skin = new GUISkin("DefaultGUI");
         font = new Font("Candarai", 22);
+        
+        start();
     }
 
-    public static void Start() {
+    public void start() {
         areas.clear();
-        areas.add(Window.getRect());
+        areas.add(window.getRect());
         area = areas.get(areas.size() - 1);
 
         glDisable(GL_DEPTH_TEST);
         shader.bind();
-        shader.SetUniform("matColor", backgroundColor);
-        ortho = Matrix4X4.Ortho(0, Window.getWidth(), Window.getHeight(), 0, -1, 1);
-        shader.SetUniform("projection", ortho);
-        mesh.Bind();
+        shader.setUniform("matColor", backgroundColor);
+        ortho = Matrix4X4.Ortho(0, window.getWidth(), window.getHeight(), 0, -1, 1);
+        shader.setUniform("projection", ortho);
+        mesh.bind();
     }
 
-    public static boolean Button(String text, Rect r, String normalSystle, String hoverStyle) {
+    public boolean Button(String text, Rect r, String normalSystle, String hoverStyle) {
         return Button(text, r, skin.Get(normalSystle), skin.Get(hoverStyle));
     }
 
-    public static boolean Button(String text, Rect r, GUIStyle normalStyle, GUIStyle hoverStyle) {
+    public boolean Button(String text, Rect r, GUIStyle normalStyle, GUIStyle hoverStyle) {
         Rect rf = r.AddPosition(area);
 
-        if (rf.Contains(Mouse.Position())){
+        if (rf.Contains(mouse.Position())){
             Rect p = Box(r, hoverStyle);
             Label(text, (r.x * 2) - (text.length() * 4), r.y + r.height * 0.3f);
 
-            if (Mouse.GetButtonDown(0)) {
+            // TODO
+            if (mouse.isLeftButtonPressed()) {
                 return true;
             }
+
         }
         else {
             Rect p = Box(r, normalStyle);
@@ -78,11 +111,11 @@ public class GUI {
         return false;
     }
 
-    public static Rect Box(Rect r, String style) {
+    public Rect Box(Rect r, String style) {
         return Box(r, skin.Get(style));
     }
 
-    public static Rect Box(Rect r, GUIStyle e) {
+    public Rect Box(Rect r, GUIStyle e) {
         if (e == null) {
             return null;
         }
@@ -128,7 +161,7 @@ public class GUI {
         return c;
     }
 
-    public static void Label(String text, float x, float y) {
+    public void Label(String text, float x, float y) {
         Map<Character, Glyph> chars = font.GetCharacters();
         xTemp = x;
 
@@ -143,15 +176,15 @@ public class GUI {
         }
     }
 
-    public static void DrawTexture(Texture tex, Rect r) {
+    public void DrawTexture(Texture tex, Rect r) {
         DrawTextureWithTexCoords(tex, r, new Rect(0,0,1, 1));
     }
 
-    public static void DrawTextureWithTexCoords(Texture tex, Rect drawRect, Rect uv) {
+    public void DrawTextureWithTexCoords(Texture tex, Rect drawRect, Rect uv) {
         DrawTextureWithTexCoords(tex, drawRect, uv, backgroundColor);
     }
 
-    public static void DrawTextureWithTexCoords(Texture tex, Rect drawRect, Rect uv, Color c) {
+    public void DrawTextureWithTexCoords(Texture tex, Rect drawRect, Rect uv, Color c) {
         if (area == null) {
             return;
         }
@@ -164,25 +197,25 @@ public class GUI {
         float y = uv.y + ((((r.y - drawRect.y) - area.y) / drawRect.height) * uv.height);
         Rect u = new Rect(x, y, (r.width / drawRect.width) * uv.width, (r.height / drawRect.height) * uv.height);
 
-        if (tex.ID() != boundTex) {
-            glBindTexture(GL_TEXTURE_2D, tex.ID());
+        if (tex.getId() != boundTex) {
+            glBindTexture(GL_TEXTURE_2D, tex.getId());
         }
-        shader.SetUniform("offset", u.x, u.y, u.width, u.height);
-        shader.SetUniform("pixelScale", r.width, r.height);
-        shader.SetUniform("screenPos", r.x, r.y);
+        shader.setUniform("offset", u.x, u.y, u.width, u.height);
+        shader.setUniform("pixelScale", r.width, r.height);
+        shader.setUniform("screenPos", r.x, r.y);
 
         if (!boundColor.Compare(c)) {
-            shader.SetUniform("matColor", c);
+            shader.setUniform("matColor", c);
             boundColor = c;
         }
         mesh.Render();
     }
 
-    public static void Window(Rect r, String title, Consumer<Integer> f, String style) {
+    public void Window(Rect r, String title, Consumer<Integer> f, String style) {
         Window(r, title, f, skin.Get(style));
     }
 
-    public static void Window(Rect r, String title, Consumer<Integer> f, GUIStyle style) {
+    public void Window(Rect r, String title, Consumer<Integer> f, GUIStyle style) {
         if (style != null) {
             Rect center = Box(r, style);
             Label(title, r.x + style.padding.x, r.y + 4);
@@ -197,12 +230,12 @@ public class GUI {
         EndArea();
     }
 
-    public static void BeginArea(Rect r) {
+    public void BeginArea(Rect r) {
         areas.add(area.GetIntersection(new Rect(area.x + r.x, area.y + r.y, r.width, r.height)));
         area = areas.get(areas.size() - 1);
     }
 
-    public static void EndArea() {
+    public void EndArea() {
         if (areas.size() == 1) {
             return;
         }
@@ -210,8 +243,9 @@ public class GUI {
         area = areas.get(areas.size() - 1);
     }
 
-    public static void Unbind() {
-        mesh.Unbind();
+    public static void unbind() {
+    	shader.unbind();
+        mesh.unbind();
     }
 
 }

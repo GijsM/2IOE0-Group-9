@@ -3,12 +3,13 @@ package app.graphics;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import app.math.Vertex;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
+
+import app.Util.Vertex;
 
 public class Mesh {
     private Vertex[] vertices;

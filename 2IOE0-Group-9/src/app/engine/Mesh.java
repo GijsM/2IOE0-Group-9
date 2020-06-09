@@ -20,7 +20,7 @@ public class Mesh {
     private int v_id;
     private int u_id;
 
-    private static List<Mesh> m	hList = new ArrayList<Mesh>();
+    private static List<Mesh> meshList = new ArrayList<Mesh>();
 
     public Mesh(float[] vertices, float[] indices) {
         this.vertices = vertices;
@@ -48,7 +48,7 @@ public class Mesh {
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
-    public void Bind() {
+    public void bind() {
         GL30.glBindVertexArray(vao);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
@@ -60,7 +60,7 @@ public class Mesh {
         glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
     }
 
-    public void Unbind() {
+    public void unbind() {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);

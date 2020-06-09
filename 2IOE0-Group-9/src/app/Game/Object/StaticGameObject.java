@@ -4,7 +4,9 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.World;
 
-import app.Util.IRenderable;
+import app.Util.Interfaces.ICollidable;
+import app.Util.Interfaces.ILoadable;
+import app.Util.Interfaces.IRenderable;
 
 public abstract class StaticGameObject implements IRenderable, ILoadable, ICollidable{
     protected Body body;

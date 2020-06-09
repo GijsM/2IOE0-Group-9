@@ -1,4 +1,4 @@
-package app.Util;
+package app.Util.Interfaces;
 
 public interface IStartStopable {
     public void start();

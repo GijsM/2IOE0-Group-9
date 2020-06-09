@@ -1,91 +1,81 @@
 package app;
 
-import app.Game.Game;
-//import app.GUI.GUIStateManager;
-//import app.GUI.MenuGUIState;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+
 import app.Input.Mouse;
 import app.Util.Timer;
-import app.engine.Window;
 
-public class Engine implements Runnable{
-	private long window;
-//	private GUIStateManager guiManager;
-	private Game game;
-	private Timer timer;
-	private final Mouse mouse;
+public class Engine {
+
+	protected Mouse mouse;
+	protected Renderer renderer;
+	protected Timer timer;
+
+	protected Window window;
+
+	private boolean running;
 	
-	private boolean running = false;
-	private static final int TARGET_UPS = 30;
-	
-	public Engine(String title, int width, int height, Game game) {
-		window = Window.getWindow();
-//		guiManager = new GUIStateManager();
-//		guiManager.setCurrentGuiState(new MenuGUIState());
-		mouse = new Mouse();
-		this.game = game;
-		timer = new Timer();
+	public void createWindow(String title, int width, int height) {
+		glfwInit();
+		
+		window = Window.getInstance();
+		renderer = Renderer.getInstance();
+		timer = Timer.getInstance();	
+		mouse = Mouse.getInstance();
+		
+		window.create(title, width, height);
 	}
 	
-	public long getWindow() {
-		return window;
+	public void init() {
+		renderer.init();
 	}
-
-	@Override
-	public void run() {
-		try {
-			init();
-			loop();
-		} catch (Exception excp) {
-			excp.printStackTrace();
-		} finally {
-			cleanup();
+	
+	public void start() {
+		if (running) {
+			return;
 		}
+	
+		run();
 	}
 	
-	protected void init() throws Exception {
-		Window.start();
-		mouse.init();
-		game.start();
-	}
-	
-	protected void loop() {
-		float elapsedTime;
-		float accumulator = 0f;
-		float interval = 1f / TARGET_UPS;
+	public void run() { 
+		this.running = true;
 		
-		boolean running = true;
-		
-		while(running && !Window.windowShouldClose()) {
-			elapsedTime = timer.getElapsedTime();
-			accumulator += elapsedTime;
-			
-			input();
-			
-			while (accumulator >= interval) {
-				update(interval);
-				accumulator -= interval;
+		// GameLoop
+		while(running) {			
+			glfwPollEvents();
+			mouse.reset();			
+
+			if (window.shouldClose()) {
+				stop();
 			}
-			
+				
+			update();
 			render();
 		}
+
+		clean();
+	}
+	private void render() {
+		renderer.render();
 	}
 	
-	protected void input() {
-		mouse.input();
-		game.input(mouse);
+	public void update() {
+		renderer.update();
 	}
 	
-	protected void update(float interval) {
-		game.update(interval, mouse);
+	private void stop() {
+		if (!running) {
+			return;
+		}
+		
+		running = false;
 	}
 	
-	protected void render() {
-		game.render();
-		Window.update();
+	private void clean() {
+		window.clean();
+		glfwTerminate();
 	}
-	
-	protected void cleanup() {
-		game.stop();
-	}
-	
 }

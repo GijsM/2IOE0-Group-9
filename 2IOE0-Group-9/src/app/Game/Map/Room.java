@@ -6,10 +6,10 @@ import java.util.Random;
 
 import org.jbox2d.dynamics.World;
 
-import app.Game.Object.ILoadable;
 import app.Game.Object.StaticGameObject;
-import app.Util.IRenderable;
-import app.Util.IUpdateable;
+import app.Util.Interfaces.ILoadable;
+import app.Util.Interfaces.IRenderable;
+import app.Util.Interfaces.IUpdateable;
 
 public class Room implements IUpdateable, IRenderable, ILoadable {
 

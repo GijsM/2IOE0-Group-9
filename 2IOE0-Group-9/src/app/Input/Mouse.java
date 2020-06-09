@@ -1,7 +1,7 @@
 package app.Input;
 
-import app.engine.Window;
-import app.math.Vec2;
+import app.Window;
+import app.Util.Vec2;
 
 import org.joml.Vector2d;
 import org.joml.Vector2f;
@@ -19,6 +19,8 @@ enum CursorImage {
 }
 
 public class Mouse extends GLFWMouseButtonCallback {
+	private static Mouse instance = null;
+	
     private static boolean anyButton = false;
     public static boolean[] buttons = new boolean[8];
     public static boolean[] buttonsDown = new boolean[8];
@@ -27,7 +29,7 @@ public class Mouse extends GLFWMouseButtonCallback {
     private static List<Integer> downButtons = new ArrayList<>();
     private static List<Integer> upButtons = new ArrayList<>();
 
-    private static long window;
+    private static Window window;
     private static DoubleBuffer xBuffer;
     private static DoubleBuffer yBuffer;
     
@@ -40,7 +42,8 @@ public class Mouse extends GLFWMouseButtonCallback {
     private boolean inWindow = false;
 
     public Mouse() {
-        window = Window.getWindow();
+        window = Window.getInstance();
+        
         xBuffer = BufferUtils.createDoubleBuffer(1);
         yBuffer = BufferUtils.createDoubleBuffer(1);
         
@@ -49,18 +52,11 @@ public class Mouse extends GLFWMouseButtonCallback {
         displVec = new Vector2f();
     }
     
-    public void init() {
-        glfwSetCursorPosCallback(window, (windowHandle, xpos, ypos) -> {
-            currentPos.x = xpos;
-            currentPos.y = ypos;
-        });
-        glfwSetCursorEnterCallback(window, (windowHandle, entered) -> {
-            inWindow = entered;
-        });
-        glfwSetMouseButtonCallback(window, (windowHandle, button, action, mode) -> {
-            leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
-            rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
-        });
+    public static Mouse getInstance() {
+    	if (instance == null) {
+    		instance = new Mouse();
+    	}
+    	return instance;
     }
     
     public void input() {
@@ -84,7 +80,7 @@ public class Mouse extends GLFWMouseButtonCallback {
 
 
 
-    public static void Reset() {
+    public void reset() {
         for (int i = 0; i < downButtons.size(); i++) {
             buttonsDown[downButtons.get(i)] = false;
         }
@@ -110,27 +106,27 @@ public class Mouse extends GLFWMouseButtonCallback {
         }
     }
 
-    public static boolean AnyButton() {
+    public boolean anyButton() {
         return anyButton;
     }
 
-    public static boolean GetButton(int buttonCode) {
+    public boolean getButton(int buttonCode) {
         return buttons[buttonCode];
     }
 
-    public static boolean AnyButtonDown() {
+    public boolean anyButtonDown() {
         return downButtons.size() > 0;
     }
 
-    public static boolean GetButtonDown(int buttonCode) {
+    public boolean getButtonDown(int buttonCode) {
         return buttonsDown[buttonCode];
     }
 
-    public static boolean AnyButtonUp() {
+    public boolean anyButtonUp() {
         return upButtons.size() > 0;
     }
 
-    public static boolean GetButtonUp(int buttonCode) {
+    public boolean getButtonUp(int buttonCode) {
         return buttonsUp[buttonCode];
     }
     
@@ -141,9 +137,17 @@ public class Mouse extends GLFWMouseButtonCallback {
     public boolean isRightButtonPressed() {
         return rightButtonPressed;
     }
+    
+    public void setLeftButtonPressed(boolean val) {
+        leftButtonPressed = val;
+    }
 
-    public static Vec2 Position() {
-        glfwGetCursorPos(window, xBuffer, yBuffer);
+    public void setRightButtonPressed(boolean val) {
+        rightButtonPressed = val;
+    }
+
+    public Vec2 Position() {
+        glfwGetCursorPos(window.getWindow(), xBuffer, yBuffer);
         return new Vec2((float)xBuffer.get(0), (float)yBuffer.get(0));
     }
     
@@ -151,3 +155,18 @@ public class Mouse extends GLFWMouseButtonCallback {
         return displVec;
     }
 }
+
+// OLD
+//public void init() {
+//    glfwSetCursorPosCallback(window, (windowHandle, xpos, ypos) -> {
+//        currentPos.x = xpos;
+//        currentPos.y = ypos;
+//    });
+//    glfwSetCursorEnterCallback(window, (windowHandle, entered) -> {
+//        inWindow = entered;
+//    });
+//    glfwSetMouseButtonCallback(window, (windowHandle, button, action, mode) -> {
+//        leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
+//        rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
+//    });
+//}

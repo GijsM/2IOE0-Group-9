@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.Components;
 
 public class Glyph {
     public float x;

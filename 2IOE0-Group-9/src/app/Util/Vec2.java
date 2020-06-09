@@ -1,4 +1,4 @@
-package app.math;
+package app.Util;
 
 public class Vec2 {
     public float x;

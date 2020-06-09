@@ -7,8 +7,10 @@ import org.jbox2d.dynamics.World;
 import org.joml.Vector3f;
 
 import app.Game.Map.GameMap;
-import app.Util.IRenderable;
-import app.Util.IUpdateable;
+import app.Util.Interfaces.ICollidable;
+import app.Util.Interfaces.ILoadable;
+import app.Util.Interfaces.IRenderable;
+import app.Util.Interfaces.IUpdateable;
 import app.engine.Mesh2;
 
 public class GameObject implements IRenderable, IUpdateable, ILoadable, ICollidable {

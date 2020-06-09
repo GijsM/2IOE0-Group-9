@@ -5,8 +5,6 @@
  */
 package app.graphics;
 
-import app.math.Vec2;
-import app.math.Vector3f;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import app.Util.Vec2;
+import app.Util.Vector3f;
 
 /**
  *

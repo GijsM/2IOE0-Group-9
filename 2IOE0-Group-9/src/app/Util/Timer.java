@@ -1,8 +1,17 @@
 package app.Util;
 
 public class Timer {
-
+	private static Timer instance = null;
+	
     private double lastLoopTime;
+    
+    public static Timer getInstance() {
+    	if (instance == null) {
+    		instance = new Timer();
+    	}
+    	
+    	return instance;
+    }
     
     public void init() {
         lastLoopTime = getTime();

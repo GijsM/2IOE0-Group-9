@@ -2,39 +2,50 @@ package app.GUI;
 
 import app.engine.Rect;
 import app.engine.Texture;
-import app.engine.Window;
-import app.App;
-import org.lwjgl.glfw.GLFW;
+
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
+
+import app.Window;
+
 
 public class MainMenu {
-    private static Texture title;
+    protected static Texture title = new Texture("Title.png");
+    protected static StateManager stateManager;
+    protected static GUI gui;
+    protected static Window window;
 
     public static void init() {
-        title = new Texture("Title.png");
+    	gui = GUI.getInstance();
+    	window = Window.getInstance();
+    	stateManager = StateManager.getInstance();
 
-
-        GUI.DrawTexture(title, new Rect((Window.getWidth() / 4),0, Window.getWidth() / 2, 100));
-        GUI.Button("Start", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
-        GUI.Button("Settings", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
-        GUI.Button("Exit", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover");
+        gui.DrawTexture(title, new Rect((window.getWidth() / 4),0, window.getWidth() / 2, 100));
+        gui.Button("Start", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
+        gui.Button("Settings", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
+        gui.Button("Exit", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
         update();
     }
 
     public static void update() {
-        if (GUI.Button("Start", new Rect(Window.getWidth() / 4, Window.getHeight() / 6, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
-            System.out.println("The game has started");
+        if (gui.Button("Start", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
+        	System.out.println("Go to game");
+        	stateManager.toGame();
+        	stateManager.update();
         }
 
-        if (GUI.Button("Settings", new Rect(Window.getWidth() / 4, Window.getHeight() / 3, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
+        if (gui.Button("Settings", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Go to settings menu");
-            Window.ClearWindow();
-            Window.update();
-            StateManager.toSettings();
+            stateManager.toSettings();
+            stateManager.update();
         }
 
-        if (GUI.Button("Exit", new Rect(Window.getWidth() / 4, Window.getHeight() / 2, Window.getWidth() / 2, Window.getHeight() / 10), "Button", "ButtonHover")) {
+        if (gui.Button("Exit", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Game is being shutdown");
-            Window.CloseWindow();
+            window.closeWindow();
         }
     }
 

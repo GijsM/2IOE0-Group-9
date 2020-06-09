@@ -1,12 +1,16 @@
 package app.engine;
 
-import app.math.Color;
-import app.math.Matrix4X4;
-
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
+import app.Util.Color;
+import app.Util.Matrix4X4;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
@@ -29,17 +33,7 @@ public class Shader {
 
         glBindAttribLocation(program, 0, "vertices");
         glBindAttribLocation(program, 1, "uv");
-
-        if(glGetProgrami(program, GL_LINK_STATUS) != 1) {
-            System.err.println(glGetProgramInfoLog(vs));
-            System.exit(-1);
-        }
-
         glValidateProgram(program);
-        if(glGetProgrami(program, GL_VALIDATE_STATUS) != 1) {
-            System.err.println(glGetProgramInfoLog(vs));
-            System.exit(-1);
-        }
     }
     
     
@@ -77,34 +71,42 @@ public class Shader {
         uniforms.put(uniformName, uniformLocation);
     }
 
-    public void SetUniform(String name, float x, float y) {
+    public void setUniform(String name, float x, float y) {
         int location = glGetUniformLocation(program, name);
         if (location != -1) {
             glUniform2f(location, x, y);
         }
     }
 
-    public void SetUniform(String name, float x, float y, float z, float w) {
+    public void setUniform(String name, float x, float y, float z, float w) {
         int location = glGetUniformLocation(program, name);
         if (location != -1) {
             glUniform4f(location, x, y, z, w);
         }
     }
 
-    public void SetUniform(String name, Color c) {
+    public void setUniform(String name, Color c) {
         int location = glGetUniformLocation(program, name);
         if(location != 1) {
             glUniform4f(location, c.r, c.g, c.b, c.a);
         }
     }
 
-    public void SetUniform(String name, Matrix4X4 m) {
+    public void setUniform(String name, Matrix4X4 m) {
         int location = glGetUniformLocation(program, name);
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
         m.GetBuffer(buffer);
         if (location != 1) {
             glUniformMatrix4fv(location, false, buffer);
             buffer.flip();
+        }
+    }
+    
+    public void setUniform(String uniformName, Matrix4f value) {
+        // Dump the matrix into a float buffer
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            glUniformMatrix4fv(uniforms.get(uniformName), false,
+                               value.get(stack.mallocFloat(16)));
         }
     }
     
@@ -147,11 +149,21 @@ public class Shader {
      * Aux. Function for reading shaders
      */
     public static String loadResource(String fileName) throws Exception {
-        String result;
-        try (InputStream in = Coordinates.class.getResourceAsStream(fileName);
-             Scanner scanner = new Scanner(in, java.nio.charset.StandardCharsets.UTF_8.name())) {
-            result = scanner.useDelimiter("\\A").next();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br;
+
+        try {
+        	br = new BufferedReader(new FileReader(new File("C:\\Users\\malte\\Documents\\GameDev\\Current\\2IOE0-Group-9\\res\\Shaders\\" + fileName)));
+            String line;
+            while ((line = br.readLine()) != null) {
+            	sb.append(line);
+            	sb.append("\n");
+            }
+            br.close();
+        } catch (IOException e) {
+        	e.printStackTrace();
         }
-        return result;
+        
+        return sb.toString();
     }
 }

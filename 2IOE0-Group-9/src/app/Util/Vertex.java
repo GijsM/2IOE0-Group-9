@@ -1,6 +1,6 @@
-package app.math;
+package app.Util;
 
-import app.math.Vector3f;
+import app.Util.Vector3f;
 
 public class Vertex {
     private Vector3f position;

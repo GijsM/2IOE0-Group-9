@@ -6,17 +6,24 @@ import org.joml.Vector3f;
 import app.Game.Object.GameObject;
 
 public class Transformation {
-
+	private static Transformation instance = null;
+	
     private final Matrix4f projectionMatrix;
-
     private final Matrix4f modelViewMatrix;
-    
     private final Matrix4f viewMatrix;
 
     public Transformation() {
         projectionMatrix = new Matrix4f();
         modelViewMatrix = new Matrix4f();
         viewMatrix = new Matrix4f();
+    }
+    
+    public static Transformation getInstance() {
+    	if (instance == null) {
+    		instance = new Transformation();
+    	}
+    	
+    	return instance;
     }
 
     public final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar) {

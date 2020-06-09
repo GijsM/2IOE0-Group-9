@@ -3,14 +3,22 @@ package app.graphics;
 import org.joml.Vector3f;
 
 public class Camera {
-
+	private static Camera instance = null;
+	
     private final Vector3f position;
-    
     private final Vector3f rotation;
     
     public Camera() {
         position = new Vector3f();
         rotation = new Vector3f();
+    }
+    
+    public static Camera getInstance() {
+    	if (instance == null) {
+    		instance = new Camera();
+    	}
+    	
+    	return instance;
     }
     
     public Camera(Vector3f position, Vector3f rotation) {

@@ -1,4 +1,4 @@
-package app.math;
+package app.Util;
 
 public class Color {
     public float r = 1;
@@ -8,16 +8,16 @@ public class Color {
 
 
     public Color (float r, float g, float b, float a) {
-        this.r = Math.Clamp(r, 0, 1);
-        this.g = Math.Clamp(g, 0, 1);;
-        this.b = Math.Clamp(b, 0, 1);;
-        this.a = Math.Clamp(a, 0, 1);;
+        this.r = MathClamp.Clamp(r, 0, 1);
+        this.g = MathClamp.Clamp(g, 0, 1);;
+        this.b = MathClamp.Clamp(b, 0, 1);;
+        this.a = MathClamp.Clamp(a, 0, 1);;
     }
 
     public Color (float r, float g, float b) {
-        this.r = Math.Clamp(r, 0, 1);
-        this.g = Math.Clamp(g, 0, 1);;
-        this.b = Math.Clamp(b, 0, 1);;
+        this.r = MathClamp.Clamp(r, 0, 1);
+        this.g = MathClamp.Clamp(g, 0, 1);;
+        this.b = MathClamp.Clamp(b, 0, 1);;
     }
 
     public static Color color(float r, float g, float b) {

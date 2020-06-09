@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.Components;
 
 import app.engine.Rect;
 import app.engine.Texture;
@@ -15,8 +15,8 @@ public class GUIStyle {
         this.offset = offset;
         this.padding = padding;
 
-        float w = t.Width();
-        float h = t.Height();
+        float w = t.getWidth();
+        float h = t.getHeight();
 
         uv = new Rect(offset.x / w, offset.y / h, offset.width / w, offset.height / h);
         paddingUV = new Rect(padding.x / w, padding.y / h, padding.width / w, padding.height / h);

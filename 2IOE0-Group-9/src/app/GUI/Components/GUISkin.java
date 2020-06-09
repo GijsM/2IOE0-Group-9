@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.Components;
 
 import app.engine.Rect;
 import app.engine.Texture;
@@ -19,7 +19,7 @@ public class GUISkin {
         BufferedReader br;
 
         try{
-            br = new BufferedReader(new FileReader(new File("./res/Skins/" + name + ".Skin")));
+            br = new BufferedReader(new FileReader(new File("C:\\Users\\malte\\Documents\\GameDev\\Current\\2IOE0-Group-9\\res\\Skins\\" + name + ".Skin")));
             texture = Texture.Find(br.readLine().split(" ")[1]);
 
             String line = br.readLine();

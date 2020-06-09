@@ -8,8 +8,8 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.GameObject;
-import app.Util.IRenderable;
-import app.Util.IUpdateable;
+import app.Util.Interfaces.IRenderable;
+import app.Util.Interfaces.IUpdateable;
 
 public class GameMap implements IUpdateable, IRenderable {
 
