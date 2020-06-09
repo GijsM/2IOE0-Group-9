@@ -2,6 +2,8 @@ package app.Game.AI;
 
 import java.util.Random;
 import app.Game.AI.AStar;
+import app.Game.Object.Entity.Enemy;
+import app.Game.Object.Entity.Player;
 
 /*
 TODO:
@@ -22,6 +24,10 @@ public class Qlearner {
     int action;
     int newState;
     private final int[][] room;
+    int XEnemy = Enemy.getEnemyX();
+    int YEnemy = Enemy.getEnemyY();
+    int XPlayer = Player.getPlayerX();
+    int YPlayer = Player.getPlayerY();
     //total cost: 11 (in example). integer called: path.get(path.size() -1).g
 
     public Qlearner(int[][] room){
@@ -109,9 +115,9 @@ public class Qlearner {
     	// TODO get coordinates enemy & item & player
     	    	
     	//get distance to item
-    	double distItem = AStar.AStarql(room, xEnemy, yEnemy, xItem, yItem) ;
+    	double distItem = AStar.AStarql(room, XEnemy, YEnemy, xItem, yItem) ;
     	//get distance to player
-    	double distPlayer = AStar.AStarql(room, xEnemy, yEnemy, xPlayer, yPlayer);
+    	double distPlayer = AStar.AStarql(room, XEnemy, YEnemy, XPlayer, YPlayer);
     	//return difference for qtable
     	return(distItem - distPlayer);
     }
