@@ -13,7 +13,7 @@ import org.joml.Vector3f;
 
 import app.Window;
 import app.Game.Object.GameObject;
-import app.engine.Mesh2;
+import app.engine.Mesh;
 import app.engine.Shader;
 import app.graphics.Camera;
 import app.graphics.Transformation;
@@ -82,7 +82,7 @@ public class Game {
             int[] indices = new int[]{
                 0, 1, 3, 3, 1, 2,
             };
-            Mesh2 mesh = new Mesh2(positions, colours, indices);
+            Mesh mesh = new Mesh(positions, colours, indices);
             GameObject obj1 = new GameObject(mesh);
             obj1.setScale(0.5f);
             obj1.setPosition(0, 0, -2);

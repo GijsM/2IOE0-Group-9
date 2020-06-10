@@ -11,18 +11,18 @@ import app.Util.Interfaces.ICollidable;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
-import app.engine.Mesh2;
+import app.engine.Mesh;
 
 public class GameObject implements IRenderable, IUpdateable, ILoadable, ICollidable {
     protected GameMap gameMap;
     protected Body body;
     
     private float scale;
-    private final Mesh2 mesh;			// TODO: requires merging mesh.java's from branches
+    private final Mesh mesh;			// TODO: requires merging mesh.java's from branches
     private final Vector3f position;
     private final Vector3f rotation;
 
-    public GameObject(Mesh2 mesh) {
+    public GameObject(Mesh mesh) {
 //        this.gameMap = gameMap;
     	this.mesh = mesh;
     	position = new Vector3f();
@@ -58,7 +58,7 @@ public class GameObject implements IRenderable, IUpdateable, ILoadable, ICollida
     	this.rotation.z = z;
     }
     
-    public Mesh2 getMesh() {
+    public Mesh getMesh() {
     	return mesh;
     }
     @Override

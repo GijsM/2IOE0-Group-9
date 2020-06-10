@@ -6,7 +6,7 @@ import app.Game.Object.GameObject;
 public abstract class Entity extends GameObject {
     
     public Entity(GameMap gameMap, EntityBehaviour behaviour) {
-        super(gameMap);
+        super(null);
     }
 
     protected EntityBehaviour behaviour;

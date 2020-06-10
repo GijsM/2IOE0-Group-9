@@ -26,7 +26,7 @@ public class Font {
 
     public Font(String name, float size) {
         try {
-            font = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("C:\\Users\\malte\\Documents\\GameDev\\Current\\2IOE0-Group-9\\res\\Font\\" + name + ".ttf")).deriveFont(size);
+            font = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File(".\\2IOE0-Group-9\\res\\Font\\" + name + ".ttf")).deriveFont(size);
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {

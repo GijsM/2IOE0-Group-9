@@ -54,7 +54,8 @@ public class GUI {
         mouse = Mouse.getInstance();
         
         float[] meshData = new float[] {0,1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1};
-        mesh = new Mesh(meshData, meshData);
+        int[] indicesData = new int[] {0,1,2,3,4};
+        mesh = new Mesh(meshData, meshData, indicesData);
         
         area = new Rect(0,0, window.getWidth(), window.getHeight());
         
@@ -84,7 +85,6 @@ public class GUI {
         shader.setUniform("matColor", backgroundColor);
         ortho = Matrix4X4.Ortho(0, window.getWidth(), window.getHeight(), 0, -1, 1);
         shader.setUniform("projection", ortho);
-        mesh.bind();
     }
 
     public boolean Button(String text, Rect r, String normalSystle, String hoverStyle) {
@@ -208,7 +208,7 @@ public class GUI {
             shader.setUniform("matColor", c);
             boundColor = c;
         }
-        mesh.Render();
+        mesh.render();
     }
 
     public void Window(Rect r, String title, Consumer<Integer> f, String style) {
@@ -245,7 +245,7 @@ public class GUI {
 
     public static void unbind() {
     	shader.unbind();
-        mesh.unbind();
+        mesh.cleanUp();
     }
 
 }

@@ -153,7 +153,7 @@ public class Shader {
         BufferedReader br;
 
         try {
-        	br = new BufferedReader(new FileReader(new File("C:\\Users\\malte\\Documents\\GameDev\\Current\\2IOE0-Group-9\\res\\Shaders\\" + fileName)));
+        	br = new BufferedReader(new FileReader(new File(".\\2IOE0-Group-9\\res\\Shaders\\" + fileName)));
             String line;
             while ((line = br.readLine()) != null) {
             	sb.append(line);
