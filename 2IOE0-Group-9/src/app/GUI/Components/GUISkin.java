@@ -19,7 +19,7 @@ public class GUISkin {
         BufferedReader br;
 
         try{
-            br = new BufferedReader(new FileReader(new File("C:\\Users\\gijsm\\eclipse-workspace\\2IOE0-Group-9\\2IOE0-Group-9\\res\\Skins\\" + name + ".Skin")));
+            br = new BufferedReader(new FileReader(new File(".\\2IOE0-Group-9\\res\\Skins\\" + name + ".Skin")));
             texture = Texture.Find(br.readLine().split(" ")[1]);
 
             String line = br.readLine();
