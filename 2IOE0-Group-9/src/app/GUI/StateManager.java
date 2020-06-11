@@ -45,11 +45,11 @@ public class StateManager {
                     break;
 
                 case PAUSE:
-                    Pause.init();
+                    state = PauseMenu.getInstance();
                     break;
 
                 case SETTINGS:
-                    SettingsMenu.init();
+                    state = SettingsMenu.getInstance();
                     break;
 
             }
@@ -67,7 +67,17 @@ public class StateManager {
         gameState = GameState.GAME;
         initHasBeenDone = false;
     }
-    public void toMenu() { gameState = GameState.MAINMENU; }
-    public void toPause() { gameState = GameState.PAUSE; }
-    public void toSettings() { gameState = GameState.SETTINGS; }
+    
+    public void toMenu() { 
+    	gameState = GameState.MAINMENU; 
+    	initHasBeenDone = false;
+    }
+    public void toPause() { 
+    	gameState = GameState.PAUSE; 
+    	initHasBeenDone = false;
+    }
+    public void toSettings() { 
+    	gameState = GameState.SETTINGS; 
+        initHasBeenDone = false;
+    }
 }

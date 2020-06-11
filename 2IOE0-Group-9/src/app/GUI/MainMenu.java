@@ -20,7 +20,6 @@ public class MainMenu extends State{
     protected static Window window;
 
     public void init() {
-        System.out.println("init in mainmenu");
     	gui = GUI.getInstance();
     	window = Window.getInstance();
     	stateManager = StateManager.getInstance();
@@ -33,7 +32,6 @@ public class MainMenu extends State{
     }
 
     public static MainMenu getInstance(){
-        System.out.println("getinstance in mainmenu");
         if(instance == null) {
             instance = new MainMenu();
         }
@@ -42,17 +40,16 @@ public class MainMenu extends State{
     }
 
     public void update() {
-        System.out.println("update in mainmenu");
         if (gui.Button("Start", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
         	System.out.println("Go to game");
         	stateManager.toGame();
-        	stateManager.update();
+//        	stateManager.update();
         }
 
         if (gui.Button("Settings", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Go to settings menu");
             stateManager.toSettings();
-            stateManager.update();
+//            stateManager.update();
         }
 
         if (gui.Button("Exit", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {

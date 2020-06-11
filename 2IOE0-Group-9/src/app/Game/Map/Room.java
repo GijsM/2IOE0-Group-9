@@ -52,6 +52,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         this.map = map;
     }
     
+    
     private ArrayList<ArrayList> standardroom(int width) {
         int doorwayDirection = this.ran.nextInt(5);
         int randomDoorLocation = this.ran.nextInt(8)+1;
@@ -222,11 +223,14 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
                 if((int) this.room.get(i_int).get(j_int) == 0){
                     colours = new float[]{
-                            0.0f, 1.0f, 0.0f,
-                            0.0f, 0.0f, 1.0f,
-                            0.0f, 1.0f, 0.0f,
-                            0.0f, 0.0f, 1.0f
-
+                    		0.188f, 0.462f, 0.098f,
+                    		0.188f, 0.462f, 0.098f,
+                    		0.188f, 0.462f, 0.098f,
+                    		0.188f, 0.462f, 0.098f,
+//                            0.5f, 0.25f, 0.5f, 	// top left
+//                            0.5f, 0.25f, 0.5f, 	// bottom left
+//                            0.5f, 0.25f, 0.5f, 	// bottom right
+//                            0.5f, 0.25f, 0.5f 	// top right
                     };
 
 
@@ -265,7 +269,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 GameObject obj = new GameObject(mesh);
                 System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,yOne,-1.0f);
+                obj.setPosition(xOne,yOne,-2.0f);
                 obj.setScale(0.2f);
                 gameobjects.add(obj);
 

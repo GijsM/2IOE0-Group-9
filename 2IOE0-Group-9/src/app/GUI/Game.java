@@ -63,12 +63,11 @@ public class Game extends State {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        System.out.println("init() in game");
 		makeObjects();
+		camera.movePosition(-0.1f, 0.1f, 0f);
     }
     
     public void makeObjects() {
-        System.out.println("MakeObjects() in game");
     	gameObjects = this.map.getRooms().get(0).getGameobjects();
     	map.render();
     	//update();
@@ -98,7 +97,7 @@ public class Game extends State {
 
     public void update() {
     	controlCamera();
-        System.out.println("update() in game");
+
         // Uniforms required for 3D camera
         try {
         	shader.createUniform("projectionMatrix");
