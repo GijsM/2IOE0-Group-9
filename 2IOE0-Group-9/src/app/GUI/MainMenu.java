@@ -12,13 +12,15 @@ import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import app.Window;
 
 
-public class MainMenu {
+public class MainMenu extends State{
+    private static MainMenu instance = null;
     protected static Texture title = new Texture("Title.png");
     protected static StateManager stateManager;
     protected static GUI gui;
     protected static Window window;
 
-    public static void init() {
+    public void init() {
+        System.out.println("init in mainmenu");
     	gui = GUI.getInstance();
     	window = Window.getInstance();
     	stateManager = StateManager.getInstance();
@@ -27,10 +29,20 @@ public class MainMenu {
         gui.Button("Start", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
         gui.Button("Settings", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
         gui.Button("Exit", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
-        update();
+        //update();
     }
 
-    public static void update() {
+    public static MainMenu getInstance(){
+        System.out.println("getinstance in mainmenu");
+        if(instance == null) {
+            instance = new MainMenu();
+        }
+
+        return instance;
+    }
+
+    public void update() {
+        System.out.println("update in mainmenu");
         if (gui.Button("Start", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
         	System.out.println("Go to game");
         	stateManager.toGame();

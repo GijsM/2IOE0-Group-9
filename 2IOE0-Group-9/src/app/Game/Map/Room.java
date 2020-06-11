@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import app.Game.Object.GameObject;
+import app.engine.Mesh;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.StaticGameObject;
@@ -11,12 +13,16 @@ import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
 
+import static java.lang.Math.round;
+
 public class Room implements IUpdateable, IRenderable, ILoadable {
 
     private GameMap map;
-    private List<StaticGameObject> gameobjects = new ArrayList<>();
+    private List<GameObject> gameobjects = new ArrayList<>();
     Random ran = new Random();
     ArrayList<ArrayList> room;
+    //holds the meshes that will be rendered in the render() method
+    ArrayList<Mesh> meshes;
     
     /*
     doorwayDirection = 0 when the door is on the north side
@@ -34,7 +40,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 //        this.setMap(map);
     }
 
-    public List<StaticGameObject> getGameobjects() {
+    public List<GameObject> getGameobjects() {
         return gameobjects;
     }
 
@@ -164,10 +170,114 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     @Override
     public void render() {
-        for (StaticGameObject staticGameObject : gameobjects) {
-            staticGameObject.render();
+        System.out.println("render in room");
+    if(this.meshes == null){
+        createMeshes();
+        }
+
+        for (GameObject gameObject : gameobjects) {
+            gameObject.render();
         }
     }
+
+    private void createMeshes() {
+        float topX =(float) -1;
+        float topY = 1;
+        float delta = (float) 2/this.room.size();
+        float botX = (float) topX + delta;
+        float botY = (float) topY - delta;
+        float[] positions;
+        float[] colours;
+        int[] indices = new int[]{
+                0, 1,3,3,2,1
+        };
+        this.meshes = new ArrayList<>();
+        for(float i = 0 ; i < this.room.size(); i++){
+            for( float j = 0 ; j < this.room.size(); j++){
+
+                float xOne = topX + j*delta;
+
+
+                float xTwo = botX + j*delta;
+                float yOne = topY - i*delta;
+
+                float yTwo = botY - i*delta;
+
+                int i_int = round(i);
+
+                int j_int = round(j);
+
+                positions = new float[]{
+
+                        // V0
+                        -0.5f, 0.5f, 0.5f,
+                        // V1
+                        -0.5f, -0.5f, 0.5f,
+                        // V2
+                        0.5f, -0.5f, 0.5f,
+                        // V3
+                        0.5f, 0.5f, 0.5f
+                };
+
+
+                if((int) this.room.get(i_int).get(j_int) == 0){
+                    colours = new float[]{
+                            0.0f, 1.0f, 0.0f,
+                            0.0f, 0.0f, 1.0f,
+                            0.0f, 1.0f, 0.0f,
+                            0.0f, 0.0f, 1.0f
+
+                    };
+
+
+
+                } else if((int) this.room.get(i_int).get(j_int) == 1) {
+                    colours = new float[]{
+                            1.0f, 0.0f, 0.0f,
+                            0.0f, 0.0f, 1.0f,
+                            1.0f, 0.0f, 0.0f,
+                            0.0f, 0.0f, 1.0f
+
+                    };
+
+
+                } else if((int)this.room.get(i_int).get(j_int) == 2){
+                    colours = new float[]{
+                            1.0f, 0.0f, 0.0f,
+                            1.0f, 0.0f, 0.0f,
+                            1.0f, 0.0f, 0.0f,
+                            1.0f, 0.0f, 0.0f
+
+                    };
+
+
+                } else {
+                    colours = new float[]{
+                            0.0f, 1.0f, 0.0f,
+                            0.0f, 1.0f, 0.0f,
+                            0.0f, 1.0f, 0.0f,
+                            0.0f, 1.0f, 0.0f
+
+                    };
+                }
+                Mesh mesh = new Mesh(positions, colours, indices);
+                this.meshes.add(mesh);
+                GameObject obj = new GameObject(mesh);
+                System.out.println(xOne + " " + yOne);
+
+                obj.setPosition(xOne,yOne,-1.0f);
+                obj.setScale(0.2f);
+                gameobjects.add(obj);
+
+            }
+        }
+
+
+
+
+    }
+
+
 
     @Override
     public void update() {
@@ -177,16 +287,16 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     @Override
     public void load(World world) {
-        for (StaticGameObject staticGameObject : gameobjects) {
-            staticGameObject.load(world);
+        for (GameObject gameObject : gameobjects) {
+            gameObject.load(world);
         }
 
     }
 
     @Override
     public void unload(World world) {
-        for (StaticGameObject staticGameObject : gameobjects) {
-            staticGameObject.unload(world);
+        for (GameObject gameObject : gameobjects) {
+            gameObject.unload(world);
         }
     }
     

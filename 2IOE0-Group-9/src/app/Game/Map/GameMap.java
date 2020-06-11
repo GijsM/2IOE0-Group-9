@@ -23,8 +23,9 @@ public class GameMap implements IUpdateable, IRenderable {
     public GameMap(final Random random) {
         Vec2 gravity = new Vec2(0.0f, -10.0f);
         boolean doSleep = true;
-        world = new World(gravity, doSleep);
+        //world = new World(gravity, doSleep);
         this.random = random;
+        this.rooms.add(new Room(this));
     }
 
     // TODO: add a generator of some kind to add new rooms

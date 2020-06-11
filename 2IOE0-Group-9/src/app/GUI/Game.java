@@ -7,19 +7,22 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 
+import app.Game.Map.GameMap;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import app.Window;
 import app.Game.Object.GameObject;
-import app.engine.Mesh;
 import app.engine.Shader;
 import app.graphics.Camera;
 import app.graphics.Transformation;
 
+import java.util.List;
+import java.util.Random;
 
-public class Game {
+
+public class Game extends State {
+    private static Game instance = null;
     protected static StateManager stateManager;
     protected static GUI gui;
     protected static Window window;
@@ -33,15 +36,25 @@ public class Game {
     private static final float Z_FAR = 1000.f;
     private static final float CAMERA_POS_STEP = 0.05f;
 	private static final float MOUSE_SENSITIVITY = 0.2f;
-    private static GameObject[] gameObjects;
+    private static List<GameObject> gameObjects;
+    private GameMap map;
+
+    public static Game getInstance() {
+        if(instance == null) {
+            instance = new Game();
+        }
+
+        return instance;
+    }
     
-    public static void init() { 
+    public void init() {
     	gui = GUI.getInstance();
     	window = Window.getInstance();
     	stateManager = StateManager.getInstance();
 		camera = Camera.getInstance();
 		transformation = Transformation.getInstance();
 		shader = new Shader("GameShader");
+		map = new GameMap(new Random());
         
 		try {
 			shader.createVertexShader(Shader.loadResource("GameShader.vs"));
@@ -50,51 +63,18 @@ public class Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+        System.out.println("init() in game");
 		makeObjects();
     }
     
-    public static void makeObjects() {
-    	float[] positions = new float[]{
-                // V0
-                -0.5f, 0.5f, 0.5f,
-                // V1
-                -0.5f, -0.5f, 0.5f,
-                // V2
-                0.5f, -0.5f, 0.5f,
-                // V3
-                0.5f, 0.5f, 0.5f,
-                // V4
-                -0.5f, 0.5f, -0.5f,
-                // V5
-                0.5f, 0.5f, -0.5f,
-                // V6
-                -0.5f, -0.5f, -0.5f,
-            };
-            float[] colours = new float[]{
-                0.5f, 0.0f, 0.0f,
-                0.0f, 0.5f, 0.0f,
-                0.0f, 0.0f, 0.5f,
-                0.0f, 0.5f, 0.5f,
-                0.0f, 0.5f, 0.5f,
-                0.0f, 0.5f, 0.5f,            		
-            };
-            int[] indices = new int[]{
-                0, 1, 3, 3, 1, 2,
-            };
-            Mesh mesh = new Mesh(positions, colours, indices);
-            GameObject obj1 = new GameObject(mesh);
-            obj1.setScale(0.5f);
-            obj1.setPosition(0, 0, -2);
-            GameObject obj2 = new GameObject(mesh);
-            obj2.setScale(0.5f);
-            obj2.setPosition(0.5f, 0.5f, -2);
-            gameObjects = new GameObject[] {obj1, obj2};
-            
-            update();
+    public void makeObjects() {
+        System.out.println("MakeObjects() in game");
+    	gameObjects = this.map.getRooms().get(0).getGameobjects();
+    	map.render();
+    	//update();
     }
     
-    public static void controlCamera() {
+    public void controlCamera() {
         cameraVec.set(0, 0, 0);
         if (window.isKeyPressed(GLFW_KEY_W)) {
             cameraVec.z = -1;
@@ -116,9 +96,9 @@ public class Game {
     }
   
 
-    public static void update() {
+    public void update() {
     	controlCamera();
-        
+        System.out.println("update() in game");
         // Uniforms required for 3D camera
         try {
         	shader.createUniform("projectionMatrix");
