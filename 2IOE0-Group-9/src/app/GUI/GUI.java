@@ -54,7 +54,7 @@ public class GUI {
         mouse = Mouse.getInstance();
         
         float[] meshData = new float[] {0,1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1};
-        int[] indicesData = new int[] {0,1,2,3,4};
+        int[] indicesData = new int[] {0,1,3,3,1,2};
         mesh = new Mesh(meshData, meshData, indicesData);
         
         area = new Rect(0,0, window.getWidth(), window.getHeight());

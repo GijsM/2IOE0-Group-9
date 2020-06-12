@@ -36,7 +36,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     int[] exitDoorWayLocation = new int[2];
 
     public Room(GameMap map) {
-    	this.room = standardroom(10);
+    	this.room = standardroom(20);
 //        this.setMap(map);
     }
 
@@ -62,7 +62,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         
         while(entranceExitCollision){
             if(exitDoorwayDirection == doorwayDirection){
-                randomExitDoorLocation = this.ran.nextInt(9)+1;
+                exitDoorwayDirection = this.ran.nextInt(5);
             } else {
                 entranceExitCollision = false;
             }
@@ -118,6 +118,34 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
             this.exitDoorWayLocation[1] = 0;
         }
         this.exitDoorwayDirection = exitDoorwayDirection;
+        int random = this.ran.nextInt(10) + 5;
+        int chunkSize = Math.round(width/2f);
+        int chunkPos = this.ran.nextInt((width - 2) * (width - 2 - chunkSize));
+        int counter = 0;
+        for(int i = 0 ; i < width ; i++){
+            for(int j = 0; j < width ; j++){
+                if((int) room.get(i).get(j) == 1){
+                    counter++;
+                    if(counter >= chunkPos && ((i >= 1 && i <= width - chunkSize - 1) && (j >= 1 && j <= width - chunkSize - 1))){
+                        for(int row = i; row < i + chunkSize; row++) {
+                            for (int col = j; col < j + chunkSize; col++) {
+                                if (!(row == doorWayLocation[0] || col == doorWayLocation[1] || row == exitDoorWayLocation[0] || col == exitDoorWayLocation[1])) {
+                                    if(!(row + 1 >= width || col + 1 >= width)){
+                                        room.get(row).set(col, 4);
+                                    }
+                                }
+                            }
+                        }
+                        chunkPos = 10000;
+                    } else if(counter >= random){
+                        if(!(i == doorWayLocation[0] || j == doorWayLocation[1] || i == exitDoorWayLocation[0] || j == exitDoorWayLocation[1])){
+                            random += this.ran.nextInt(10) + 5;
+                            room.get(i).set(j, 4);
+                        }
+                    }
+                }
+            }
+        }
         return room;
     }
     
@@ -237,10 +265,10 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
                 } else if((int) this.room.get(i_int).get(j_int) == 1) {
                     colours = new float[]{
-                            1.0f, 0.0f, 0.0f,
-                            0.0f, 0.0f, 1.0f,
-                            1.0f, 0.0f, 0.0f,
-                            0.0f, 0.0f, 1.0f
+                            0.419f, 0.301f, 0.098f,
+                            0.419f, 0.301f, 0.098f,
+                            0.419f, 0.301f, 0.098f,
+                            0.419f, 0.301f, 0.098f
 
                     };
 
@@ -251,6 +279,16 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                             1.0f, 0.0f, 0.0f,
                             1.0f, 0.0f, 0.0f,
                             1.0f, 0.0f, 0.0f
+
+                    };
+
+
+                } else if((int)this.room.get(i_int).get(j_int) == 4){
+                    colours = new float[]{
+                            0.188f, 0.462f, 0.098f,
+                            0.188f, 0.462f, 0.098f,
+                            0.188f, 0.462f, 0.098f,
+                            0.188f, 0.462f, 0.098f
 
                     };
 
@@ -267,7 +305,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
                 GameObject obj = new GameObject(mesh);
-                System.out.println(xOne + " " + yOne);
+                //System.out.println(xOne + " " + yOne);
 
                 obj.setPosition(xOne,yOne,-2.0f);
                 obj.setScale(0.2f);
