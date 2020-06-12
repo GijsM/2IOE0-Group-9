@@ -6,12 +6,15 @@ import java.util.Random;
 
 import app.Game.Object.GameObject;
 import app.engine.Mesh;
+import app.graphics.Loader;
+import app.graphics.RawModel;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.StaticGameObject;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
+import app.graphics.ObjectLoader;
 
 import static java.lang.Math.round;
 
@@ -34,6 +37,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     int exitDoorwayDirection;
     int[] doorWayLocation = new int[2];
     int[] exitDoorWayLocation = new int[2];
+    Loader loader = new Loader();
 
     public Room(GameMap map) {
     	this.room = standardroom(10);
@@ -61,8 +65,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         boolean entranceExitCollision = true;
         
         while(entranceExitCollision){
+            System.out.println("looping for collision");
             if(exitDoorwayDirection == doorwayDirection){
-                randomExitDoorLocation = this.ran.nextInt(9)+1;
+                exitDoorwayDirection = this.ran.nextInt(5);
             } else {
                 entranceExitCollision = false;
             }
@@ -267,11 +272,21 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
                 GameObject obj = new GameObject(mesh);
-                System.out.println(xOne + " " + yOne);
+
 
                 obj.setPosition(xOne,yOne,-2.0f);
                 obj.setScale(0.2f);
                 gameobjects.add(obj);
+
+                if((int)this.room.get(i_int).get(j_int) == 0 ){
+                    RawModel model = ObjectLoader.loadObjModel("Tree",loader);
+                    mesh = new Mesh(model.positions,model.colors, model.indices);
+                    GameObject objTree = new GameObject(mesh);
+                    objTree.setPosition(xOne,yOne,-2.0f);
+                    objTree.setScale(0.025f);
+                    objTree.setRotation(-90f,0,0);
+                    gameobjects.add(objTree);
+                }
 
             }
         }
