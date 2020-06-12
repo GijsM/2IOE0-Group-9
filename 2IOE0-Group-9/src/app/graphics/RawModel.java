@@ -14,10 +14,17 @@ public class RawModel {
     
     private int vaoID;
     private int vertexCount;
+    public float[] positions;
+    public float[] colors;
+    public int[] indices;
     
-    public RawModel(int vaoID, int vertexCount) {
+    public RawModel(int vaoID, int vertexCount, float[] positions , float[] colours, int[] indices) {
         this.vaoID = vaoID;
         this.vertexCount = vertexCount;
+        this.positions = positions;
+        this.colors = colours;
+        this.indices = indices;
+
     }
 
     public int getVaoID() {
