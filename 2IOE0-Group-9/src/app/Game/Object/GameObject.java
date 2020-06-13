@@ -13,7 +13,7 @@ import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
 import app.engine.Mesh;
 
-public class GameObject implements  IRenderable, IUpdateable, ILoadable, ICollidable {
+public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable, ICollidable {
     protected GameMap gameMap;
     protected Body body;
     
@@ -74,7 +74,7 @@ public class GameObject implements  IRenderable, IUpdateable, ILoadable, ICollid
 
 	@Override
 	public BodyDef getBodyDef() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

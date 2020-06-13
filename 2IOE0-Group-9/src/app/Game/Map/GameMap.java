@@ -23,9 +23,11 @@ public class GameMap implements IUpdateable, IRenderable {
     public GameMap(final Random random) {
         Vec2 gravity = new Vec2(0.0f, -10.0f);
         boolean doSleep = true;
-        //world = new World(gravity, doSleep);
+        world = new World(gravity, doSleep);
         this.random = random;
-        this.rooms.add(new Room(this));
+        Room defaultRoom = new Room(this);
+        this.rooms.add(defaultRoom);
+        defaultRoom.load(world);
     }
 
     // TODO: add a generator of some kind to add new rooms
@@ -51,6 +53,7 @@ public class GameMap implements IUpdateable, IRenderable {
 
     @Override
     public void render() {
+    	System.out.println("Render gamemap");
         for (final GameObject gameObject : gameobjects) {
             gameObject.render();
         }
@@ -61,6 +64,7 @@ public class GameMap implements IUpdateable, IRenderable {
 
     @Override
     public void update() {
+    	System.out.println("Update");
         world.step(1/60f, 1, 1);
         for (final GameObject gameObject : gameobjects) {
             gameObject.update();

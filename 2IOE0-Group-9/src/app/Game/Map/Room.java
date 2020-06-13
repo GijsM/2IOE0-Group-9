@@ -9,6 +9,7 @@ import app.engine.Mesh;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.StaticGameObject;
+import app.Game.Object.Tree;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
@@ -304,7 +305,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 }
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
-                GameObject obj = new GameObject(mesh);
+                GameObject obj = new Tree(mesh);
                 //System.out.println(xOne + " " + yOne);
 
                 obj.setPosition(xOne,yOne,-2.0f);

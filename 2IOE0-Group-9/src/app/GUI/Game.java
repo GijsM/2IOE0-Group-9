@@ -121,6 +121,9 @@ public class Game extends State {
         }
 
         shader.unbind();
+        
+        
+        map.update();
     }
 
     public void render() { }
