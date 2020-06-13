@@ -69,7 +69,11 @@ public class Game extends State {
 			e.printStackTrace();
 		}
 		makeObjects();
-		camera.movePosition(-0.1f, 0.1f, 0f);
+
+		// Rotate camera to 2D"ish" view
+		camera.movePosition(1.6f, -0.75f, 0f);
+		camera.setRotation(45f, -90f, 100f);
+		
     }
     
     public void makeObjects() {

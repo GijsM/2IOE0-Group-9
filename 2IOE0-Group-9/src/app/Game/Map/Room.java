@@ -241,9 +241,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                         // V0
                         -0.5f, 0.5f, 0.5f,
                         // V1
-                        -0.5f, -0.5f, 0.5f,
+                        -0.5f, 0.5f, -0.5f,
                         // V2
-                        0.5f, -0.5f, 0.5f,
+                        0.5f, 0.5f, -0.5f,
                         // V3
                         0.5f, 0.5f, 0.5f
                 };
@@ -307,7 +307,8 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 GameObject obj = new GameObject(mesh);
                 //System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,yOne,-2.0f);
+//                obj.setPosition(xOne,yOne,-2.0f);
+                obj.setPosition(xOne,-2.0f, yOne);
                 obj.setScale(0.2f);
                 gameobjects.add(obj);
 
