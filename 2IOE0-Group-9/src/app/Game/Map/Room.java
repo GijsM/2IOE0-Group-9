@@ -305,7 +305,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 }
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
-                GameObject obj = new Tree(mesh);
+                Tree obj = new Tree(mesh);
                 //System.out.println(xOne + " " + yOne);
 
                 obj.setPosition(xOne,yOne,-2.0f);
