@@ -49,7 +49,7 @@ public class Renderer {
 	}
 	
 	public void update() {
-		// Input.update()
+		 mouse.input();
 		// Camera.update()
 		stateManager.update();
 	}

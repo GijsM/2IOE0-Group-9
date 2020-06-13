@@ -3,6 +3,7 @@ package app;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWaitEvents;
 
 import app.Input.Mouse;
 import app.Util.Timer;
@@ -44,10 +45,10 @@ public class Engine {
 		this.running = true;
 		
 		// GameLoop
-		while(running) {			
+		while(running) {	
+//			glfwWaitEvents(); 	// Reduces polling rate for input
 			glfwPollEvents();
-			mouse.reset();			
-
+					
 			if (window.shouldClose()) {
 				stop();
 			}
