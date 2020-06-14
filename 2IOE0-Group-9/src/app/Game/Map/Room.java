@@ -8,7 +8,6 @@ import app.Game.Object.GameObject;
 import app.engine.Mesh;
 import org.jbox2d.dynamics.World;
 
-import app.Game.Object.StaticGameObject;
 import app.Game.Object.Tree;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
@@ -38,7 +37,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
-//        this.setMap(map);
+    	createGameObjects();
     }
 
     public List<GameObject> getGameobjects() {
@@ -201,16 +200,12 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     @Override
     public void render() {
         System.out.println("render in room");
-    if(this.meshes == null){
-        createMeshes();
-        }
-
         for (GameObject gameObject : gameobjects) {
             gameObject.render();
         }
     }
 
-    private void createMeshes() {
+    private void createGameObjects() {
         float topX =(float) -1;
         float topY = 1;
         float delta = (float) 2/this.room.size();

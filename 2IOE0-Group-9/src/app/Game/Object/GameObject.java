@@ -12,9 +12,8 @@ import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
 import app.engine.Mesh;
-import app.Game.Object.Tree;
 
-public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable, ICollidable {
+public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable {
     protected GameMap gameMap;
     protected Body body;
     
@@ -36,15 +35,9 @@ public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable
     public void setScale(float scale) {
     	this.scale = scale;
     }
-    
-  
-    
+      
     public Mesh getMesh() {
     	return mesh;
-    }
-    @Override
-    public void load(World world) {
-        body = world.createBody(getBodyDef());
     }
 
     @Override
@@ -52,22 +45,4 @@ public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable
         world.destroyBody(body);
         body = null;
     }
-
-	@Override
-	public BodyDef getBodyDef() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void render() {
-		// TODO Auto-generated method stub
-		
-	}
 }

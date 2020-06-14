@@ -21,7 +21,7 @@ public class GameMap implements IUpdateable, IRenderable {
     private final List<GameObject> gameobjects = new ArrayList<>();
 
     public GameMap(final Random random) {
-        Vec2 gravity = new Vec2(0.0f, -10.0f);
+        Vec2 gravity = new Vec2(0.0f, 1.0f);
         boolean doSleep = true;
         world = new World(gravity, doSleep);
         this.random = random;
