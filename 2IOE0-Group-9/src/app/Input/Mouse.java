@@ -46,7 +46,7 @@ public class Mouse extends GLFWMouseButtonCallback {
         
         xBuffer = BufferUtils.createDoubleBuffer(1);
         yBuffer = BufferUtils.createDoubleBuffer(1);
-        
+       
         previousPos = new Vector2d(-1, -1);
         currentPos = new Vector2d(0, 0);
         displVec = new Vector2f();
@@ -60,13 +60,13 @@ public class Mouse extends GLFWMouseButtonCallback {
     }
     
     public void input() {
-        displVec.x = 0;
-        displVec.y = 0;
         if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
             double deltax = currentPos.x - previousPos.x;
             double deltay = currentPos.y - previousPos.y;
+
             boolean rotateX = deltax != 0;
             boolean rotateY = deltay != 0;
+            
             if (rotateX) {
                 displVec.y = (float) deltax;
             }
@@ -76,6 +76,7 @@ public class Mouse extends GLFWMouseButtonCallback {
         }
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
+        
     }
 
 
@@ -145,6 +146,15 @@ public class Mouse extends GLFWMouseButtonCallback {
     public void setRightButtonPressed(boolean val) {
         rightButtonPressed = val;
     }
+    
+    public void setCurrentPos(double xpos, double ypos) {
+    	currentPos.x = xpos;
+    	currentPos.y = ypos;
+    }
+    
+    public void setInWindow(boolean entered) {
+    	inWindow = entered;
+    }
 
     public Vec2 Position() {
         glfwGetCursorPos(window.getWindow(), xBuffer, yBuffer);
@@ -155,18 +165,3 @@ public class Mouse extends GLFWMouseButtonCallback {
         return displVec;
     }
 }
-
-// OLD
-//public void init() {
-//    glfwSetCursorPosCallback(window, (windowHandle, xpos, ypos) -> {
-//        currentPos.x = xpos;
-//        currentPos.y = ypos;
-//    });
-//    glfwSetCursorEnterCallback(window, (windowHandle, entered) -> {
-//        inWindow = entered;
-//    });
-//    glfwSetMouseButtonCallback(window, (windowHandle, button, action, mode) -> {
-//        leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
-//        rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
-//    });
-//}

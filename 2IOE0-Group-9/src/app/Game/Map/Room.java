@@ -27,7 +27,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     private RawModel treeModel;
     private Mesh treeMesh;
 
-    
+
     /*
     doorwayDirection = 0 when the door is on the north side
     doorwayDirection = 1 when the door is on the east side
@@ -319,7 +319,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
                 GameObject obj = new GameObject(mesh);
-
+                //System.out.println(xOne + " " + yOne);
 
                 obj.setPosition(xOne,yOne,-2.0f);
                 obj.setScale(delta);
