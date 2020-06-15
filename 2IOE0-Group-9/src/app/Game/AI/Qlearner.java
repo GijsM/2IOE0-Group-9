@@ -110,7 +110,7 @@ public class Qlearner {
             }
         }
     }
-    
+//    
 //    public double getAstarValues() {
 //    	// TODO get coordinates enemy & item & player
 //    	    	
@@ -121,5 +121,5 @@ public class Qlearner {
 //    	//return difference for qtable
 //    	return(distItem - distPlayer);
 //    }
-    
+//    
 }

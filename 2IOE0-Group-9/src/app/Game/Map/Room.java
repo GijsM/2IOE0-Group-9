@@ -42,16 +42,17 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
-    	createGameObjects();
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
-    	Texture texture = new Texture("/Textures/tree");
+    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree.png");
         TexturedModel texturedModel = new TexturedModel(treeModel,texture);
         for (int p = 0 ; p < treeModel.colors.length ; p++){
             treeModel.colors[p++] = 0.0f;
             treeModel.colors[p] = 0.5f;
         }
         this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
+        
+        createGameObjects();
 //        this.setMap(map);
     }
 
