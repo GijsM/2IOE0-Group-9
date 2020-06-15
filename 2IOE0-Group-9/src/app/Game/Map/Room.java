@@ -9,7 +9,7 @@ import app.engine.Mesh;
 import app.graphics.*;
 import org.jbox2d.dynamics.World;
 
-import app.Game.Object.StaticGameObject;
+import app.Game.Object.Tree;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
@@ -42,6 +42,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
+    	createGameObjects();
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
     	Texture texture = new Texture("/Textures/tree");
@@ -214,16 +215,12 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     @Override
     public void render() {
         System.out.println("render in room");
-    if(this.meshes == null){
-        createMeshes();
-        }
-
         for (GameObject gameObject : gameobjects) {
             gameObject.render();
         }
     }
 
-    private void createMeshes() {
+    private void createGameObjects() {
         float topX =(float) -1;
         float topY = 1;
         float delta = (float) 2/this.room.size();
@@ -318,7 +315,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 }
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
-                GameObject obj = new GameObject(mesh);
+                Tree obj = new Tree(mesh);
                 //System.out.println(xOne + " " + yOne);
 
                 obj.setPosition(xOne,-2.0f,yOne);

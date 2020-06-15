@@ -15,6 +15,7 @@ import org.joml.Vector3f;
 
 import app.Window;
 import app.Game.Object.GameObject;
+import app.Game.Object.Tree;
 import app.Input.Mouse;
 import app.engine.Shader;
 import app.graphics.Camera;
@@ -133,12 +134,15 @@ public class Game extends State {
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
 
         for (GameObject obj: gameObjects) {
-        	Matrix4f modelViewMatrix = transformation.getModelViewMatrix(obj, viewMatrix);
+        	Matrix4f modelViewMatrix = transformation.getModelViewMatrix((Tree) obj, viewMatrix);
         	shader.setUniform("modelViewMatrix", modelViewMatrix);
         	obj.getMesh().render();
         }
 
         shader.unbind();
+        
+        
+        map.update();
     }
 
     public void render() { }
