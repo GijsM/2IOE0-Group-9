@@ -255,9 +255,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                         // V0
                         -0.5f, 0.5f, 0.5f,
                         // V1
-                        -0.5f, -0.5f, 0.5f,
+                        -0.5f, 0.5f, -0.5f,
                         // V2
-                        0.5f, -0.5f, 0.5f,
+                        0.5f, 0.5f, -0.5f,
                         // V3
                         0.5f, 0.5f, 0.5f
                 };
@@ -321,7 +321,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 GameObject obj = new GameObject(mesh);
                 //System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,yOne,-2.0f);
+                obj.setPosition(xOne,-2.0f,yOne);
                 obj.setScale(delta);
                 gameobjects.add(obj);
 
@@ -329,9 +329,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
 
                     GameObject objTree = new GameObject(treeMesh);
-                    objTree.setPosition(xOne,yOne,-2.0f);
+                    objTree.setPosition(xOne,-2.0f,yOne);
                     objTree.setScale(delta/5f);
-                    objTree.setRotation(-90f,0,0);
+                    //objTree.setRotation(-90f,0,0);
                     gameobjects.add(objTree);
                 }
 
