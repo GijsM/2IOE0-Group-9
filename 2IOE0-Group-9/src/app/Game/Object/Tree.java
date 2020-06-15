@@ -62,6 +62,8 @@ public class Tree extends GameObject {
 		body = world.createBody(def);
 		PolygonShape shape = new PolygonShape();
 		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+		fixtureDef.density = 1;
 		body.createFixture(fixtureDef);
 		
 	}
