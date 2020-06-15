@@ -325,7 +325,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 // make the tree objects
                 if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
 
-                    GameObject objTree = new GameObject(treeMesh);
+                    Tree objTree = new Tree(treeMesh);
                     objTree.setPosition(xOne,-2.0f,yOne);
                     objTree.setScale(delta/5f);
                     //objTree.setRotation(-90f,0,0);
