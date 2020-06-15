@@ -6,15 +6,13 @@ import java.util.Random;
 
 import app.Game.Object.GameObject;
 import app.engine.Mesh;
-import app.graphics.Loader;
-import app.graphics.RawModel;
+import app.graphics.*;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.StaticGameObject;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
-import app.graphics.ObjectLoader;
 
 import static java.lang.Math.round;
 
@@ -26,6 +24,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     ArrayList<ArrayList> room;
     //holds the meshes that will be rendered in the render() method
     ArrayList<Mesh> meshes;
+    private RawModel treeModel;
+    private Mesh treeMesh;
+
     
     /*
     doorwayDirection = 0 when the door is on the north side
@@ -41,6 +42,15 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
+
+    	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
+    	Texture texture = new Texture("/Textures/tree");
+        TexturedModel texturedModel = new TexturedModel(treeModel,texture);
+        for (int p = 0 ; p < treeModel.colors.length ; p++){
+            treeModel.colors[p++] = 0.0f;
+            treeModel.colors[p] = 0.5f;
+        }
+        this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
 //        this.setMap(map);
     }
 
@@ -312,15 +322,15 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
 
                 obj.setPosition(xOne,yOne,-2.0f);
-                obj.setScale(0.2f);
+                obj.setScale(delta);
                 gameobjects.add(obj);
 
-                if((int)this.room.get(i_int).get(j_int) == 0 ){
-                    RawModel model = ObjectLoader.loadObjModel("Tree",loader);
-                    mesh = new Mesh(model.positions,model.colors, model.indices);
-                    GameObject objTree = new GameObject(mesh);
+                // make the tree objects
+                if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
+
+                    GameObject objTree = new GameObject(treeMesh);
                     objTree.setPosition(xOne,yOne,-2.0f);
-                    objTree.setScale(0.025f);
+                    objTree.setScale(delta/5f);
                     objTree.setRotation(-90f,0,0);
                     gameobjects.add(objTree);
                 }
