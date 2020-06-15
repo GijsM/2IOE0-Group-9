@@ -6,6 +6,7 @@ import java.util.Random;
 
 import app.Game.Object.GameObject;
 import app.engine.Mesh;
+import app.graphics.*;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.Tree;
@@ -23,7 +24,10 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     ArrayList<ArrayList> room;
     //holds the meshes that will be rendered in the render() method
     ArrayList<Mesh> meshes;
-    
+    private RawModel treeModel;
+    private Mesh treeMesh;
+
+
     /*
     doorwayDirection = 0 when the door is on the north side
     doorwayDirection = 1 when the door is on the east side
@@ -34,10 +38,21 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     int exitDoorwayDirection;
     int[] doorWayLocation = new int[2];
     int[] exitDoorWayLocation = new int[2];
+    Loader loader = new Loader();
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
     	createGameObjects();
+
+    	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
+    	Texture texture = new Texture("/Textures/tree");
+        TexturedModel texturedModel = new TexturedModel(treeModel,texture);
+        for (int p = 0 ; p < treeModel.colors.length ; p++){
+            treeModel.colors[p++] = 0.0f;
+            treeModel.colors[p] = 0.5f;
+        }
+        this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
+//        this.setMap(map);
     }
 
     public List<GameObject> getGameobjects() {
@@ -237,9 +252,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                         // V0
                         -0.5f, 0.5f, 0.5f,
                         // V1
-                        -0.5f, -0.5f, 0.5f,
+                        -0.5f, 0.5f, -0.5f,
                         // V2
-                        0.5f, -0.5f, 0.5f,
+                        0.5f, 0.5f, -0.5f,
                         // V3
                         0.5f, 0.5f, 0.5f
                 };
@@ -303,9 +318,19 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 Tree obj = new Tree(mesh);
                 //System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,yOne,-2.0f);
-                obj.setScale(0.2f);
+                obj.setPosition(xOne,-2.0f,yOne);
+                obj.setScale(delta);
                 gameobjects.add(obj);
+
+                // make the tree objects
+                if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
+
+                    GameObject objTree = new GameObject(treeMesh);
+                    objTree.setPosition(xOne,-2.0f,yOne);
+                    objTree.setScale(delta/5f);
+                    //objTree.setRotation(-90f,0,0);
+                    gameobjects.add(objTree);
+                }
 
             }
         }

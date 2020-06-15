@@ -4,9 +4,9 @@ public class App {
 	/*
 	 * Game Properties
 	 */
-	private final String TITLE = "Genocrawler";
-	private final int WIDTH = 800;
-	private final int HEIGHT = 600;
+	private final String TITLE = "Genocrawl";
+	private final int WIDTH = 1280;
+	private final int HEIGHT = 800;
 	
 	protected Engine engine;
 	
