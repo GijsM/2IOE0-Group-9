@@ -8,6 +8,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.GameObject;
+import app.Game.Object.Entity.Player.Player;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
 
@@ -28,6 +29,7 @@ public class GameMap implements IUpdateable, IRenderable {
         Room defaultRoom = new Room(this);
         this.rooms.add(defaultRoom);
         defaultRoom.load(world);
+        Player player = new Player(this, );
     }
 
     // TODO: add a generator of some kind to add new rooms
@@ -64,7 +66,7 @@ public class GameMap implements IUpdateable, IRenderable {
 
     @Override
     public void update() {
-    	System.out.println("Update");
+    	//System.out.println("Update");
         world.step(1/60f, 1, 1);
         for (final GameObject gameObject : gameobjects) {
             gameObject.update();

@@ -70,7 +70,6 @@ public class Game extends State {
     
     public void makeObjects() {
     	gameObjects = this.map.getRooms().get(0).getGameobjects();
-    	map.render();
     	//update();
     }
     
@@ -125,6 +124,7 @@ public class Game extends State {
         
         
         map.update();
+        map.render();
     }
 
     public void render() { }
