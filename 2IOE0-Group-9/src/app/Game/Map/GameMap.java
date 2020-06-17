@@ -29,7 +29,7 @@ public class GameMap implements IUpdateable, IRenderable {
         Room defaultRoom = new Room(this);
         this.rooms.add(defaultRoom);
         defaultRoom.load(world);
-        Player player = new Player(this, );
+        //Player player = new Player(this, null);
     }
 
     // TODO: add a generator of some kind to add new rooms

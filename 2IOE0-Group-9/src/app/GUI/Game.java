@@ -79,6 +79,7 @@ public class Game extends State {
     
     public void makeObjects() {
     	gameObjects = this.map.getRooms().get(0).getGameobjects();
+    	map.render();
     	//update();
     }
     

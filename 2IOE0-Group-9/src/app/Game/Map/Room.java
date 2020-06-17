@@ -42,10 +42,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
-    	createGameObjects();
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
-    	Texture texture = new Texture("/Textures/tree");
+    	Texture texture = new Texture(".\\res\\Textures\\tree.png");
         TexturedModel texturedModel = new TexturedModel(treeModel,texture);
         for (int p = 0 ; p < treeModel.colors.length ; p++){
             treeModel.colors[p++] = 0.0f;
@@ -53,6 +52,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         }
         this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
 //        this.setMap(map);
+        createGameObjects();
     }
 
     public List<GameObject> getGameobjects() {
@@ -325,11 +325,12 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 // make the tree objects
                 if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
 
-                    GameObject objTree = new GameObject(treeMesh);
+                    GameObject objTree = new Tree(treeMesh);
                     objTree.setPosition(xOne,-2.0f,yOne);
                     objTree.setScale(delta/5f);
                     //objTree.setRotation(-90f,0,0);
                     gameobjects.add(objTree);
+                    
                 }
 
             }
