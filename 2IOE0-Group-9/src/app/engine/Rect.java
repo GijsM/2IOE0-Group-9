@@ -1,6 +1,6 @@
 package app.engine;
 
-import app.Util.Vec2;
+import app.Util.Vector2f;
 
 public class Rect {
     public float x;
@@ -26,7 +26,7 @@ public class Rect {
         return new Rect(r.x + x, r.y + y, width, height);
     }
 
-    public boolean Contains(Vec2 v) {
+    public boolean Contains(Vector2f v) {
         return v.x > x && v.x < x + width && v.y > y && v.y < y + height;
     }
 
@@ -41,7 +41,7 @@ public class Rect {
         if (!Intersects(r)) {
             return null;
         }
-        Vec2 v = new Vec2(Math.max(x, r.x), Math.max(y, r.y));
+        Vector2f v = new Vector2f(Math.max(x, r.x), Math.max(y, r.y));
         return new Rect(v.x, v.y, Math.min(x + width, r.x + r.width) - v.x, Math.min(y + height, r.y + r.height) - v.y);
     }
 }

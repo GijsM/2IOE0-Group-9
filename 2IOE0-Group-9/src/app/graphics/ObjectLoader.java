@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import app.Util.Vec2;
+import app.Util.Vector2f;
 import app.Util.Vector3f;
 
 /**
@@ -35,7 +35,7 @@ public class ObjectLoader {
         BufferedReader reader = new BufferedReader(fileReader);
         String line;
         List<Vector3f> vertices = new ArrayList<>();
-        List<Vec2> textures = new ArrayList<>();
+        List<Vector2f> textures = new ArrayList<>();
         List<Vector3f> normals = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class ObjectLoader {
                     vertices.add(vertex);
 
                 } else if (line.startsWith("vt ")) {
-                    Vec2 texture = new Vec2(
+                    Vector2f texture = new Vector2f(
                             Float.parseFloat(currentLine[1]),
                             Float.parseFloat(currentLine[2]));
 
@@ -130,14 +130,14 @@ public class ObjectLoader {
     }
     
     private static void processVertex(String[] vertexData,
-            List<Integer> indices, List<Vec2> textures,
+            List<Integer> indices, List<Vector2f> textures,
             List<Vector3f> normals, float[] textureArray, float[] normalArray) {
         
         int currentVertexIndex = Integer.parseInt(vertexData[0]) - 1;
         indices.add(currentVertexIndex);
         
         //add textures to the array of textures
-        Vec2 currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
+        Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
         textureArray[currentVertexIndex * 2] = currentTex.getX();
         textureArray[currentVertexIndex * 2 + 1] = 1 - currentTex.getY();
         

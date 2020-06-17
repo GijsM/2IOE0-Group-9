@@ -1,10 +1,9 @@
 package app.Input;
 
 import app.Window;
-import app.Util.Vec2;
+import app.Util.Vector2f;
 
 import org.joml.Vector2d;
-import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
@@ -35,7 +34,7 @@ public class Mouse extends GLFWMouseButtonCallback {
     
     private final Vector2d previousPos;
     private final Vector2d currentPos;
-    private final Vector2f displVec;
+    private final org.joml.Vector2f displVec;
     
     private boolean leftButtonPressed = false;
     private boolean rightButtonPressed = false;
@@ -49,7 +48,7 @@ public class Mouse extends GLFWMouseButtonCallback {
        
         previousPos = new Vector2d(-1, -1);
         currentPos = new Vector2d(0, 0);
-        displVec = new Vector2f();
+        displVec = new org.joml.Vector2f();
     }
     
     public static Mouse getInstance() {
@@ -156,12 +155,12 @@ public class Mouse extends GLFWMouseButtonCallback {
     	inWindow = entered;
     }
 
-    public Vec2 Position() {
+    public Vector2f Position() {
         glfwGetCursorPos(window.getWindow(), xBuffer, yBuffer);
-        return new Vec2((float)xBuffer.get(0), (float)yBuffer.get(0));
+        return new Vector2f((float)xBuffer.get(0), (float)yBuffer.get(0));
     }
     
-    public Vector2f getDisplVec() {
+    public org.joml.Vector2f getDisplVec() {
         return displVec;
     }
 }

@@ -4,20 +4,19 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import app.Util.Vec2;
+import app.Util.Vector2f;
 import app.engine.Texture;
 
 public class Font {
     private int fontID;
     private BufferedImage bufferedImage;
-    private Vec2 imageSize;
+    private Vector2f imageSize;
     private java.awt.Font font;
     private FontMetrics fontMetrics;
     private Texture texture;
@@ -47,7 +46,7 @@ public class Font {
         graphics.setFont(font);
 
         fontMetrics = graphics.getFontMetrics();
-        imageSize = new Vec2(1024, 1024);
+        imageSize = new Vector2f(1024, 1024);
         bufferedImage = graphics.getDeviceConfiguration().createCompatibleImage((int) imageSize.x, (int) imageSize.y, Transparency.TRANSLUCENT);
 
         fontID = glGenTextures();
