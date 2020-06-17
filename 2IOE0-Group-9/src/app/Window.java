@@ -4,6 +4,8 @@ import app.engine.Rect;
 import app.Input.Mouse;
 import app.Util.Color;
 
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
@@ -49,22 +51,41 @@ public class Window {
             System.exit(-1);
         }
 		
+		glfwSetFramebufferSizeCallback(window, (window, w, h) -> {
+			instance.width = w;
+			instance.height = h;
+			GL11.glViewport(0,0, w, h);
+		});
+		
+	    GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+	    int windowPosX = (videoMode.width() - width) / 2;
+	    int windowPosY = (videoMode.height() - height) / 2;
+	    GLFW.glfwSetWindowPos(window, windowPosX, windowPosY);
+		
 		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+			
+			if ( key == GLFW_KEY_DELETE && action == GLFW_RELEASE )
 				glfwSetWindowShouldClose(window, true);	
 		});
 		
 		glfwSetMouseButtonCallback(window, (window, key, action, mods) -> {
 			if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-				mouse.setLeftButtonPressed(true);
+				mouse.setLeftButtonPressed(true);		
 			if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 				mouse.setLeftButtonPressed(false);	
 			if (key == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		        mouse.setRightButtonPressed(true);
 			if (key == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
-				mouse.setRightButtonPressed(false);	
-			
+				mouse.setRightButtonPressed(false);
 		});
+		
+        glfwSetCursorPosCallback(window, (windowHandle, xpos, ypos) -> {
+            mouse.setCurrentPos(xpos, ypos);
+        });
+        
+        glfwSetCursorEnterCallback(window, (windowHandle, entered) -> {
+        	mouse.setInWindow(entered);
+        });
 		
 		glfwMakeContextCurrent(window);
 		glfwSwapInterval(1);

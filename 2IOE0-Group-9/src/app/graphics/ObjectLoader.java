@@ -26,7 +26,7 @@ public class ObjectLoader {
     public static RawModel loadObjModel(String fileName, Loader loader) {
         FileReader fileReader = null;
         try {
-            fileReader = new FileReader(new File("res/" + fileName + ".obj"));
+            fileReader = new FileReader(new File("2IOE0-Group-9\\res\\" + fileName + ".obj"));
         } catch (FileNotFoundException ex) {
             System.err.println("File not not found, cannot load");
             Logger.getLogger(ObjectLoader.class.getName()).log(Level.SEVERE, null, ex);

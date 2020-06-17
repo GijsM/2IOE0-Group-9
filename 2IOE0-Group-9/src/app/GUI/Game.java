@@ -4,16 +4,19 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 
 import app.Game.Map.GameMap;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import app.Window;
 import app.Game.Object.GameObject;
 import app.Game.Object.Tree;
+import app.Input.Mouse;
 import app.engine.Shader;
 import app.graphics.Camera;
 import app.graphics.Transformation;
@@ -26,6 +29,7 @@ public class Game extends State {
     private static Game instance = null;
     protected static StateManager stateManager;
     protected static GUI gui;
+    protected static Mouse mouse;
     protected static Window window;
 	protected static Camera camera;
 	protected static Transformation transformation;
@@ -50,6 +54,7 @@ public class Game extends State {
     
     public void init() {
     	gui = GUI.getInstance();
+    	mouse = Mouse.getInstance();
     	window = Window.getInstance();
     	stateManager = StateManager.getInstance();
 		camera = Camera.getInstance();
@@ -65,7 +70,11 @@ public class Game extends State {
 			e.printStackTrace();
 		}
 		makeObjects();
-		camera.movePosition(-0.1f, 0.1f, 0f);
+
+		// Rotate camera to 2D"ish" view
+		camera.movePosition(1.6f, -0.75f, 0f);
+		camera.setRotation(45f, -90f, 100f);
+		
     }
     
     public void makeObjects() {
@@ -85,12 +94,21 @@ public class Game extends State {
         } else if (window.isKeyPressed(GLFW_KEY_D)) {
             cameraVec.x = 1;
         }
-        if (window.isKeyPressed(GLFW_KEY_Z)) {
-            cameraVec.y = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_X)) {
+        if (window.isKeyPressed(GLFW_KEY_Q)) {
             cameraVec.y = 1;
+        } else if (window.isKeyPressed(GLFW_KEY_E)) {
+            cameraVec.y = -1;
         }
-        
+        if (window.isKeyPressed(GLFW_KEY_ESCAPE)) {
+        	System.out.println("Game has been paused");
+        	stateManager.toPause();
+        }
+    	
+        if (mouse.isRightButtonPressed()) {
+    		Vector2f rotVec = mouse.getDisplVec();
+    		camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY,0);
+    	}
+
     	camera.movePosition(cameraVec.x * CAMERA_POS_STEP, cameraVec.y * CAMERA_POS_STEP, cameraVec.z * CAMERA_POS_STEP);
     }
   

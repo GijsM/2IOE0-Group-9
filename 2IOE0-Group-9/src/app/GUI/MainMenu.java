@@ -23,12 +23,6 @@ public class MainMenu extends State{
     	gui = GUI.getInstance();
     	window = Window.getInstance();
     	stateManager = StateManager.getInstance();
-
-        gui.DrawTexture(title, new Rect((window.getWidth() / 4),0, window.getWidth() / 2, 100));
-        gui.Button("Start", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
-        gui.Button("Settings", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
-        gui.Button("Exit", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover");
-        //update();
     }
 
     public static MainMenu getInstance(){
@@ -40,16 +34,15 @@ public class MainMenu extends State{
     }
 
     public void update() {
+    	gui.DrawTexture(title, new Rect((window.getWidth() / 4),0, window.getWidth() / 2, 100));
         if (gui.Button("Start", new Rect(window.getWidth() / 4, window.getHeight() / 6, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
         	System.out.println("Go to game");
-        	stateManager.toGame();
-//        	stateManager.update();
+        	stateManager.toGame(); 
         }
 
         if (gui.Button("Settings", new Rect(window.getWidth() / 4, window.getHeight() / 3, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
             System.out.println("Go to settings menu");
             stateManager.toSettings();
-//            stateManager.update();
         }
 
         if (gui.Button("Exit", new Rect(window.getWidth() / 4, window.getHeight() / 2, window.getWidth() / 2, window.getHeight() / 10), "Button", "ButtonHover")) {
