@@ -1,39 +1,43 @@
 package app.graphics;
 
-import app.graphics.AnimatedModel;
-import app.graphics.Joint;
-import app.graphics.ColladaLoader;
+import app.Util.MyFile;
+import app.Util.Vector3f;
 import app.engine.AnimatedModelData;
 import app.engine.JointData;
 import app.engine.MeshData;
 import app.engine.SkeletonData;
+import app.engine.Vao;
 
-import main.GeneralSettings;
 
-import openglObjects.Vao;
 //import textures.Texture;
-import app.graphics.Texture;
-
-import app.Util.MyFile;
 
 public class AnimatedModelLoader {
+
+
+	public static final MyFile RES_FOLDER = new MyFile("D:\\Documenten\\Universiteit\\IES\\OpenGL-Animation-master\\OpenGL-Animation-master\\Resources\\res");
+	public static final String MODEL_FILE = "model.dae";
+	public static final String ANIM_FILE = "model.dae";
+	public static final String DIFFUSE_FILE = "diffuse.png";
+
+	public static final int MAX_WEIGHTS = 3;
+
+	public static final Vector3f LIGHT_DIR = new Vector3f(0.2f, -0.3f, -0.8f);
 
 	/**
 	 * Creates an AnimatedEntity from the data in an entity file. It loads up
 	 * the collada model data, stores the extracted data in a VAO, sets up the
 	 * joint heirarchy, and loads up the entity's texture.
-	 * 
-	 * @param entityFile
+	 *
 	 *            - the file containing the data for the entity.
 	 * @return The animated entity (no animation applied though)
 	 */
 	public static AnimatedModel loadEntity(MyFile modelFile, MyFile textureFile) {
-		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelFile, GeneralSettings.MAX_WEIGHTS);
+		AnimatedModelData entityData = ColladaLoader.loadColladaModel(modelFile, MAX_WEIGHTS);
 		Vao model = createVao(entityData.getMeshData());
-		Texture texture = loadTexture(textureFile);
+		//Texture texture = loadTexture(textureFile);
 		SkeletonData skeletonData = entityData.getJointsData();
 		Joint headJoint = createJoints(skeletonData.headJoint);
-		return new AnimatedModel(model, texture, headJoint, skeletonData.jointCount);
+		return new AnimatedModel(model, headJoint, skeletonData.jointCount);
 	}
 
 	/**
@@ -43,10 +47,10 @@ public class AnimatedModelLoader {
 	 *            - the texture file.
 	 * @return The diffuse texture.
 	 */
-	private static Texture loadTexture(MyFile textureFile) {
-		Texture diffuseTexture = Texture.newTexture(textureFile).anisotropic().create();
-		return diffuseTexture;
-	}
+//	private static Texture loadTexture(MyFile textureFile) {
+//		Texture diffuseTexture = Texture.newTexture(textureFile).anisotropic().create();
+//		return diffuseTexture;
+//	}
 
 	/**
 	 * Constructs the joint-hierarchy skeleton from the data extracted from the

@@ -17,6 +17,9 @@ public class Engine {
 	protected Window window;
 
 	private boolean running;
+
+	private static long lastFrameTime;
+	private static float delta;
 	
 	public void createWindow(String title, int width, int height) {
 		glfwInit();
@@ -27,10 +30,13 @@ public class Engine {
 		mouse = Mouse.getInstance();
 		
 		window.create(title, width, height);
+
+		lastFrameTime = getCurrentTime();
 	}
 	
 	public void init() {
 		renderer.init();
+
 	}
 	
 	public void start() {
@@ -64,6 +70,9 @@ public class Engine {
 	}
 	
 	public void update() {
+		long currentFrameTime = getCurrentTime();
+		delta = (currentFrameTime - lastFrameTime) / 1000f;
+		lastFrameTime = currentFrameTime;
 		renderer.update();
 	}
 	
@@ -78,5 +87,13 @@ public class Engine {
 	private void clean() {
 		window.clean();
 		glfwTerminate();
+	}
+
+	private static long getCurrentTime() {
+		return System.currentTimeMillis();
+	}
+
+	public static float getFrameTime() {
+		return delta;
 	}
 }

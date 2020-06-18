@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 
 
 public class Texture {
@@ -95,4 +96,7 @@ public class Texture {
         return height;
     }
 
+    public void delete() {
+        GL11.glDeleteTextures(id);
+    }
 }

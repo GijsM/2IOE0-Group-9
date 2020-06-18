@@ -1,13 +1,11 @@
 package app.graphics;
 
 import app.Util.Matrix4f;
-
+import app.engine.Texture;
+import app.engine.Vao;
 import app.graphics.Animation;
 import app.graphics.Animator;
 
-import openglObjects.Vao;
-//import textures.Texture;
-import app.graphics.Texture;
 
 /**
  * 
@@ -25,7 +23,7 @@ public class AnimatedModel {
 
 	// skin
 	private final Vao model;
-	private final Texture texture;
+	//private final Texture texture;
 
 	// skeleton
 	private final Joint rootJoint;
@@ -39,8 +37,7 @@ public class AnimatedModel {
 	 * simply the original (no pose applied) transform of a joint in relation to
 	 * the model's origin (model-space). The inverse bind transform is simply
 	 * that but inverted.
-	 * 
-	 * @param model
+	 *  @param model
 	 *            - the VAO containing the mesh data for this entity. This
 	 *            includes vertex positions, normals, texture coords, IDs of
 	 *            joints that affect each vertex, and their corresponding
@@ -48,16 +45,23 @@ public class AnimatedModel {
 	 * @param texture
 	 *            - the diffuse texture for the entity.
 	 * @param rootJoint
-	 *            - the root joint of the joint hierarchy which makes up the
-	 *            "skeleton" of the entity.
+ *            - the root joint of the joint hierarchy which makes up the
+ *            "skeleton" of the entity.
 	 * @param jointCount
-	 *            - the number of joints in the joint hierarchy (skeleton) for
-	 *            this entity.
+*            - the number of joints in the joint hierarchy (skeleton) for
 	 * 
 	 */
 	public AnimatedModel(Vao model, Texture texture, Joint rootJoint, int jointCount) {
 		this.model = model;
-		this.texture = texture;
+		//this.texture = texture;
+		this.rootJoint = rootJoint;
+		this.jointCount = jointCount;
+		this.animator = new Animator(this);
+		rootJoint.calcInverseBindTransform(new Matrix4f());
+	}
+
+	public AnimatedModel(Vao model, Joint rootJoint, int jointCount) {
+		this.model = model;
 		this.rootJoint = rootJoint;
 		this.jointCount = jointCount;
 		this.animator = new Animator(this);
@@ -74,9 +78,9 @@ public class AnimatedModel {
 	/**
 	 * @return The diffuse texture for this entity.
 	 */
-	public Texture getTexture() {
-		return texture;
-	}
+//	public Texture getTexture() {
+//		return texture;
+//	}
 
 	/**
 	 * @return The root joint of the joint hierarchy. This joint has no parent,
@@ -93,7 +97,7 @@ public class AnimatedModel {
 	 */
 	public void delete() {
 		model.delete();
-		texture.delete();
+		//texture.delete();
 	}
 
 	/**

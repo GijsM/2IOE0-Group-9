@@ -1,22 +1,14 @@
 package app.graphics;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import app.Util.Matrix4f;
+import app.Util.MyFile;
 import app.Util.Vector3f;
-
-import app.graphics.Animation;
-import app.graphics.JointTransform;
-import app.graphics.KeyFrame;
-import app.graphics.Quaternion;
-import app.graphics.ColladaLoader;
-
 import app.engine.AnimationData;
 import app.engine.JointTransformData;
 import app.engine.KeyFrameData;
 
-import app.Util.MyFile;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class loads up an animation collada file, gets the information from it,

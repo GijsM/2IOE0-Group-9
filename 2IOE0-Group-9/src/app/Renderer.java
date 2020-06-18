@@ -4,27 +4,33 @@ import app.GUI.GUI;
 import app.GUI.StateManager;
 import app.Game.Map.GameMap;
 import app.Input.Mouse;
-//import AnimatedModelRenderer;
-
-import java.util.Random;
+import app.graphics.AnimatedModelRenderer;
+import app.graphics.AnimatedModel;
 
 public class Renderer {
 	private static Renderer instance = null;
-	
+
 	protected StateManager stateManager;
 	protected Mouse mouse;
 	protected Window window;
 	protected GUI gui;
 	protected GameMap map;
-
-	//protected AnimatedModelRenderer entityRenderer;
+	private AnimatedModelRenderer entityRenderer;
+	private AnimatedModel animatedModel;
 
 	public Renderer() {
 		window = Window.getInstance();
 		gui = GUI.getInstance();
 		mouse = Mouse.getInstance();
 		stateManager = StateManager.getInstance();
-		//entityRenderer.getInstance();
+	}
+
+	public void AnimationRenderer(AnimatedModelRenderer renderer) {
+		this.entityRenderer = renderer;
+	}
+
+	public void renderAnimation() {
+		entityRenderer.render(getAnimatedModel());
 	}
 	
 	public static Renderer getInstance() {
@@ -45,14 +51,13 @@ public class Renderer {
 		}
 		
 	}
-	
+
 	public void render() {
 		window.render();
-		//entityRenderer.render(scene.getAnimatedModel(), scene.getCamera, scene.getLightDirection());
 	}
 	
 	public void update() {
-		 mouse.input();
+		mouse.input();
 		// Camera.update()
 		stateManager.update();
 	}

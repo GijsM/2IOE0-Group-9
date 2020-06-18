@@ -8,18 +8,19 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 
+import app.graphics.AnimatedModel;
 import app.Game.Map.GameMap;
+import app.graphics.*;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import app.graphics.AnimatedModelRenderer;
 
 import app.Window;
 import app.Game.Object.GameObject;
 import app.Game.Object.Tree;
 import app.Input.Mouse;
 import app.engine.Shader;
-import app.graphics.Camera;
-import app.graphics.Transformation;
 
 import java.util.List;
 import java.util.Random;
@@ -34,6 +35,7 @@ public class Game extends State {
 	protected static Camera camera;
 	protected static Transformation transformation;
 	protected static Shader shader;
+    protected AnimatedModelRenderer entityRenderer;
     
 	private final static Vector3f cameraVec = new Vector3f();
     private static final float FOV = (float) Math.toRadians(60.0f);
@@ -43,6 +45,8 @@ public class Game extends State {
 	private static final float MOUSE_SENSITIVITY = 0.2f;
     private static List<GameObject> gameObjects;
     private GameMap map;
+    private AnimatedModel animatedModel;
+    private Vector3f lightDirection = new Vector3f(0, -1, 0);
 
     public static Game getInstance() {
         if(instance == null) {
@@ -76,11 +80,12 @@ public class Game extends State {
 		camera.setRotation(45f, -90f, 100f);
 		
     }
-    
+
     public void makeObjects() {
     	gameObjects = this.map.getRooms().get(0).getGameobjects();
     	map.render();
-    	//update();
+        entityRenderer.render(getAnimatedModel());
+        //update();
     }
     
     public void controlCamera() {
@@ -143,6 +148,10 @@ public class Game extends State {
         
         
         map.update();
+    }
+
+    public AnimatedModel getAnimatedModel() {
+        return animatedModel;
     }
 
     public void render() { }

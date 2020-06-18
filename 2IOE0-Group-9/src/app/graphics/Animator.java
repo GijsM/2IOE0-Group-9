@@ -1,14 +1,11 @@
 package app.graphics;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import app.Engine;
 import app.Util.Matrix4f;
 
-import app.graphics.AnimatedModel;
-import app.graphics.Joint;
-
-import utils.DisplayManager;
+import java.util.HashMap;
+import java.util.Map;
+import app.graphics.KeyFrame;
 
 /**
  * 
@@ -81,7 +78,7 @@ public class Animator {
 	 * reset, causing the animation to loop.
 	 */
 	private void increaseAnimationTime() {
-		animationTime += DisplayManager.getFrameTime();
+		animationTime += Engine.getFrameTime();
 		if (animationTime > currentAnimation.getLength()) {
 			this.animationTime %= currentAnimation.getLength();
 		}
