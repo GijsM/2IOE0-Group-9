@@ -38,4 +38,13 @@ public class Vector3f {
     public void setZ(float z) {
         this.z = z;
     }
+
+     private float length() {
+        double xSquare = Math.pow(x, 2f);
+        double ySquare = Math.pow(y, 2f);
+        double zSquare = Math.pow(z, 2f);
+        double hypo = Math.sqrt(xSquare + ySquare + zSquare);
+
+        return (float) hypo;
+    }
 }
