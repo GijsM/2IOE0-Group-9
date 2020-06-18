@@ -59,12 +59,12 @@ public class Tree extends GameObject {
 		BodyDef def = new BodyDef();
 		def.position = new Vec2(position.x, position.y);
 		//def.type = BodyType.STATIC;
-		body = world.createBody(def);
+//		body = world.createBody(def);
 		PolygonShape shape = new PolygonShape();
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
 		fixtureDef.density = 1;
-		body.createFixture(fixtureDef);
+//		body.createFixture(fixtureDef);
 		
 	}
 }
