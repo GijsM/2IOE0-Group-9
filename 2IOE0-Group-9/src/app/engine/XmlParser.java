@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import utils.MyFile;
+import app.Util.MyFile;
 
 /**
  * Reads an XML file and stores all the data in {@link XmlNode} objects,

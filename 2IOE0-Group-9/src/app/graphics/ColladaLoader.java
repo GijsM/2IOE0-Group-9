@@ -2,12 +2,13 @@ package app.graphics;
 
 import app.engine.AnimatedModelData;
 import app.engine.AnimationData;
-import dataStructures.MeshData;
+import app.engine.MeshData;
 import app.engine.SkeletonData;
-import dataStructures.SkinningData;
-import utils.MyFile;
+import app.engine.SkinningData;
+import app.Util.MyFile;
 import app.engine.XmlNode;
 import app.engine.XmlParser;
+import app.graphics.SkinLoader;
 
 public class ColladaLoader {
 

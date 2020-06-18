@@ -1,11 +1,12 @@
-package colladaLoader;
+package app.graphics;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dataStructures.SkinningData;
-import dataStructures.VertexSkinData;
-import xmlParser.XmlNode;
+import app.engine.SkinningData;
+import app.engine.VertexSkinData;
+import app.engine.XmlNode;
+
 
 public class SkinLoader {
 

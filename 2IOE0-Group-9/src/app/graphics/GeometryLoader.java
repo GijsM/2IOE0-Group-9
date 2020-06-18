@@ -8,9 +8,9 @@ import app.Util.Vector2f;
 import app.Util.Vector3f;
 import app.Util.Vector4f;
 
-import dataStructures.MeshData;
+import app.engine.MeshData;
 import app.engine.Vertex;
-import dataStructures.VertexSkinData;
+import app.engine.VertexSkinData;
 import app.engine.XmlNode;
 
 /**

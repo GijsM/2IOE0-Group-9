@@ -296,19 +296,19 @@ public class Vector4f extends Vector implements Serializable, ReadableVector4f, 
     }
 
     /**
-     * @return y
-     */
-    public final float getY() {
-        return y;
-    }
-
-    /**
      * Set X
      *
      * @param x
      */
     public final void setX(float x) {
         this.x = x;
+    }
+
+    /**
+     * @return y
+     */
+    public final float getY() {
+        return y;
     }
 
     /**
@@ -372,7 +372,7 @@ public class Vector4f extends Vector implements Serializable, ReadableVector4f, 
 //        return false;
 //    }
 
-    private float length() {
+    public float length() {
         double xSquare = Math.pow(x, 2f);
         double ySquare = Math.pow(y, 2f);
         double zSquare = Math.pow(z, 2f);

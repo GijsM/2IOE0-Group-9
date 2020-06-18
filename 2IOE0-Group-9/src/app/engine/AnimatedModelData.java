@@ -1,6 +1,7 @@
 package app.engine;
 
 import app.engine.SkeletonData;
+import app.engine.MeshData;
 
 /**
  * Contains the extracted data for an animated model, which includes the mesh data, and skeleton (joints heirarchy) data.

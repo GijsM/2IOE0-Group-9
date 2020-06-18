@@ -1,4 +1,4 @@
-package dataStructures;
+package app.engine;
 
 /**
  * This object contains all the mesh data for an animated model that is to be loaded into the VAO.

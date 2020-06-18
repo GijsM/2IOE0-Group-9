@@ -33,8 +33,6 @@ package app.Util;
 
 import java.io.Serializable;
 import java.nio.FloatBuffer;
-import java.lang.Math.*;
-
 /**
  *
  * Holds a 2-tuple vector.
@@ -309,7 +307,7 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
      * Calculates the length of a vector (hypotenuse)
      * @return 
      */
-    private float length() {
+    public float length() {
         double xSquare = Math.pow(x, 2f);
         double ySquare = Math.pow(y, 2f);
         double hypo = Math.sqrt(xSquare + ySquare);
