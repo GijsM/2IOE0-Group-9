@@ -8,6 +8,8 @@ import app.Game.Object.GameObject;
 import app.engine.Mesh;
 import app.graphics.*;
 import org.jbox2d.dynamics.World;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import app.Game.Object.Tree;
 import app.Util.Interfaces.ILoadable;
@@ -44,14 +46,22 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     	this.room = standardroom(20);
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
-    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree.png");
-        TexturedModel texturedModel = new TexturedModel(treeModel,texture);
-        for (int p = 0 ; p < treeModel.colors.length ; p++){
-            treeModel.colors[p++] = 0.0f;
-            treeModel.colors[p] = 0.5f;
-        }
+
+//    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree2.png");
+//    	texture.bind();
+//        TexturedModel texturedModel = new TexturedModel(treeModel, texture);
+        
+  
+        
+//        for (int p = 0 ; p < treeModel.colors.length ; p++){
+//            treeModel.colors[p++] = 0.0f;
+//            treeModel.colors[p] = 0.5f;
+//        }
         this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
         
+        for(int i = 0; i < treeModel.colors.length; i++) {
+        	System.out.println(treeModel.colors[i]);
+        }
         createGameObjects();
 //        this.setMap(map);
     }
@@ -319,7 +329,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 Tree obj = new Tree(mesh);
                 //System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,-2.0f,yOne);
+                obj.setPosition(xOne,-2.05f,yOne);
                 obj.setScale(delta);
                 gameobjects.add(obj);
 
@@ -328,7 +338,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
                     Tree objTree = new Tree(treeMesh);
                     objTree.setPosition(xOne,-2.0f,yOne);
-                    objTree.setScale(delta/5f);
+                    objTree.setScale(delta/10f);
                     //objTree.setRotation(-90f,0,0);
                     gameobjects.add(objTree);
                 }

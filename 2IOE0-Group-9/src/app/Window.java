@@ -13,9 +13,10 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glEnable;
-
+import static org.lwjgl.opengl.GL11.glClearColor;
 import java.util.concurrent.TimeUnit;
 
 public class Window {
@@ -63,7 +64,6 @@ public class Window {
 	    GLFW.glfwSetWindowPos(window, windowPosX, windowPosY);
 		
 		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			
 			if ( key == GLFW_KEY_DELETE && action == GLFW_RELEASE )
 				glfwSetWindowShouldClose(window, true);	
 		});
@@ -86,12 +86,13 @@ public class Window {
         glfwSetCursorEnterCallback(window, (windowHandle, entered) -> {
         	mouse.setInWindow(entered);
         });
-		
+       
 		glfwMakeContextCurrent(window);
 		glfwSwapInterval(1);
 		GL.createCapabilities();
-		
+
 		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		glfwShowWindow(window);

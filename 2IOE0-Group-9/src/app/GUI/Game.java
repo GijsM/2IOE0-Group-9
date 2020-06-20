@@ -4,6 +4,10 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL20.glBindAttribLocation;
+import static org.lwjgl.opengl.GL20.glValidateProgram;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
@@ -12,6 +16,7 @@ import app.Game.Map.GameMap;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL13;
 
 import app.Window;
 import app.Game.Object.GameObject;
@@ -19,6 +24,7 @@ import app.Game.Object.Tree;
 import app.Input.Mouse;
 import app.engine.Shader;
 import app.graphics.Camera;
+import app.graphics.Texture;
 import app.graphics.Transformation;
 
 import java.util.List;
@@ -61,7 +67,7 @@ public class Game extends State {
 		transformation = Transformation.getInstance();
 		shader = new Shader("GameShader");
 		map = new GameMap(new Random());
-        
+		
 		try {
 			shader.createVertexShader(Shader.loadResource("GameShader.vs"));
 			shader.createFragmentShader(Shader.loadResource("GameShader.fs"));
@@ -115,16 +121,22 @@ public class Game extends State {
   
 
     public void update() {
+//    	makeObjects();
+//    	glClearColor(0.3f, 0.4f, 0.1f,1.0f);
     	controlCamera();
+    	
 
+    
         // Uniforms required for 3D camera
         try {
         	shader.createUniform("projectionMatrix");
 			shader.createUniform("modelViewMatrix");
+			shader.createUniform("texture_sampler");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         shader.bind();
+        
         
         // Projection matrix
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
@@ -138,6 +150,8 @@ public class Game extends State {
         	shader.setUniform("modelViewMatrix", modelViewMatrix);
         	obj.getMesh().render();
         }
+        
+        shader.setUniform("texture_sampler", 0);
 
         shader.unbind();
         
