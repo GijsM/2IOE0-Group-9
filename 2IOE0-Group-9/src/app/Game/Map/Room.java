@@ -46,7 +46,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     	this.room = standardroom(20);
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
-
+    	loader.loadTexture("tree2");
 //    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree2.png");
 //    	texture.bind();
 //        TexturedModel texturedModel = new TexturedModel(treeModel, texture);

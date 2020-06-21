@@ -124,9 +124,7 @@ public class ObjectLoader {
         for(int i = 0; i < indices.size(); i++) {
             indexArray[i] = indices.get(i);
         }
-        
-        loader.loadTexture("tree2");
-        
+                
         return loader.loadToVAO(vertexArray, textureArray, indexArray);
 
     }

@@ -101,14 +101,7 @@ public class Loader {
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-        
-        
 
-        
-
-        
-        
-        glBindTexture(GL_TEXTURE_2D, textureID);
         return textureID;
     }
 
