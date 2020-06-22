@@ -18,6 +18,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Callback;
 
 import app.Window;
 import app.Game.Object.GameObject;
@@ -125,11 +127,9 @@ public class Game extends State {
   
 
     public void update() {
-//    	makeObjects();
-//    	glClearColor(0.3f, 0.4f, 0.1f,1.0f);
     	controlCamera();
     	
-
+    	GL13.glEnable(GL13.GL_DEPTH_TEST);
     
         // Uniforms required for 3D camera
         try {
