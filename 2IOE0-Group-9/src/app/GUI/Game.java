@@ -63,7 +63,7 @@ public class Game extends State {
     
     public void init() {
         glEnable(GL_DEPTH_TEST);
-        glDisable(GL_CULL_FACE);
+//        glDisable(GL_CULL_FACE);
     	gui = GUI.getInstance();
     	mouse = Mouse.getInstance();
     	window = Window.getInstance();

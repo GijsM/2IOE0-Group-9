@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
@@ -91,6 +92,7 @@ public class Window {
 
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
+		
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		glfwShowWindow(window);
