@@ -1,5 +1,7 @@
 package app.Game.AI;
 
+import app.Game.Map.Room;
+
 import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,7 @@ public class AStar {
     private final int yStart;
     private int xEnd, yEnd;
     private final boolean diag;
+    private static Room wholeRoom;
 
     static class Node implements Comparable {
         public Node parent;
@@ -36,11 +39,12 @@ public class AStar {
         }
     }
 
-    AStar(int[][] room, int xStart, int yStart, boolean diag) {
+    public AStar(int[][] room, int xStart, int yStart, boolean diag, Room wholeRoom) {
         this.open = new ArrayList<>();
         this.closed = new ArrayList<>();
         this.path = new ArrayList<>();
         this.room = room;
+        this.wholeRoom = wholeRoom;
         this.current = new Node(null, xStart, yStart, 0, 0);
         this.xStart = xStart;
         this.yStart = yStart;
@@ -115,7 +119,7 @@ public class AStar {
 
     // Perform the A* algorithm and return a path
     public static void PerformAStar(int[][] room) {
-        AStar as = new AStar(room, 2, 2, false); // Create new AStar instance with starting points
+        AStar as = new AStar(room, 2, 2, false, wholeRoom); // Create new AStar instance with starting points
         List<Node> path = as.findPathTo(6, 8); // Create a list containing the path to the goal node
 
         int playerX = 0;
@@ -317,7 +321,7 @@ public class AStar {
     
     // Perform the A* algorithm and return a value for qlearner
     public static double AStarql(int[][] room, int xEnemy, int yEnemy, int xItem, int yItem) {
-        AStar as = new AStar(room, xEnemy, yEnemy, false); // Create new AStar instance with starting points
+        AStar as = new AStar(room, xEnemy, yEnemy, false, wholeRoom); // Create new AStar instance with starting points
         List<Node> path = as.findPathTo(xItem, yItem); // Create a list containing the path to the goal node
         return path.get(path.size() - 1).g;
     }
