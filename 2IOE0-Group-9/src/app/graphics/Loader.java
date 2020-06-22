@@ -76,7 +76,6 @@ public class Loader {
             IntBuffer h = stack.mallocInt(1);
             IntBuffer comp = stack.mallocInt(1);
 
-//            image = stbi_load("res/" + path + ".png", w, h, comp, 4);
             image = stbi_load(".\\2IOE0-Group-9\\res\\Textures\\"+ fileName + ".png", w, h, comp, 4);
             if (image == null) {
                 System.out.println("Failed to load texture file: " + fileName + "\n"
@@ -84,24 +83,22 @@ public class Loader {
                 );
             }
             width = w.get();
-            System.out.println(width);
             height = h.get();
         }
 
         textureID = glGenTextures();
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureID);
-        
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //sets MINIFICATION filtering to nearest
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //sets MAGNIFICATION filtering to nearest
         
-        textures.add(textureID);
-        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+        textures.add(textureID);    
 
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+        GL30.glGenerateMipmap(GL_TEXTURE_2D);
         return textureID;
     }
 

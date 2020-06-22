@@ -16,8 +16,6 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import java.util.concurrent.TimeUnit;
 
 public class Window {
 	private static Window instance = null;
@@ -170,52 +168,3 @@ public class Window {
 		return rect;
 	}
 }
-
-
-// OLD
-//public static long start() {
-//	if (!glfwInit()) {
-//		System.err.println("GLFW failed to initialize");
-//		System.exit(-1);
-//	}
-//	
-//	r = new Rect (0, 0 , width, height);
-//	
-//	window = glfwCreateWindow(width, height, title, 0, 0);
-//	if (window == 0) {
-//        System.err.println("ERROR: Window wasn't created");
-//        System.exit(-1);
-//    }
-//	
-//	glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
-//		Window.width = width;
-//		Window.height = height;
-//		r.Set(0, 0, width, height);
-//		GL11.glViewport(0,0, width, height);
-//	});
-//
-//	glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-//		if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-//			glfwSetWindowShouldClose(window, true);
-//	});
-//	
-//    GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-//    int windowPosX = (videoMode.width() - width) / 2;
-//    int windowPosY = (videoMode.height() - height) / 2;
-//    GLFW.glfwSetWindowPos(window, windowPosX, windowPosY);
-//    
-//    
-//    GLFW.glfwMakeContextCurrent(window);
-//    GLFW.glfwSwapInterval(1);
-//	glfwShowWindow(window);
-//	
-//    GL.createCapabilities();
-//	glClearColor(0, 0, 0, 1);
-//    GL11.glEnable(GL11.GL_DEPTH_TEST);
-//
-//    // TEST
-//	glEnable(GL_BLEND);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//	
-//	return window;
-//}
