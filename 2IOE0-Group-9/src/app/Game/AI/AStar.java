@@ -1,5 +1,7 @@
 package app.Game.AI;
 
+import app.Game.Map.Room;
+
 import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,7 @@ public class AStar {
     private final int yStart;
     private int xEnd, yEnd;
     private final boolean diag;
+    private Room wholeRoom;
 
     static class Node implements Comparable {
         public Node parent;
@@ -36,10 +39,11 @@ public class AStar {
         }
     }
 
-    AStar(int[][] room, int xStart, int yStart, boolean diag) {
+    public AStar(int[][] room, int xStart, int yStart, boolean diag, Room wholeRoom) {
         this.open = new ArrayList<>();
         this.closed = new ArrayList<>();
         this.path = new ArrayList<>();
+        this.wholeRoom = wholeRoom;
         this.room = room;
         this.current = new Node(null, xStart, yStart, 0, 0);
         this.xStart = xStart;
@@ -103,7 +107,7 @@ public class AStar {
 
                     // diagonal cost = sqrt(hor_cost² + vert_cost²)
                     if (diag && x != 0 && y != 0) {
-                        node.g += .6;	// Diagonal movement cost = 1.6
+                        node.g += 2;	// Diagonal movement cost = 1.6
                     }
 
                     this.open.add(node);
@@ -114,23 +118,28 @@ public class AStar {
     }
 
     // Perform the A* algorithm and return a path
-    public static void PerformAStar(int[][] room) {
-        AStar as = new AStar(room, 2, 2, false); // Create new AStar instance with starting points
-        List<Node> path = as.findPathTo(6, 8); // Create a list containing the path to the goal node
-
+    public void PerformAStar(int[][] room) {
         int playerX = 0;
         int playerY = 0;
+        int enemyX = 0;
+        int enemyY = 0;
 
         for(int i = 0; i < room.length; i ++){
             for(int j = 0; j < room.length; j++){
                 if(room[j][i] == 5){
                     playerX = i;
                     playerY = j;
-                    break;
+                } else if (room[j][i] == 3){
+                    enemyX = i;
+                    enemyY = j;
                 }
             }
         }
-        List<List<Integer>> dangerZone = FindDangerZones(playerX, playerY, room);
+
+        AStar as = new AStar(room, enemyX, enemyY, false, wholeRoom); // Create new AStar instance with starting points
+        List<Node> path = as.findPathTo(playerX, playerY); // Create a list containing the path to the goal node
+
+        FindDangerZones(playerX, playerY, room);
 
         for(int i = 0; i < room.length; i++){
             for(int j = 0; j < room.length; j++){
@@ -141,6 +150,21 @@ public class AStar {
                 }
             }
         }
+
+        int x;
+        int y;
+
+        if(!(path == null)){
+            for(int i = 0; i < path.size(); i++){
+                if(!(i == 0 || i == path.size() -1)){
+                    x = path.get(i).x;
+                    y = path.get(i).y;
+                    room[y][x] = 10;
+                }
+            }
+        }
+
+        wholeRoom.AlterRoom(room);
 
         if (path != null) {
             path.forEach((n) -> {
@@ -174,7 +198,7 @@ public class AStar {
     }
 
     // Calculate all coordinates that the player can shoot at
-    public static List<List<Integer>> FindDangerZones(int playerX, int playerY, int[][] room){
+    public List<List<Integer>> FindDangerZones(int playerX, int playerY, int[][] room){
         List<List<Integer>> dangers = new ArrayList<>();
         List<List<Integer>> safeSpots = new ArrayList<>();
 
@@ -188,7 +212,8 @@ public class AStar {
             else if (foundStone) {
                 AddCoords(i, playerY, safeSpots);
             }
-            else {
+            else if(!(room[playerY][i] == 5 || room[playerY][i] == 3)){
+                room[playerY][i] += 100;
                 AddCoords(i, playerY, dangers);
             }
 
@@ -202,7 +227,8 @@ public class AStar {
             }
             else if(foundStone) {
                 AddCoords(i, playerY, safeSpots);
-            } else {
+            } else if(!(room[playerY][i] == 5 || room[playerY][i] == 3)){
+                room[playerY][i] += 100;
                 AddCoords(i, playerY, dangers);
             }
 
@@ -216,7 +242,8 @@ public class AStar {
             else if(foundStone) {
                 AddCoords(playerX, i, safeSpots);
             }
-            else {
+            else if(!(room[i][playerX] == 5 || room[i][playerX] == 3)){
+                room[i][playerX] += 100;
                 AddCoords(playerX, i, dangers);
             }
 
@@ -230,7 +257,8 @@ public class AStar {
             else if(foundStone) {
                 AddCoords(playerX, i, safeSpots);
             }
-            else {
+            else if(!(room[i][playerX] == 5 || room[i][playerX] == 3)){
+                room[i][playerX] += 100;
                 AddCoords(playerX, i, dangers);
             }
 
@@ -243,11 +271,11 @@ public class AStar {
         CalculateDiagonals(dangers, playerX, playerY, 1, -1, room, safeSpots);
 
         for(int i = 0; i < dangers.size(); i++){
-            System.out.print(dangers.get(i) + " ");
+            //.out.print(dangers.get(i) + " ");
         }
         System.out.println("/n");
         for(int i = 0; i < safeSpots.size(); i++){
-            System.out.print(safeSpots.get(i) + " ");
+            //System.out.print(safeSpots.get(i) + " ");
         }
         setValues(safeSpots, room);
         System.out.println();
@@ -255,7 +283,7 @@ public class AStar {
     }
 
     // Calculate the diagonal range of the player
-    public static void CalculateDiagonals(List<List<Integer>> dangers, int player_X, int player_Y,
+    public void CalculateDiagonals(List<List<Integer>> dangers, int player_X, int player_Y,
                                           int xVal, int yVal, int[][] room, List<List<Integer>> safeSpots){
         player_X += xVal;
         player_Y += yVal;
@@ -267,9 +295,10 @@ public class AStar {
             else if (foundStone) {
                 AddCoords(player_X, player_Y, safeSpots);
             }
-            else {
-                AddCoords(player_X, player_Y, dangers);
-            }
+            else if(!(room[player_X][player_Y] == 5 || room[player_X][player_Y] == 3)){
+                    //room[player_X][player_Y] += -1;
+                    AddCoords(player_X, player_Y, dangers);
+                }
 
             player_X += xVal;
             player_Y += yVal;
@@ -277,20 +306,21 @@ public class AStar {
     }
 
     // Add coordinates to dangers list
-    public static void AddCoords(int x, int y, List<List<Integer>> dangers){
+    public void AddCoords(int x, int y, List<List<Integer>> dangers){
         List<Integer> coords = new ArrayList();
         coords.add(x);
         coords.add(y);
         dangers.add(coords);
     }
-    public static void setValues(List<List<Integer>> safeSpots, int[][] room) {
+    public void setValues(List<List<Integer>> safeSpots, int[][] room) {
         int x;
         int y;
         for(int i = 0; i < safeSpots.size(); i++){
             y = safeSpots.get(i).get(0);
             x = safeSpots.get(i).get(1);
-
-            room[x][y] -= 3;
+            if(room[x][y] != 3){
+                room[x][y] -= 3;
+            }
         }
         for(int i = 0; i < safeSpots.size(); i++){
             y = safeSpots.get(i).get(0);
@@ -309,15 +339,15 @@ public class AStar {
         }
     }
 
-    public static void setNeighbours(int x, int y, int[][] room) {
+    public void setNeighbours(int x, int y, int[][] room) {
         if (room[x][y] == 9) {
             room[x][y] -= 2;
         }
     }
     
     // Perform the A* algorithm and return a value for qlearner
-    public static double AStarql(int[][] room, int xEnemy, int yEnemy, int xItem, int yItem) {
-        AStar as = new AStar(room, xEnemy, yEnemy, false); // Create new AStar instance with starting points
+    public double AStarql(int[][] room, int xEnemy, int yEnemy, int xItem, int yItem) {
+        AStar as = new AStar(room, xEnemy, yEnemy, false, wholeRoom); // Create new AStar instance with starting points
         List<Node> path = as.findPathTo(xItem, yItem); // Create a list containing the path to the goal node
         return path.get(path.size() - 1).g;
     }

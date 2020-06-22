@@ -1,14 +1,17 @@
 package app.Game.Map;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
+import app.Game.AI.AStar;
 import app.Game.Object.GameObject;
 import app.engine.Mesh;
 import org.jbox2d.dynamics.World;
 
-import app.Game.Object.StaticGameObject;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
@@ -20,9 +23,11 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     private GameMap map;
     private List<GameObject> gameobjects = new ArrayList<>();
     Random ran = new Random();
-    ArrayList<ArrayList> room;
+    private ArrayList<ArrayList> room;
+    private ArrayList<ArrayList> originalRoom = new ArrayList<>();
     //holds the meshes that will be rendered in the render() method
     ArrayList<Mesh> meshes;
+    AStar as;
     
     /*
     doorwayDirection = 0 when the door is on the north side
@@ -37,6 +42,10 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
+        print();
+        int[][] aStarRoom = ToInt(this.room);
+        as = new AStar(aStarRoom, 0, 0, false, this);
+        as.PerformAStar(aStarRoom);
 //        this.setMap(map);
     }
 
@@ -55,14 +64,16 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     
     private ArrayList<ArrayList> standardroom(int width) {
         int doorwayDirection = this.ran.nextInt(5);
-        int randomDoorLocation = this.ran.nextInt(8)+1;
+        int randomDoorLocation = this.ran.nextInt(width - 2)+1;
         int exitDoorwayDirection = this.ran.nextInt(5);
-        int randomExitDoorLocation = this.ran.nextInt(8)+1;
+        int randomExitDoorLocation = this.ran.nextInt(width - 2)+1;
         boolean entranceExitCollision = true;
         
         while(entranceExitCollision){
             if(exitDoorwayDirection == doorwayDirection){
                 exitDoorwayDirection = this.ran.nextInt(5);
+            } else if( randomDoorLocation == randomExitDoorLocation){
+                randomExitDoorLocation = this.ran.nextInt(width - 2)+1;
             } else {
                 entranceExitCollision = false;
             }
@@ -118,9 +129,15 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
             this.exitDoorWayLocation[1] = 0;
         }
         this.exitDoorwayDirection = exitDoorwayDirection;
+
+        System.out.println("door locations: " + doorWayLocation[0] + ", " + doorWayLocation[1] + ", " + exitDoorWayLocation[0] + ", " + exitDoorWayLocation[1]);
+
         int random = this.ran.nextInt(10) + 5;
-        int chunkSize = Math.round(width/2f);
+        int chunkSize = Math.round(width/3f);
         int chunkPos = this.ran.nextInt((width - 2) * (width - 2 - chunkSize));
+        int offset = 3;
+        int playerPos = this.ran.nextInt((width - offset) * (width - offset));
+        int enemyPos = this.ran.nextInt((width - offset) * (width - offset));
         int counter = 0;
         for(int i = 0 ; i < width ; i++){
             for(int j = 0; j < width ; j++){
@@ -129,22 +146,42 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                     if(counter >= chunkPos && ((i >= 1 && i <= width - chunkSize - 1) && (j >= 1 && j <= width - chunkSize - 1))){
                         for(int row = i; row < i + chunkSize; row++) {
                             for (int col = j; col < j + chunkSize; col++) {
-                                if (!(row == doorWayLocation[0] || col == doorWayLocation[1] || row == exitDoorWayLocation[0] || col == exitDoorWayLocation[1])) {
-                                    if(!(row + 1 >= width || col + 1 >= width)){
+                                if(row == i || col == j || row == i + chunkSize - 1 || col == j + chunkSize - 1){
+                                    if(!(row + 1 >= width || col + 1 >= width || (int) room.get(row).get(col) == 5 || (int) room.get(row).get(col) == -4)){
                                         room.get(row).set(col, 4);
+                                        AStar stoneCheck = new AStar(ToInt(room), doorWayLocation[1], doorWayLocation[0], false, this);
+                                        if (stoneCheck.findPathTo(exitDoorWayLocation[1], exitDoorWayLocation[0]) == null) {
+                                            room.get(row).set(col, 1);
+                                        }
                                     }
                                 }
                             }
                         }
                         chunkPos = 10000;
+                    } else if(counter >= playerPos) {
+                        room.get(i).set(j, 5);
+                        playerPos = 10000;
+                    } else if(counter >= enemyPos) {
+                        room.get(i).set(j, -4);
+                        enemyPos = 10000;
                     } else if(counter >= random){
-                        if(!(i == doorWayLocation[0] || j == doorWayLocation[1] || i == exitDoorWayLocation[0] || j == exitDoorWayLocation[1])){
-                            random += this.ran.nextInt(10) + 5;
-                            room.get(i).set(j, 4);
+                        random += this.ran.nextInt(10) + 5;
+                        room.get(i).set(j, 4);
+                        AStar stoneCheck = new AStar(ToInt(room), doorWayLocation[1], doorWayLocation[0], false, this);
+                        if (stoneCheck.findPathTo(exitDoorWayLocation[1], exitDoorWayLocation[0]) == null) {
+                            room.get(i).set(j, 1);
                         }
                     }
                 }
             }
+        }
+        int index = 0;
+        for(ArrayList i: room){
+            this.originalRoom.add(new ArrayList<>());
+            for(Object j: i){
+                this.originalRoom.get(index).add(j);
+            }
+            index++;
         }
         return room;
     }
@@ -195,6 +232,32 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
             }
         }
         System.out.println("-------------------------");
+    }
+
+    public int[][] ToInt(ArrayList<ArrayList> room){
+        int[][] aStarRoom = new int[room.size()][room.size()];
+
+        for(int i = 0; i < room.size() ; i++){
+            for(int j = 0 ; j < room.size() ; j++){
+                int currentTile = (int) room.get(i).get(j);
+                // If a tile is blocked put -2 in the array for A*
+                if(currentTile == 0){
+                    aStarRoom[i][j] = 0;
+                    // If a tile contains a rock put -3 in the array
+                } else if(currentTile == 4){
+                    aStarRoom[i][j] = 4;
+                    // If a tile is traversable put a 0 in the array
+                } else if(currentTile == 5){
+                    aStarRoom[i][j] = 5;
+                    // If a tile is traversable put a 0 in the array
+                } else if(currentTile == -4){
+                    aStarRoom[i][j] = 3;
+                } else{
+                    aStarRoom[i][j] = 9;
+                }
+            }
+        }
+        return aStarRoom;
     }
 
     @Override
@@ -283,6 +346,15 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                     };
 
 
+                } else if((int)this.room.get(i_int).get(j_int) == 3){
+                    colours = new float[]{
+                            0.345f, 0.321f, 1f,
+                            0.345f, 0.321f, 1f,
+                            0.345f, 0.321f, 1f,
+                            0.345f, 0.321f, 1f
+                    };
+
+
                 } else if((int)this.room.get(i_int).get(j_int) == 4){
                     colours = new float[]{
                             0.188f, 0.462f, 0.098f,
@@ -310,16 +382,43 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 obj.setPosition(xOne,yOne,-2.0f);
                 obj.setScale(0.2f);
                 gameobjects.add(obj);
-
             }
         }
-
-
-
-
     }
 
+    public void AlterRoom(int[][] newRoom) {
+        for(int i = 0; i < newRoom.length; i ++){
+            for (int j = 0; j < newRoom.length; j++){
+                int currentTile = newRoom[i][j];
+                if(currentTile == 0 || currentTile == 4){
+                    this.room.get(i).set(j, 0);
+                } else if(currentTile == 10){
+                    this.room.get(i).set(j, 5);
+                } else if(currentTile == 3){
+                    this.room.get(i).set(j, 2);
+                } else if(currentTile == 5){
+                    this.room.get(i).set(j, 3);
+                }
+            }
+        }
+        render();
+        this.room.clear();
+        this.room = (ArrayList<ArrayList>) this.originalRoom.clone();
 
+        boolean found = false;
+        for(int i = 1; i < room.size() - 1; i++){
+            for(int j = 1; j < room.size() - 1; j++){
+                if(found && !((int) room.get(i).get(j) == 4)){
+                    room.get(i).set(j, 5);
+                    break;
+                }
+                if(!found && (int) room.get(i).get(j) == 5){
+                    found = true;
+                    room.get(i).set(j, 1);
+                }
+            }
+        }
+    }
 
     @Override
     public void update() {

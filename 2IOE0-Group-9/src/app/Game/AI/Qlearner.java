@@ -111,15 +111,14 @@ public class Qlearner {
         }
     }
     
-    public double getAstarValues() {
-    	// TODO get coordinates enemy & item & player
-    	    	
-    	//get distance to item
-    	double distItem = AStar.AStarql(room, XEnemy, YEnemy, xItem, yItem) ;
-    	//get distance to player
-    	double distPlayer = AStar.AStarql(room, XEnemy, YEnemy, XPlayer, YPlayer);
-    	//return difference for qtable
-    	return(distItem - distPlayer);
-    }
+//    public double getAstarValues() {
+//    	// TODO get coordinates enemy & item & player
+//    	//get distance to item
+//    	double distItem = AStar.AStarql(room, XEnemy, YEnemy, xItem, yItem) ;
+//    	//get distance to player
+//    	double distPlayer = AStar.AStarql(room, XEnemy, YEnemy, XPlayer, YPlayer);
+//    	//return difference for qtable
+//    	return(distItem - distPlayer);
+//    }
     
 }
