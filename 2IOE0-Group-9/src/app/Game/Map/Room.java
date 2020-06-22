@@ -330,6 +330,8 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
                     objTree.setPosition(xOne,-2.0f,yOne);
                     objTree.setScale(delta/10f);
+                    int ranRotation = this.ran.nextInt(90);
+                    objTree.setRotation(0,ranRotation,0);
 
                     gameobjects.add(objTree);
                 }
