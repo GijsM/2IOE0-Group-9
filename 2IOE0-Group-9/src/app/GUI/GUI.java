@@ -81,6 +81,7 @@ public class GUI {
         area = areas.get(areas.size() - 1);
 
         glDisable(GL_DEPTH_TEST);
+        //glEnable(GL_DEPTH_TEST);
         shader.bind();
         shader.setUniform("matColor", backgroundColor);
         ortho = Matrix4X4.Ortho(0, window.getWidth(), window.getHeight(), 0, -1, 1);

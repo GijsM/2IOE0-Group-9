@@ -31,7 +31,7 @@ public class Texture {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
-        ByteBuffer data = stbi_load(".\\2IOE0-Group-9\\res\\Textures\\" + fileName, width, height, channels, 4);
+        ByteBuffer data = stbi_load(".\\2IOE0-Group-9\\res\\Textures\\" + fileName, width, height, channels,4);
 
         id = glGenTextures();
         this.width = width.get();

@@ -8,8 +8,6 @@ import app.Game.Object.GameObject;
 import app.engine.Mesh;
 import app.graphics.*;
 import org.jbox2d.dynamics.World;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 
 import app.Game.Object.Tree;
 import app.Util.Interfaces.ILoadable;
@@ -40,13 +38,13 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     int exitDoorwayDirection;
     int[] doorWayLocation = new int[2];
     int[] exitDoorWayLocation = new int[2];
-    Loader loader = new Loader();
+    Loader treeLoader = new Loader();
+
 
     public Room(GameMap map) {
     	this.room = standardroom(20);
 
-    	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
-    	loader.loadTexture("tree2");
+
 //    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree2.png");
 //    	texture.bind();
 //        TexturedModel texturedModel = new TexturedModel(treeModel, texture);
@@ -57,11 +55,9 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 //            treeModel.colors[p++] = 0.0f;
 //            treeModel.colors[p] = 0.5f;
 //        }
-        this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
+
         
-        for(int i = 0; i < treeModel.colors.length; i++) {
-        	System.out.println(treeModel.colors[i]);
-        }
+
         createGameObjects();
 //        this.setMap(map);
     }
@@ -225,7 +221,6 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
     @Override
     public void render() {
-        System.out.println("render in room");
         for (GameObject gameObject : gameobjects) {
             gameObject.render();
         }
@@ -239,8 +234,10 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         float botY = (float) topY - delta;
         float[] positions;
         float[] colours;
+        Loader loader1 = new Loader();
+        Loader loader2 = new Loader();
         int[] indices = new int[]{
-                0, 1,3,3,2,1
+                0, 1,3,1,3,2
         };
         this.meshes = new ArrayList<>();
         for(float i = 0 ; i < this.room.size(); i++){
@@ -324,22 +321,30 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
                     };
                 }
-                Mesh mesh = new Mesh(positions, colours, indices);
+                RawModel tile = ObjectLoader.loadObjModel("tile",loader1);
+                loader1.loadTexture("rock");
+                Mesh mesh = new Mesh(tile.positions, tile.colors, tile.indices);
                 this.meshes.add(mesh);
                 Tree obj = new Tree(mesh);
                 //System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,-2.05f,yOne);
-                obj.setScale(delta);
+                obj.setPosition(xOne,-2.00f,yOne);
+                obj.setScale(delta/2f);
                 gameobjects.add(obj);
+
 
                 // make the tree objects
                 if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
 
-                    Tree objTree = new Tree(treeMesh);
+                    RawModel tree = ObjectLoader.loadObjModel("Tree", loader2);
+                    loader2.loadTexture("tree2");
+                    Mesh treemesh = new Mesh(tree.positions,tree.colors, tree.indices);
+                    Tree objTree = new Tree(treemesh);
                     objTree.setPosition(xOne,-2.0f,yOne);
                     objTree.setScale(delta/10f);
-                    //objTree.setRotation(-90f,0,0);
+                    int ranRotation = this.ran.nextInt(90);
+                    objTree.setRotation(0,ranRotation,0);
+
                     gameobjects.add(objTree);
                 }
 

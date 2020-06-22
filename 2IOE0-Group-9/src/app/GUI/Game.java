@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL20.glValidateProgram;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.opengl.GL11.*;
 
 import app.Game.Map.GameMap;
 import org.joml.Matrix4f;
@@ -59,6 +60,8 @@ public class Game extends State {
     }
     
     public void init() {
+        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
     	gui = GUI.getInstance();
     	mouse = Mouse.getInstance();
     	window = Window.getInstance();
@@ -76,6 +79,7 @@ public class Game extends State {
 			e.printStackTrace();
 		}
 		makeObjects();
+
 
 		// Rotate camera to 2D"ish" view
 		camera.movePosition(1.6f, -0.75f, 0f);
