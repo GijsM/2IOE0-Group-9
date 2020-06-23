@@ -64,7 +64,7 @@ public class GameMap implements IUpdateable, IRenderable {
 
     @Override
     public void update() {
-    	System.out.println("Update");
+//    	System.out.println("Update");
        // world.step(1/60f, 1, 1);
         for (final GameObject gameObject : gameobjects) {
             gameObject.update();
