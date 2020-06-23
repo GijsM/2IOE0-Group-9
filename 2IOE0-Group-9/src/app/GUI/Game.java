@@ -18,6 +18,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Callback;
 
@@ -136,6 +138,7 @@ public class Game extends State {
         	shader.createUniform("projectionMatrix");
 			shader.createUniform("modelViewMatrix");
 			shader.createUniform("texture_sampler");
+			//shader.createUniform("lightPos");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -156,7 +159,7 @@ public class Game extends State {
         }
         
         shader.setUniform("texture_sampler", 0);
-
+        GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),1.2f,2.0f,1.0f);
         shader.unbind();
         
         

@@ -20,7 +20,7 @@ import java.util.Scanner;
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
-    private int program;
+    public int program;
     private int vertexShaderId;
     private int fragmentShaderId;
     private int vs;
