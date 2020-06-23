@@ -8,6 +8,7 @@ public abstract class Entity extends GameObject {
     
     public Entity(GameMap gameMap, EntityBehaviour behaviour, Mesh mesh) {
         super(mesh);
+        this.behaviour = behaviour;
     }
 
     protected EntityBehaviour behaviour;

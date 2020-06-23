@@ -15,7 +15,7 @@ import app.engine.Mesh;
 
 public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable {
     protected GameMap gameMap;
-    protected Body body;
+    public Body body;
     
     private float scale;
     private final Mesh mesh;			// TODO: requires merging mesh.java's from branches
@@ -23,13 +23,11 @@ public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable
 	protected final Vector3f position;
     protected final Vector3f rotation;
         
-    private boolean rerender;
 
     public GameObject(Mesh mesh) {
     	this.rotation = new Vector3f();
     	this.position = new Vector3f();
-    	rerender = false;
-		        this.gameMap = gameMap;
+		this.gameMap = gameMap;
     	this.mesh = mesh;
     	scale = 1;
     }
@@ -42,7 +40,6 @@ public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable
     	this.position.x = x;
     	this.position.y = y;
     	this.position.z = z;
-    	rerender = true;
     }
     
     public Vector3f getRotation() {
@@ -53,7 +50,6 @@ public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable
     	this.rotation.x = x;
     	this.rotation.y = y;
     	this.rotation.z = z;
-    	rerender = true;
     }
     
     public float getScale() {
@@ -70,9 +66,7 @@ public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable
     
     @Override
     public void render() {
-      	if (rerender) {
-    		mesh.render();
-    	}
+    	mesh.render();
     }
 
     @Override

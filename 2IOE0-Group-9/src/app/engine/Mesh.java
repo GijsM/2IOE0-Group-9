@@ -34,8 +34,6 @@ public class Mesh {
     private final int idxVboId;
 
     private final int vertexCount;
-    
-    private boolean rendered = false;
 
     public Mesh(float[] positions, float[] colours, int[] indices) {
         FloatBuffer posBuffer = null;
@@ -96,14 +94,12 @@ public class Mesh {
     }
     
     public void render() {
-    	rendered = true;
     	glBindVertexArray(getVaoId());
     	glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
     	glBindVertexArray(0);
     }
 
     public void cleanUp() {
-    	if (rendered) {
             glDisableVertexAttribArray(0);
 
             // Delete the VBOs
@@ -115,6 +111,5 @@ public class Mesh {
             // Delete the VAO
             glBindVertexArray(0);
             glDeleteVertexArrays(vaoId);
-    	}
     }
 }

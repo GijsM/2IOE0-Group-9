@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import app.Game.Object.GameObject;
+import app.Game.Object.Tile;
 import app.engine.Mesh;
 import app.graphics.*;
 import org.jbox2d.dynamics.World;
@@ -24,8 +25,8 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     ArrayList<ArrayList> room;
     //holds the meshes that will be rendered in the render() method
     ArrayList<Mesh> meshes;
-    private RawModel treeModel;
-    private Mesh treeMesh;
+    RawModel treeModel;
+    Mesh treeMesh;
 
 
     /*
@@ -44,7 +45,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     	this.room = standardroom(20);
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
-    	Texture texture = new Texture(".\\res\\Textures\\tree.png");
+    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree.png");
         TexturedModel texturedModel = new TexturedModel(treeModel,texture);
         for (int p = 0 ; p < treeModel.colors.length ; p++){
             treeModel.colors[p++] = 0.0f;
@@ -236,8 +237,6 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
             for( float j = 0 ; j < this.room.size(); j++){
 
                 float xOne = topX + j*delta;
-
-
                 float xTwo = botX + j*delta;
                 float yOne = topY - i*delta;
 
@@ -315,10 +314,10 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 }
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
-                Tree obj = new Tree(mesh);
+                Tile obj = new Tile(mesh);
                 //System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,-2.0f,yOne);
+                obj.setPosition(xOne,-2f,yOne);
                 obj.setScale(delta);
                 gameobjects.add(obj);
 
