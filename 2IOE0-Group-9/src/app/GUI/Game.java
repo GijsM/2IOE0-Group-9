@@ -160,6 +160,7 @@ public class Game extends State {
         
         shader.setUniform("texture_sampler", 0);
         GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),1.2f,2.0f,1.0f);
+        GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"viewPos"),camera.getPosition().x,camera.getPosition().y,camera.getPosition().z);
         shader.unbind();
         
         
