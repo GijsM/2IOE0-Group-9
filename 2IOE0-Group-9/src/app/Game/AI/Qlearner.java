@@ -3,7 +3,7 @@ package app.Game.AI;
 import java.util.Random;
 import app.Game.AI.AStar;
 import app.Game.Object.Entity.Enemy;
-import app.Game.Object.Entity.Player;
+import app.Game.Object.Entity.Player.Player;
 
 /*
 TODO:

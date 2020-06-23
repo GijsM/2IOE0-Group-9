@@ -8,6 +8,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.GameObject;
+import app.Game.Object.Entity.Player.Player;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
 
@@ -21,12 +22,19 @@ public class GameMap implements IUpdateable, IRenderable {
     private final List<GameObject> gameobjects = new ArrayList<>();
 
     public GameMap(final Random random) {
-        Vec2 gravity = new Vec2(0.0f, 1.0f);
+        Vec2 gravity = new Vec2(0.0f, 0.0f);
         boolean doSleep = true;
       //  world = new World(gravity, doSleep);
         this.random = random;
         Room defaultRoom = new Room(this);
         this.rooms.add(defaultRoom);
+        defaultRoom.load(world);
+       
+        
+        Player player = new Player(this, defaultRoom.treeMesh);
+        player.setPosition(0, -2, 0);
+        player.setScale(0.02f);
+        spawnObject(player);
       //  defaultRoom.load(world);
     }
 
@@ -53,7 +61,6 @@ public class GameMap implements IUpdateable, IRenderable {
 
     @Override
     public void render() {
-    	System.out.println("Render gamemap");
         for (final GameObject gameObject : gameobjects) {
             gameObject.render();
         }
@@ -64,8 +71,8 @@ public class GameMap implements IUpdateable, IRenderable {
 
     @Override
     public void update() {
-//    	System.out.println("Update");
-       // world.step(1/60f, 1, 1);
+    	//System.out.println("Update");
+        world.step(1/60f, 1, 1);
         for (final GameObject gameObject : gameobjects) {
             gameObject.update();
         }

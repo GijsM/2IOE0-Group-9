@@ -26,6 +26,7 @@ import org.lwjgl.system.Callback;
 import app.Window;
 import app.Game.Object.GameObject;
 import app.Game.Object.Tree;
+import app.Game.Object.Entity.Player.Player;
 import app.Input.Mouse;
 import app.engine.Shader;
 import app.graphics.Camera;
@@ -93,6 +94,9 @@ public class Game extends State {
     
     public void makeObjects() {
     	gameObjects = this.map.getRooms().get(0).getGameobjects();
+    	for (GameObject object : map.getGameobjects()) {
+    		gameObjects.add(object);
+    	}
     	map.render();
     	//update();
     }
@@ -127,8 +131,10 @@ public class Game extends State {
     	camera.movePosition(cameraVec.x * CAMERA_POS_STEP, cameraVec.y * CAMERA_POS_STEP, cameraVec.z * CAMERA_POS_STEP);
     }
   
+    float multiplier = 1f;
 
     public void update() {
+    	multiplier = multiplier+0.01f;
     	controlCamera();
     	
     	GL13.glEnable(GL13.GL_DEPTH_TEST);
@@ -151,9 +157,16 @@ public class Game extends State {
         
         // Update view Matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
-
         for (GameObject obj: gameObjects) {
-        	Matrix4f modelViewMatrix = transformation.getModelViewMatrix((Tree) obj, viewMatrix);
+        	Matrix4f modelViewMatrix;
+        	if (obj instanceof Player) {
+//            	float scale = obj.getScale();
+//            	obj.setScale(scale*multiplier);
+            	modelViewMatrix = transformation.getModelViewMatrix(obj, viewMatrix);
+//            	obj.setScale(scale);
+        	} else {
+        		modelViewMatrix = transformation.getModelViewMatrix(obj, viewMatrix);
+        	}
         	shader.setUniform("modelViewMatrix", modelViewMatrix);
         	obj.getMesh().render();
         }

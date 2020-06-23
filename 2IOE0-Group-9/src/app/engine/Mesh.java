@@ -104,16 +104,16 @@ public class Mesh {
     }
 
     public void cleanUp() {
-        glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(0);
 
-        // Delete the VBOs
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDeleteBuffers(posVboId);
-        glDeleteBuffers(colourVboId);
-        glDeleteBuffers(idxVboId);
+            // Delete the VBOs
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glDeleteBuffers(posVboId);
+            glDeleteBuffers(colourVboId);
+            glDeleteBuffers(idxVboId);
 
-        // Delete the VAO
-        glBindVertexArray(0);
-        glDeleteVertexArrays(vaoId);
+            // Delete the VAO
+            glBindVertexArray(0);
+            glDeleteVertexArrays(vaoId);
     }
 }

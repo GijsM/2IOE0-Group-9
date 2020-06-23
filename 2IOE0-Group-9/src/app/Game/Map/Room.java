@@ -6,6 +6,7 @@ import java.util.Random;
 
 import app.Game.AI.AStar;
 import app.Game.Object.GameObject;
+import app.Game.Object.Tile;
 import app.engine.Mesh;
 import app.graphics.*;
 import org.jbox2d.dynamics.World;
@@ -27,8 +28,8 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     ArrayList<ArrayList> room;
     //holds the meshes that will be rendered in the render() method
     ArrayList<Mesh> meshes;
-    private RawModel treeModel;
-    private Mesh treeMesh;
+    RawModel treeModel;
+    Mesh treeMesh;
 
 
     /*
@@ -56,6 +57,8 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
         this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
 
+        createGameObjects();
+//        this.setMap(map);
         createGameObjects();
         this.setMap(map);
     }
@@ -313,8 +316,6 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
             for( float j = 0 ; j < this.room.size(); j++){
 
                 float xOne = topX + j*delta;
-
-
                 float xTwo = botX + j*delta;
                 float yOne = topY - i*delta;
 
@@ -398,6 +399,10 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 }
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
+                Tile obj = new Tile(mesh);
+                //System.out.println(xOne + " " + yOne);
+
+                obj.setPosition(xOne,-2f,yOne);
                 Tree obj = new Tree(mesh);
 
                 obj.setPosition(xOne,-2.05f,yOne);
@@ -406,7 +411,6 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
 
                 // make the tree objects
                 if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
-
                     Tree objTree = new Tree(treeMesh);
 
                     objTree.setPosition(xOne,-2.0f,yOne);
@@ -415,6 +419,7 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                     objTree.setRotation(0,ranRotation,0);
 
                     gameobjects.add(objTree);
+                    
                 }
 
             }

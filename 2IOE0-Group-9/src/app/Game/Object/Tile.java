@@ -10,11 +10,11 @@ import org.joml.Vector3f;
 
 import app.engine.Mesh;
 
-public class Tree extends GameObject {
+public class Tile extends GameObject {
 
 
     
-	public Tree(Mesh mesh) {
+	public Tile(Mesh mesh) {
 		super(mesh);
 		// TODO Auto-generated constructor stub
 	}
@@ -36,14 +36,13 @@ public class Tree extends GameObject {
 	public void load(World world) {
 		BodyDef def = new BodyDef();
 		def.position = new Vec2(position.x, position.y);
-		def.type = BodyType.STATIC;
-		body = world.createBody(def);
 		//def.type = BodyType.STATIC;
-//		body = world.createBody(def);
+		body = world.createBody(def);
 		PolygonShape shape = new PolygonShape();
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
 		fixtureDef.density = 1;
-//		body.createFixture(fixtureDef);
+		body.createFixture(fixtureDef);
+		
 	}
 }
