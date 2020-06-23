@@ -403,7 +403,6 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 //System.out.println(xOne + " " + yOne);
 
                 obj.setPosition(xOne,-2f,yOne);
-                Tree obj = new Tree(mesh);
 
                 obj.setPosition(xOne,-2.05f,yOne);
                 obj.setScale(delta);

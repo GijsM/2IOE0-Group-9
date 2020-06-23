@@ -40,7 +40,7 @@ public class Player extends Entity {
 		BodyDef def = new BodyDef();
 		def.position = new Vec2(position.x, position.y);
 		body = world.createBody(def);
-
+		body.setTransform(new Vec2(position.x, position.y), 0f);
 		body.setType(BodyType.DYNAMIC);
 		
 	}
