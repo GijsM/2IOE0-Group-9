@@ -20,7 +20,7 @@ import java.util.Scanner;
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
-    private int program;
+    public int program;
     private int vertexShaderId;
     private int fragmentShaderId;
     private int vs;
@@ -33,7 +33,8 @@ public class Shader {
 
         glBindAttribLocation(program, 0, "vertices");
         glBindAttribLocation(program, 1, "uv");
-        glValidateProgram(program);
+		glValidateProgram(program);
+
     }
     
     
@@ -108,6 +109,10 @@ public class Shader {
             glUniformMatrix4fv(uniforms.get(uniformName), false,
                                value.get(stack.mallocFloat(16)));
         }
+    }
+    
+    public void setUniform(String uniformName, int value) {
+    	glUniform1i(uniforms.get(uniformName), value);
     }
     
     public void pushUniform(String uniformName, Matrix4f value) {

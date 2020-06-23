@@ -124,8 +124,8 @@ public class ObjectLoader {
         for(int i = 0; i < indices.size(); i++) {
             indexArray[i] = indices.get(i);
         }
-        
-        return loader.loadToVAO(vertexArray, textureArray, indexArray);
+                
+        return loader.loadToVAO(vertexArray, textureArray, indexArray,normalArray);
 
     }
     

@@ -4,14 +4,24 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL20.glBindAttribLocation;
+import static org.lwjgl.opengl.GL20.glValidateProgram;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.opengl.GL11.*;
 
 import app.Game.Map.GameMap;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Callback;
 
 import app.Window;
 import app.Game.Object.GameObject;
@@ -20,6 +30,7 @@ import app.Game.Object.Entity.Player.Player;
 import app.Input.Mouse;
 import app.engine.Shader;
 import app.graphics.Camera;
+import app.graphics.Texture;
 import app.graphics.Transformation;
 
 import java.util.List;
@@ -54,6 +65,8 @@ public class Game extends State {
     }
     
     public void init() {
+        glEnable(GL_DEPTH_TEST);
+//        glDisable(GL_CULL_FACE);
     	gui = GUI.getInstance();
     	mouse = Mouse.getInstance();
     	window = Window.getInstance();
@@ -62,7 +75,7 @@ public class Game extends State {
 		transformation = Transformation.getInstance();
 		shader = new Shader("GameShader");
 		map = new GameMap(new Random());
-        
+		
 		try {
 			shader.createVertexShader(Shader.loadResource("GameShader.vs"));
 			shader.createFragmentShader(Shader.loadResource("GameShader.fs"));
@@ -71,6 +84,7 @@ public class Game extends State {
 			e.printStackTrace();
 		}
 		makeObjects();
+
 
 		// Rotate camera to 2D"ish" view
 		camera.movePosition(1.6f, -0.75f, 0f);
@@ -122,15 +136,20 @@ public class Game extends State {
     public void update() {
     	multiplier = multiplier+0.01f;
     	controlCamera();
-
+    	
+    	GL13.glEnable(GL13.GL_DEPTH_TEST);
+    
         // Uniforms required for 3D camera
         try {
         	shader.createUniform("projectionMatrix");
 			shader.createUniform("modelViewMatrix");
+			shader.createUniform("texture_sampler");
+			//shader.createUniform("lightPos");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         shader.bind();
+        
         
         // Projection matrix
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
@@ -151,7 +170,10 @@ public class Game extends State {
         	shader.setUniform("modelViewMatrix", modelViewMatrix);
         	obj.getMesh().render();
         }
-
+        
+        shader.setUniform("texture_sampler", 0);
+        GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),1.2f,2.0f,1.0f);
+        GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"viewPos"),camera.getPosition().x,camera.getPosition().y,camera.getPosition().z);
         shader.unbind();
         
         
