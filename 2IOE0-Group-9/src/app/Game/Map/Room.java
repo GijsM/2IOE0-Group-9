@@ -412,13 +412,48 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                     objTree.setPosition(xOne,-2.0f,yOne);
                     objTree.setScale(delta/10f);
                     int ranRotation = this.ran.nextInt(90);
-                    objTree.setRotation(0,ranRotation,0);
+                    //objTree.setRotation(0,ranRotation,0);
 
                     gameobjects.add(objTree);
+
                 }
 
             }
         }
+//        positions = new float[]{
+//
+//                // V0
+//                -0.5f, 0.5f, 0.5f,
+//                // V1
+//                -0.5f, 0.5f, -0.5f,
+//                // V2
+//                0.5f, 0.5f, -0.5f,
+//                // V3
+//                0.5f, 0.5f, 0.5f
+//        };
+//        colours = new float[]{
+//                0.419f, 0.301f, 0.098f,
+//                0.419f, 0.301f, 0.098f,
+//                0.419f, 0.301f, 0.098f,
+//                0.419f, 0.301f, 0.098f
+//
+//        };
+//        Mesh mesh = new Mesh (positions,colours,indices);
+//        Tree obj = new Tree(mesh);
+//
+//        obj.setPosition(0,-2.0f,0);
+//        Tree obj2 = new Tree(mesh);
+//        obj2.setPosition(0,-2.0f,0);
+//        obj2.setRotation(90,0,0);
+//        Tree obj3 = new Tree(mesh);
+//        obj3.setPosition(0,-2.0f,0);
+//        obj3.setScale(5);
+//        obj3.setRotation(0,0,90);
+//        obj.setScale(5);
+//        obj2.setScale(5);
+//        gameobjects.add(obj3);
+//        gameobjects.add(obj);
+//        gameobjects.add(obj2);
 
     }
 

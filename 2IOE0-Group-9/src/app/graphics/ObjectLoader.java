@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import app.Util.Vec2;
 import app.Util.Vector3f;
 
+
 /**
  *
  * @author iris https://www.youtube.com/watch?v=YKFYtekgnP8
@@ -119,12 +120,18 @@ public class ObjectLoader {
             vertexArray[vertexPointer++] = vertex.getY();
             vertexArray[vertexPointer++] = vertex.getZ();
         }
+
+
         
         //add indices in the list to the index array (as floats)
         for(int i = 0; i < indices.size(); i++) {
             indexArray[i] = indices.get(i);
         }
-                
+
+        System.out.println(normalArray.length+ " " + vertexArray.length);
+        for(int i = 0 ; i < 456 ;i ++){
+            System.out.println(normalArray[i]);
+        }
         return loader.loadToVAO(vertexArray, textureArray, indexArray,normalArray);
 
     }

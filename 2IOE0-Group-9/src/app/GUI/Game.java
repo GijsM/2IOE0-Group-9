@@ -65,6 +65,9 @@ public class Game extends State {
     
     public void init() {
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 //        glDisable(GL_CULL_FACE);
     	gui = GUI.getInstance();
     	mouse = Mouse.getInstance();
@@ -136,7 +139,6 @@ public class Game extends State {
         // Uniforms required for 3D camera
         try {
         	shader.createUniform("projectionMatrix");
-			shader.createUniform("modelViewMatrix");
 			shader.createUniform("texture_sampler");
 			//shader.createUniform("lightPos");
 		} catch (Exception e) {
@@ -154,14 +156,17 @@ public class Game extends State {
 
         for (GameObject obj: gameObjects) {
         	Matrix4f modelViewMatrix = transformation.getModelViewMatrix((Tree) obj, viewMatrix);
-        	shader.setUniform("modelViewMatrix", modelViewMatrix);
-        	obj.getMesh().render();
+        	GL20.glUniformMatrix4fv(GL20.glGetUniformLocation(shader.program,"modelMatrix"),false,transformation.getModelMatrix((Tree) obj).get(new float[16]));
+            GL20.glUniformMatrix4fv(GL20.glGetUniformLocation(shader.program,"viewMatrix"),false,viewMatrix.get(new float[16]));
+            GL20.glUniformMatrix4fv(GL20.glGetUniformLocation(shader.program,"modelViewMatrix"),false,modelViewMatrix.get(new float[16]));
+            obj.getMesh().render();
         }
-        
+
         shader.setUniform("texture_sampler", 0);
-        GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),1.2f,2.0f,1.0f);
+        GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),1.2f,1,0);
         GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"viewPos"),camera.getPosition().x,camera.getPosition().y,camera.getPosition().z);
         shader.unbind();
+
         
         
         map.update();

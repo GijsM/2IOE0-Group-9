@@ -1,7 +1,7 @@
 package app;
 
 public class App {
-	/*
+ 	/*
 	 * Game Properties
 	 */
 	private final String TITLE = "Genocrawl";
