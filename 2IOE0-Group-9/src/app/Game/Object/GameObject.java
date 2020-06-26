@@ -27,7 +27,6 @@ public abstract class GameObject implements  IRenderable, IUpdateable, ILoadable
     public GameObject(Mesh mesh) {
     	this.rotation = new Vector3f();
     	this.position = new Vector3f();
-		this.gameMap = gameMap;
     	this.mesh = mesh;
     	scale = 1;
     }

@@ -26,20 +26,18 @@ public class PlayerBehaviour implements EntityBehaviour {
 		if (window.isKeyPressed(GLFW_KEY_UP)) {
 			float x = (float) Math.cos(Math.toRadians(player.body.getAngle()));
 			float y = (float) Math.sin(Math.toRadians(player.body.getAngle()));
-			player.body.applyForce(new Vec2(x, y), new Vec2(0,0));
+			player.body.applyForce(new Vec2(x, y).mul(2f), new Vec2(0,0));
 		}
 		if (window.isKeyPressed(GLFW_KEY_DOWN)) {
 			float x = (float) -Math.cos(Math.toRadians(player.body.getAngle()));
 			float y = (float) -Math.sin(Math.toRadians(player.body.getAngle()));
-			player.body.applyForce(new Vec2(x, y), new Vec2(0,0));
+			player.body.applyForce(new Vec2(x, y).mul(2f), new Vec2(0,0));
 		}
 		if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-			player.body.setTransform(player.body.getPosition(), player.body.getAngle()-5f);
-			System.out.println(player.body.getAngle());
+			player.body.setTransform(player.body.getPosition(), player.body.getAngle()-3f);
 		}
 		if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-			player.body.setTransform(player.body.getPosition(), player.body.getAngle()+5f);
-			System.out.println(player.body.getAngle());
+			player.body.setTransform(player.body.getPosition(), player.body.getAngle()+3f);
 		}
 	}
 

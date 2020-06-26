@@ -11,6 +11,7 @@ import app.graphics.*;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.Tree;
+import app.Game.Object.Entity.Enemy.Enemy;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
@@ -20,9 +21,10 @@ import static java.lang.Math.round;
 public class Room implements IUpdateable, IRenderable, ILoadable {
 
     private GameMap map;
-    private List<GameObject> gameobjects = new ArrayList<>();
-    Random ran = new Random();
-    ArrayList<ArrayList> room;
+    public List<GameObject> gameobjects = new ArrayList<>();
+    Random ran;
+    public ArrayList<ArrayList> room;
+    private ArrayList<ArrayList> originalRoom = new ArrayList<>();
     //holds the meshes that will be rendered in the render() method
     ArrayList<Mesh> meshes;
     RawModel treeModel;
@@ -37,13 +39,15 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
      */
     int doorwayDirection;
     int exitDoorwayDirection;
-    int[] doorWayLocation = new int[2];
-    int[] exitDoorWayLocation = new int[2];
+    public int[] doorWayLocation = new int[2];
+    public int[] exitDoorWayLocation = new int[2];
     Loader loader = new Loader();
 
     public Room(GameMap map) {
+    	ran = map.random;
+    	this.map = map;
     	this.room = standardroom(20);
-
+    	
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
     	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree.png");
         TexturedModel texturedModel = new TexturedModel(treeModel,texture);
@@ -162,6 +166,14 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 }
             }
         }
+        int index = 0;
+        for(ArrayList i: room){
+            this.originalRoom.add(new ArrayList<>());
+            for(Object j: i){
+                this.originalRoom.get(index).add(j);
+            }
+            index++;
+        }
         return room;
     }
     
@@ -212,18 +224,50 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         }
         System.out.println("-------------------------");
     }
+    
+    public void AlterRoom(int[][] newRoom) {
+        for(int i = 0; i < newRoom.length; i ++){
+            for (int j = 0; j < newRoom.length; j++){
+                int currentTile = newRoom[i][j];
+                if(currentTile == 0 || currentTile == 4){
+                    this.room.get(i).set(j, 0);
+                } else if(currentTile == 10){
+                    this.room.get(i).set(j, 5);
+                } else if(currentTile == 3){
+                    this.room.get(i).set(j, 2);
+                } else if(currentTile == 5){
+                    this.room.get(i).set(j, 3);
+                }
+            }
+        }
+        this.room.clear();
+        this.room = (ArrayList<ArrayList>) this.originalRoom.clone();
+
+        boolean found = false;
+        for(int i = 1; i < room.size() - 1; i++){
+            for(int j = 1; j < room.size() - 1; j++){
+                if(found && !((int) room.get(i).get(j) == 4)){
+                    room.get(i).set(j, 5);
+                    break;
+                }
+                if(!found && (int) room.get(i).get(j) == 5){
+                    found = true;
+                    room.get(i).set(j, 1);
+                }
+            }
+        }
+    }
 
     @Override
     public void render() {
-        System.out.println("render in room");
         for (GameObject gameObject : gameobjects) {
             gameObject.render();
         }
     }
 
     private void createGameObjects() {
-        float topX =(float) -1;
-        float topY = 1;
+        float topX =(float) 0;
+        float topY = 0;
         float delta = (float) 2/this.room.size();
         float botX = (float) topX + delta;
         float botY = (float) topY - delta;
@@ -325,26 +369,68 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
 
                     GameObject objTree = new Tree(treeMesh);
-                    objTree.setPosition(xOne,-2.0f,yOne);
-                    objTree.setScale(delta/5f);
-                    //objTree.setRotation(-90f,0,0);
+                    objTree.setPosition(xOne,-2.0f, yOne);
+                    float scalemodifier = ran.nextFloat()/20f + 0.8f;
+                    objTree.setScale(delta/5f*scalemodifier);
+                    objTree.setRotation(ran.nextFloat()*8-4,ran.nextInt(360),ran.nextFloat()*8-4);
                     gameobjects.add(objTree);
                     
                 }
 
             }
         }
+        spawnEnemy(delta);
+    }
+    
+    public int[][] ToInt(ArrayList<ArrayList> room){
+        int[][] aStarRoom = new int[room.size()][room.size()];
 
-
-
-
+        for(int i = 0; i < room.size() ; i++){
+            for(int j = 0 ; j < room.size() ; j++){
+                int currentTile = (int) room.get(i).get(j);
+                // If a tile is blocked put -2 in the array for A*
+                if(currentTile == 0){
+                    aStarRoom[i][j] = 0;
+                    // If a tile contains a rock put -3 in the array
+                } else if(currentTile == 4){
+                    aStarRoom[i][j] = 4;
+                    // If a tile is traversable put a 0 in the array
+                } else if(currentTile == 5){
+                    aStarRoom[i][j] = 5;
+                    // If a tile is traversable put a 0 in the array
+                } else if(currentTile == -4){
+                    aStarRoom[i][j] = 3;
+                } else{
+                    aStarRoom[i][j] = 9;
+                }
+            }
+        }
+        return aStarRoom;
+    }
+    
+    public void spawnEnemy(float size) {
+    	int x;
+    	int y;
+        while (true) {
+        	x = ran.nextInt(room.size());
+        	y = ran.nextInt(room.size());
+        	if ((int) room.get(y).get(x) == 1) {
+        		break;
+        	}
+        }
+        Enemy enemy = new Enemy(map, treeMesh);
+        enemy.setScale(size/5f);
+        enemy.setPosition((float) (x)/10, -2f, (float) -(y)/10);
+        gameobjects.add(enemy);
     }
 
 
 
     @Override
     public void update() {
-        // TODO not sure if this is necessary
+        for (GameObject object : getGameobjects()) {
+        	object.update();
+        }
 
     }
 

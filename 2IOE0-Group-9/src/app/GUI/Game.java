@@ -7,6 +7,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.opengl.GL13.*;
 
 import app.Game.Map.GameMap;
 import org.joml.Matrix4f;
@@ -54,6 +55,7 @@ public class Game extends State {
     }
     
     public void init() {
+    	glEnable(GL_DEPTH_TEST);
     	gui = GUI.getInstance();
     	mouse = Mouse.getInstance();
     	window = Window.getInstance();
@@ -61,7 +63,7 @@ public class Game extends State {
 		camera = Camera.getInstance();
 		transformation = Transformation.getInstance();
 		shader = new Shader("GameShader");
-		map = new GameMap(new Random());
+		map = new GameMap(new Random(2));
         
 		try {
 			shader.createVertexShader(Shader.loadResource("GameShader.vs"));
@@ -70,7 +72,6 @@ public class Game extends State {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		makeObjects();
 
 		// Rotate camera to 2D"ish" view
 		camera.movePosition(1.6f, -0.75f, 0f);
@@ -78,13 +79,9 @@ public class Game extends State {
 		
     }
     
-    public void makeObjects() {
-    	gameObjects = this.map.getRooms().get(0).getGameobjects();
-    	for (GameObject object : map.getGameobjects()) {
-    		gameObjects.add(object);
-    	}
-    	map.render();
-    	//update();
+    public void controlCameraPlayer() {
+    	Vector3f vec = map.player.getPosition().add(1.6f,1.25f,0);
+    	camera.setPosition(vec.x, vec.y, vec.z);
     }
     
     public void controlCamera() {
@@ -121,7 +118,7 @@ public class Game extends State {
 
     public void update() {
     	multiplier = multiplier+0.01f;
-    	controlCamera();
+    	controlCameraPlayer();
 
         // Uniforms required for 3D camera
         try {
@@ -138,7 +135,7 @@ public class Game extends State {
         
         // Update view Matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
-        for (GameObject obj: gameObjects) {
+        for (GameObject obj: map.getGameobjects()) {
         	Matrix4f modelViewMatrix;
         	if (obj instanceof Player) {
 //            	float scale = obj.getScale();
