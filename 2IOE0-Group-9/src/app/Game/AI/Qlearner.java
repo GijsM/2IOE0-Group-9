@@ -2,8 +2,8 @@ package app.Game.AI;
 
 import java.util.Random;
 import app.Game.AI.AStar;
-import app.Game.Object.Entity.Enemy;
-import app.Game.Object.Entity.Player;
+import app.Game.Object.Entity.Enemy.Enemy;
+import app.Game.Object.Entity.Player.Player;
 
 /*
 TODO:
@@ -24,10 +24,10 @@ public class Qlearner {
     int action;
     int newState;
     private final int[][] room;
-    int XEnemy = Enemy.getEnemyX();
-    int YEnemy = Enemy.getEnemyY();
-    int XPlayer = Player.getPlayerX();
-    int YPlayer = Player.getPlayerY();
+    int XEnemy = 0;
+    int YEnemy = 0;
+    int XPlayer = 0;
+    int YPlayer = 0;
     //total cost: 11 (in example). integer called: path.get(path.size() -1).g
 
     public Qlearner(int[][] room){

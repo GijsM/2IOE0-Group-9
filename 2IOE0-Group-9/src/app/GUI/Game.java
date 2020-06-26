@@ -12,6 +12,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Q;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 
 import app.Game.Map.GameMap;
 import org.joml.Matrix4f;
@@ -26,6 +27,7 @@ import org.lwjgl.system.Callback;
 import app.Window;
 import app.Game.Object.GameObject;
 import app.Game.Object.Tree;
+import app.Game.Object.Entity.Player.Player;
 import app.Input.Mouse;
 import app.engine.Shader;
 import app.graphics.Camera;
@@ -76,8 +78,8 @@ public class Game extends State {
 		camera = Camera.getInstance();
 		transformation = Transformation.getInstance();
 		shader = new Shader("GameShader");
-		map = new GameMap(new Random());
-		
+		map = new GameMap(new Random(2));
+        
 		try {
 			shader.createVertexShader(Shader.loadResource("GameShader.vs"));
 			shader.createFragmentShader(Shader.loadResource("GameShader.fs"));
@@ -87,17 +89,15 @@ public class Game extends State {
 		}
 		makeObjects();
 
-
 		// Rotate camera to 2D"ish" view
 		camera.movePosition(1.6f, -0.75f, 0f);
 		camera.setRotation(45f, -90f, 100f);
 		
     }
     
-    public void makeObjects() {
-    	gameObjects = this.map.getRooms().get(0).getGameobjects();
-    	map.render();
-    	//update();
+    public void controlCameraPlayer() {
+    	Vector3f vec = map.player.getPosition().add(1.6f,1.25f,0);
+    	camera.setPosition(vec.x, vec.y, vec.z);
     }
     
     public void controlCamera() {
@@ -130,12 +130,12 @@ public class Game extends State {
     	camera.movePosition(cameraVec.x * CAMERA_POS_STEP, cameraVec.y * CAMERA_POS_STEP, cameraVec.z * CAMERA_POS_STEP);
     }
   
+    float multiplier = 1f;
 
     public void update() {
-    	controlCamera();
-    	
-    	GL13.glEnable(GL13.GL_DEPTH_TEST);
-    
+    	multiplier = multiplier+0.01f;
+    	controlCameraPlayer();
+
         // Uniforms required for 3D camera
         try {
         	shader.createUniform("projectionMatrix");
@@ -145,7 +145,6 @@ public class Game extends State {
 			e.printStackTrace();
 		}
         shader.bind();
-        
         
         // Projection matrix
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
@@ -167,7 +166,7 @@ public class Game extends State {
         GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"viewPos"),camera.getPosition().x,camera.getPosition().y,camera.getPosition().z);
         shader.unbind();
 
-        
+
         
         map.update();
     }

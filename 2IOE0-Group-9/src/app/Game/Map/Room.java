@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import app.Game.AI.AStar;
 import app.Game.Object.GameObject;
 import app.engine.Mesh;
 import app.graphics.*;
 import org.jbox2d.dynamics.World;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 
 import app.Game.Object.Tree;
 import app.Util.Interfaces.ILoadable;
@@ -22,13 +19,14 @@ import static java.lang.Math.round;
 public class Room implements IUpdateable, IRenderable, ILoadable {
 
     private GameMap map;
-    private List<GameObject> gameobjects = new ArrayList<>();
-    Random ran = new Random();
-    ArrayList<ArrayList> room;
+    public List<GameObject> gameobjects = new ArrayList<>();
+    Random ran;
+    public ArrayList<ArrayList> room;
+    private ArrayList<ArrayList> originalRoom = new ArrayList<>();
     //holds the meshes that will be rendered in the render() method
     ArrayList<Mesh> meshes;
-    private RawModel treeModel;
-    private Mesh treeMesh;
+    RawModel treeModel;
+    Mesh treeMesh;
 
 
     /*
@@ -39,25 +37,32 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
      */
     int doorwayDirection;
     int exitDoorwayDirection;
-    int[] doorWayLocation = new int[2];
-    int[] exitDoorWayLocation = new int[2];
+    public int[] doorWayLocation = new int[2];
+    public int[] exitDoorWayLocation = new int[2];
     Loader loader = new Loader();
 
     public Room(GameMap map) {
+    	ran = map.random;
+    	this.map = map;
     	this.room = standardroom(20);
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
+    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree.png");
+        TexturedModel texturedModel = new TexturedModel(treeModel,texture);
+        for (int p = 0 ; p < treeModel.colors.length ; p++){
+            treeModel.colors[p++] = 0.0f;
+            treeModel.colors[p] = 0.5f;
+        }
         loader.loadTexture("leaf");
-  
+
 //        for (int p = 0 ; p < treeModel.colors.length ; p++){
 //            treeModel.colors[p++] = 0.0f;
 //            treeModel.colors[p] = 0.5f;
 //        }
 
         this.treeMesh = new Mesh(treeModel.positions,treeModel.colors, treeModel.indices);
-
+//        this.setMap(map);
         createGameObjects();
-        this.setMap(map);
     }
 
     public List<GameObject> getGameobjects() {
@@ -142,7 +147,6 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         int chunkSize = Math.round(width/2f);
         int chunkPos = this.ran.nextInt((width - 2) * (width - 2 - chunkSize));
         int counter = 0;
-
         for(int i = 0 ; i < width ; i++){
             for(int j = 0; j < width ; j++){
                 if((int) room.get(i).get(j) == 1){
@@ -208,6 +212,14 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 break;
             }
         }
+        int index = 0;
+        for(ArrayList i: room){
+            this.originalRoom.add(new ArrayList<>());
+            for(Object j: i){
+                this.originalRoom.get(index).add(j);
+            }
+            index++;
+        }
         return room;
     }
     
@@ -250,14 +262,16 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         for(int i = 0; i < this.room.size() ; i++){
             for(int j = 0 ; j < this.room.size() ; j++){
                 if(j == this.room.size()-1){
-                    System.out.println(" "+ this.room.get(j).get(i));
+                    System.out.println(" "+ this.room.get(i).get(j));
                 } else {
-                    System.out.print(" "+ this.room.get(j).get(i));
+                    System.out.print(" "+ this.room.get(i).get(j));
                 }
             }
         }
         System.out.println("-------------------------");
     }
+
+
 
     public int[][] ToInt(ArrayList<ArrayList> room){
         int[][] aStarRoom = new int[room.size()][room.size()];
@@ -296,8 +310,8 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     }
 
     private void createGameObjects() {
-        float topX =(float) -1;
-        float topY = 1;
+        float topX =(float) 0;
+        float topY = 0;
         float delta = (float) 2/this.room.size();
         float botX = (float) topX + delta;
         float botY = (float) topY - delta;
@@ -305,10 +319,8 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         float[] colours;
         int[] indices = new int[]{
                 0, 1,3,3,2,1
-//        		2,1,3,3,1,0
         };
         this.meshes = new ArrayList<>();
-        
         for(float i = 0 ; i < this.room.size(); i++){
             for( float j = 0 ; j < this.room.size(); j++){
 
@@ -343,6 +355,10 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                     		0.188f, 0.462f, 0.098f,
                     		0.188f, 0.462f, 0.098f,
                     		0.188f, 0.462f, 0.098f,
+//                            0.5f, 0.25f, 0.5f, 	// top left
+//                            0.5f, 0.25f, 0.5f, 	// bottom left
+//                            0.5f, 0.25f, 0.5f, 	// bottom right
+//                            0.5f, 0.25f, 0.5f 	// top right
                     };
 
 
@@ -398,68 +414,39 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                 }
                 Mesh mesh = new Mesh(positions, colours, indices);
                 this.meshes.add(mesh);
-                Tree obj = new Tree(mesh);
+                Tile obj = new Tile(mesh);
+                //System.out.println(xOne + " " + yOne);
 
-                obj.setPosition(xOne,-2.05f,yOne);
+                obj.setPosition(xOne,-2f,yOne);
                 obj.setScale(delta);
                 gameobjects.add(obj);
 
                 // make the tree objects
                 if((int)this.room.get(i_int).get(j_int) %4  == 0  ){
 
-                    Tree objTree = new Tree(treeMesh);
-
-                    objTree.setPosition(xOne,-2.0f,yOne);
-                    objTree.setScale(delta/10f);
-                    int ranRotation = this.ran.nextInt(90);
-                    //objTree.setRotation(0,ranRotation,0);
-
+                    GameObject objTree = new Tree(treeMesh);
+                    objTree.setPosition(xOne,-2.0f, yOne);
+                    float scalemodifier = ran.nextFloat()/20f + 0.8f;
+                    objTree.setScale(delta/5f*scalemodifier);
+                    objTree.setRotation(ran.nextFloat()*8-4,ran.nextInt(360),ran.nextFloat()*8-4);
                     gameobjects.add(objTree);
-
                 }
 
             }
         }
-//        positions = new float[]{
-//
-//                // V0
-//                -0.5f, 0.5f, 0.5f,
-//                // V1
-//                -0.5f, 0.5f, -0.5f,
-//                // V2
-//                0.5f, 0.5f, -0.5f,
-//                // V3
-//                0.5f, 0.5f, 0.5f
-//        };
-//        colours = new float[]{
-//                0.419f, 0.301f, 0.098f,
-//                0.419f, 0.301f, 0.098f,
-//                0.419f, 0.301f, 0.098f,
-//                0.419f, 0.301f, 0.098f
-//
-//        };
-//        Mesh mesh = new Mesh (positions,colours,indices);
-//        Tree obj = new Tree(mesh);
-//
-//        obj.setPosition(0,-2.0f,0);
-//        Tree obj2 = new Tree(mesh);
-//        obj2.setPosition(0,-2.0f,0);
-//        obj2.setRotation(90,0,0);
-//        Tree obj3 = new Tree(mesh);
-//        obj3.setPosition(0,-2.0f,0);
-//        obj3.setScale(5);
-//        obj3.setRotation(0,0,90);
-//        obj.setScale(5);
-//        obj2.setScale(5);
-//        gameobjects.add(obj3);
-//        gameobjects.add(obj);
-//        gameobjects.add(obj2);
+
+
+
 
     }
 
+
+
     @Override
     public void update() {
-        // TODO not sure if this is necessary
+        for (GameObject object : getGameobjects()) {
+        	object.update();
+        }
 
     }
 
@@ -479,3 +466,79 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     }
     
 }
+
+
+
+
+//OLD RENDER FUNCTION FOR ROOMS
+
+//@Override
+//public void render(WindowManager window) {
+// for (StaticGameObject staticGameObject : gameobjects) {
+//     staticGameObject.render(window);
+// }
+//
+//
+// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+// glColor4d(1f, 0f, 0f, 0.3f);
+//
+// glLoadIdentity();
+// float topX =(float) -1;
+// float topY = 1;
+// float delta = (float) 2/this.room.size();
+// float botX = (float) topX + delta;
+// float botY = (float) topY - delta;
+// for(float i = 0 ; i < this.room.size(); i++){
+//     for( float j = 0 ; j < this.room.size(); j++){
+//
+//         float xOne = topX + j*delta;
+//         float xTwo = botX + j*delta;
+//         float yOne = topY - i*delta;
+//         float yTwo = botY - i*delta;
+//         int i_int = round(i);
+//         int j_int = round(j);
+//         if((int) this.room.get(i_int).get(j_int) == 0){
+//
+//             glBegin(GL_QUADS);
+//
+//             glNormal3f(0, 0, 1);
+//             glColor3f(0,1,0);
+//             glVertex3f(xOne ,yOne, 0); //Draw Back Wall - Top Left
+//             glColor3f(0,0,1);
+//             glVertex3f(xTwo,yOne, 0); //Draw Back Wall - Top Right
+//             glColor3f(0,1,0);
+//             glVertex3f(xTwo,yTwo, 0); //Draw Back Wall - Bottom Right
+//             glColor3f(0,0,1);
+//             glVertex3f(xOne,yTwo, 0); //Draw Back Wall - Bottom Left
+//             glEnd();
+//         } else if((int) this.room.get(i_int).get(j_int) == 1) {
+//             glBegin(GL_QUADS);
+//
+//             glNormal3f(0, 0, 1);
+//             glColor3f(1,0,0);
+//             glVertex3f(xOne ,yOne, 0); //Draw Back Wall - Top Left
+//             glColor3f(0,0,1);
+//             glVertex3f(xTwo,yOne, 0); //Draw Back Wall - Top Right
+//             glColor3f(1,0,0);
+//             glVertex3f(xTwo,yTwo, 0); //Draw Back Wall - Bottom Right
+//             glColor3f(0,0,1);
+//             glVertex3f(xOne,yTwo, 0); //Draw Back Wall - Bottom Left
+//             glEnd();
+//         } else {
+//             glBegin(GL_QUADS);
+//
+//             glNormal3f(0, 0, 1);
+//             glColor3f(1,0,0);
+//             glVertex3f(xOne ,yOne, 0); //Draw Back Wall - Top Left
+//             glColor3f(1,0,0);
+//             glVertex3f(xTwo,yOne, 0); //Draw Back Wall - Top Right
+//             glColor3f(1,0,0);
+//             glVertex3f(xTwo,yTwo, 0); //Draw Back Wall - Bottom Right
+//             glColor3f(1,0,0);
+//             glVertex3f(xOne,yTwo, 0); //Draw Back Wall - Bottom Left
+//             glEnd();
+//         }
+//     }
+// }
+//
+//}
