@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import app.Game.AI.AStar;
+import app.Game.Object.Entity.Enemy.Enemy;
 import app.Game.Object.GameObject;
 import app.engine.Mesh;
 import app.graphics.*;
 import org.jbox2d.dynamics.World;
 
 import app.Game.Object.Tree;
+import app.Game.Object.Tile;
 import app.Util.Interfaces.ILoadable;
 import app.Util.Interfaces.IRenderable;
 import app.Util.Interfaces.IUpdateable;
-
 import static java.lang.Math.round;
 
 public class Room implements IUpdateable, IRenderable, ILoadable {
@@ -47,8 +49,6 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
     	this.room = standardroom(20);
 
     	this.treeModel = ObjectLoader.loadObjModel("Tree",loader);
-    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree.png");
-        TexturedModel texturedModel = new TexturedModel(treeModel,texture);
         for (int p = 0 ; p < treeModel.colors.length ; p++){
             treeModel.colors[p++] = 0.0f;
             treeModel.colors[p] = 0.5f;
@@ -431,12 +431,16 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
                     objTree.setRotation(ran.nextFloat()*8-4,ran.nextInt(360),ran.nextFloat()*8-4);
                     gameobjects.add(objTree);
                 }
+                if((int)this.room.get(i_int).get(j_int) == -6){
+
+
+                }
 
             }
         }
 
 
-
+    spawnEnemy(delta);
 
     }
 
@@ -463,6 +467,21 @@ public class Room implements IUpdateable, IRenderable, ILoadable {
         for (GameObject gameObject : gameobjects) {
             gameObject.unload(world);
         }
+    }
+    public void spawnEnemy(float size) {
+        int x;
+        int y;
+        while (true) {
+            x = ran.nextInt(room.size());
+            y = ran.nextInt(room.size());
+            if ((int) room.get(y).get(x) == 1) {
+                break;
+            }
+        }
+        Enemy enemy = new Enemy(map, treeMesh);
+        enemy.setScale(size/5f);
+        enemy.setPosition((float) (x)/10, -2f, (float) -(y)/10);
+        gameobjects.add(enemy);
     }
     
 }

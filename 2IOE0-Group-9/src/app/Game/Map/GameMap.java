@@ -18,6 +18,9 @@ import app.graphics.RawModel;
 import app.graphics.Texture;
 import app.graphics.TexturedModel;
 
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+
 public class GameMap implements IUpdateable, IRenderable {
 
     //Perhaps use this for seeded randomization
@@ -36,8 +39,9 @@ public class GameMap implements IUpdateable, IRenderable {
         world = new World(gravity, doSleep);
         this.random = random;
         Loader loader = new Loader();
-    	RawModel playermodel = ObjectLoader.loadObjModel("Tree",loader);
-    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\tree.png");
+    	RawModel playermodel = ObjectLoader.loadObjModel("Player_2",loader);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    	Texture texture = new Texture(".\\2IOE0-Group-9\\res\\Textures\\Egg.png");
         TexturedModel texturedModel = new TexturedModel(playermodel,texture);
         for (int p = 0 ; p < playermodel.colors.length ; p++){
             playermodel.colors[p++] = 0.0f;
@@ -59,7 +63,7 @@ public class GameMap implements IUpdateable, IRenderable {
     	currentRoom = room;
     	this.rooms.add(currentRoom);
     	room.load(world);
-    	player.setPosition((float) currentRoom.doorWayLocation[1]/10, -2, (float) currentRoom.doorWayLocation[0]/-10);
+    	player.setPosition((float) currentRoom.doorWayLocation[1]/10, -1.0f, (float) currentRoom.doorWayLocation[0]/-10);
     	
     }
 

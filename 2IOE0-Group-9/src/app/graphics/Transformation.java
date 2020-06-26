@@ -55,7 +55,7 @@ public class Transformation {
         return viewCurr.mul(modelViewMatrix);
     }
 
-    public Matrix4f getModelMatrix(Tree gameItem) {
+    public Matrix4f getModelMatrix(GameObject gameItem) {
         Vector3f rotation = gameItem.getRotation();
         modelViewMatrix.identity().translate(gameItem.getPosition()).
                 rotateX((float)Math.toRadians(-rotation.x)).

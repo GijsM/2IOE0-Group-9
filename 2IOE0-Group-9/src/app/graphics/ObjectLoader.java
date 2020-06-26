@@ -128,9 +128,13 @@ public class ObjectLoader {
             indexArray[i] = indices.get(i);
         }
 
-        System.out.println(normalArray.length+ " " + vertexArray.length);
-        for(int i = 0 ; i < 456 ;i ++){
-            System.out.println(normalArray[i]);
+
+
+        if(fileName.equals("Player_2")){
+            System.out.println(fileName);
+            for(int i = 0 ; i < textureArray.length;i++){
+                textureArray[i]=1.0f;
+            }
         }
         return loader.loadToVAO(vertexArray, textureArray, indexArray,normalArray);
 

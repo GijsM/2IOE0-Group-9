@@ -87,7 +87,7 @@ public class Game extends State {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		makeObjects();
+
 
 		// Rotate camera to 2D"ish" view
 		camera.movePosition(1.6f, -0.75f, 0f);
@@ -153,16 +153,20 @@ public class Game extends State {
         // Update view Matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
 
-        for (GameObject obj: gameObjects) {
-        	Matrix4f modelViewMatrix = transformation.getModelViewMatrix((Tree) obj, viewMatrix);
-        	GL20.glUniformMatrix4fv(GL20.glGetUniformLocation(shader.program,"modelMatrix"),false,transformation.getModelMatrix((Tree) obj).get(new float[16]));
+        for (GameObject obj: map.getGameobjects()) {
+            if(obj instanceof Player ){
+                Player player = (Player) obj;
+                GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),obj.getPosition().x,obj.getPosition().y+1,obj.getPosition().z+1);
+            }
+        	Matrix4f modelViewMatrix = transformation.getModelViewMatrix( obj, viewMatrix);
+        	GL20.glUniformMatrix4fv(GL20.glGetUniformLocation(shader.program,"modelMatrix"),false,transformation.getModelMatrix(obj).get(new float[16]));
             GL20.glUniformMatrix4fv(GL20.glGetUniformLocation(shader.program,"viewMatrix"),false,viewMatrix.get(new float[16]));
             GL20.glUniformMatrix4fv(GL20.glGetUniformLocation(shader.program,"modelViewMatrix"),false,modelViewMatrix.get(new float[16]));
             obj.getMesh().render();
         }
 
         shader.setUniform("texture_sampler", 0);
-        GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),1.2f,1,0);
+        //GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"lightPos"),);
         GL20.glUniform3f(GL20.glGetUniformLocation(shader.program,"viewPos"),camera.getPosition().x,camera.getPosition().y,camera.getPosition().z);
         shader.unbind();
 

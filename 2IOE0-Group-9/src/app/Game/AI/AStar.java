@@ -105,7 +105,7 @@ public class AStar {
                     node.g = node.parent.g + 1.; // Horizontal/vertical cost = 1.0
                     node.g += room[this.current.y + y][this.current.x + x]; // add movement cost for this square
 
-                    // diagonal cost = sqrt(hor_cost² + vert_cost²)
+                    // diagonal cost = sqrt(hor_costï¿½ + vert_costï¿½)
                     if (diag && x != 0 && y != 0) {
                         node.g += 2;	// Diagonal movement cost = 1.6
                     }
@@ -164,7 +164,6 @@ public class AStar {
             }
         }
 
-        wholeRoom.AlterRoom(room);
 
         if (path != null) {
             path.forEach((n) -> {

@@ -54,7 +54,7 @@ public class Player extends Entity {
 	public Vector3f getPosition() {
 		// TODO Auto-generated method stub
 		Vec2 bodyPosition = body.getPosition();
-		return new Vector3f(bodyPosition.x, -2f, bodyPosition.y);
+		return new Vector3f(bodyPosition.x, -1.9f, bodyPosition.y);
 	}
 	
 	@Override
